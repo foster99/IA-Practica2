@@ -1,8 +1,275 @@
+;
+; ONTOLOGIA
+;
+
 ; Wed Nov 27 17:09:03 CET 2019
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 660")
 
+
+(defclass %3ACLIPS_TOP_LEVEL_SLOT_CLASS "Fake class to save top-level slot information"
+	(is-a USER)
+	(role abstract)
+	(single-slot Nacionalidad
+		(type STRING)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(multislot Es_Del_Genero
+		(type INSTANCE)
+;+		(allowed-classes Genero)
+		(cardinality 1 ?VARIABLE)
+;+		(inverse-slot Es_Genero_De)
+		(create-accessor read-write))
+	(single-slot NumVentas
+		(type INTEGER)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot Complejidad_Tramas
+		(type SYMBOL)
+		(allowed-values Alta Media Baja)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot es_sucesor_se
+		(type INSTANCE)
+;+		(allowed-classes Libro)
+;+		(cardinality 0 1)
+;+		(inverse-slot es_predecesor_de)
+		(create-accessor read-write))
+	(single-slot Es_Version_Original
+;+		(comment "Es la version original, o una adaptacion.")
+		(type SYMBOL)
+		(allowed-values FALSE TRUE)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot Dificultad_Lenguaje
+		(type SYMBOL)
+		(allowed-values Alta Media Baja)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot Popularidad
+		(type SYMBOL)
+		(allowed-values Alta Media Baja)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(multislot Se_Adquiere_En
+		(type INSTANCE)
+;+		(allowed-classes LugarDeAdquision)
+		(cardinality 1 ?VARIABLE)
+;+		(inverse-slot Se_Adquiere)
+		(create-accessor read-write))
+	(multislot Formato
+		(type SYMBOL)
+		(allowed-values Paper Digital)
+		(cardinality 1 2)
+		(create-accessor read-write))
+	(multislot Es_Genero_De
+		(type INSTANCE)
+;+		(allowed-classes Libro)
+;+		(inverse-slot Es_Del_Genero)
+		(create-accessor read-write))
+	(single-slot Es_Tendencia
+		(type SYMBOL)
+		(allowed-values FALSE TRUE)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot NumPag
+;+		(comment "Numero de paginas del libro.")
+		(type INTEGER)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot es_predecesor_de
+		(type INSTANCE)
+;+		(allowed-classes Libro)
+;+		(cardinality 0 1)
+;+		(inverse-slot es_sucesor_se)
+		(create-accessor read-write))
+	(single-slot Valoracion
+;+		(comment "Valoracion de otros usuarios que han leido el libro.")
+		(type INTEGER)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(multislot Se_Adquiere
+		(type INSTANCE)
+;+		(allowed-classes Libro)
+		(cardinality 1 ?VARIABLE)
+;+		(inverse-slot Se_Adquiere_En)
+		(create-accessor read-write))
+	(multislot Idioma
+		(type SYMBOL)
+		(allowed-values Ingles Castellano Frances Aleman)
+		(cardinality 1 ?VARIABLE)
+		(create-accessor read-write))
+	(single-slot Clima
+		(type SYMBOL)
+		(allowed-values Tranquilo Ajetreado Silencioso Ruidoso)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot Es_Autor_De
+		(type INSTANCE)
+;+		(allowed-classes Libro)
+		(cardinality 1 ?VARIABLE)
+;+		(inverse-slot Tiene_Como_Autor)
+		(create-accessor read-write))
+	(multislot Tiene_Como_Autor
+		(type INSTANCE)
+;+		(allowed-classes Autor)
+		(cardinality 1 ?VARIABLE)
+;+		(inverse-slot Es_Autor_De)
+		(create-accessor read-write))
+	(single-slot Nombre
+		(type STRING)
+;+		(cardinality 1 1)
+		(create-accessor read-write)))
+
+(defclass Libro
+	(is-a USER)
+	(role concrete)
+	(single-slot es_sucesor_se
+		(type INSTANCE)
+;+		(allowed-classes Libro)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot es_predecesor_de
+		(type INSTANCE)
+;+		(allowed-classes Libro)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot Formato
+		(type SYMBOL)
+		(allowed-values Paper Digital)
+		(cardinality 1 2)
+		(create-accessor read-write))
+	(single-slot Es_Version_Original
+;+		(comment "Es la version original, o una adaptacion.")
+		(type SYMBOL)
+		(allowed-values FALSE TRUE)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot Valoracion
+;+		(comment "Valoracion de otros usuarios que han leido el libro.")
+		(type INTEGER)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot NumPag
+;+		(comment "Numero de paginas del libro.")
+		(type INTEGER)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(multislot Es_Del_Genero
+		(type INSTANCE)
+;+		(allowed-classes Genero)
+		(cardinality 1 ?VARIABLE)
+		(create-accessor read-write))
+	(multislot Tiene_Como_Autor
+		(type INSTANCE)
+;+		(allowed-classes Autor)
+		(cardinality 1 ?VARIABLE)
+		(create-accessor read-write))
+	(single-slot Nombre
+		(type STRING)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(multislot Idioma
+		(type SYMBOL)
+		(allowed-values Ingles Castellano Frances Aleman)
+		(cardinality 1 ?VARIABLE)
+		(create-accessor read-write))
+	(multislot Se_Adquiere_En
+		(type INSTANCE)
+;+		(allowed-classes LugarDeAdquision)
+		(cardinality 1 ?VARIABLE)
+		(create-accessor read-write)))
+
+(defclass Autor
+	(is-a USER)
+	(role concrete)
+	(single-slot Nacionalidad
+		(type STRING)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot Dificultad_Lenguaje
+		(type SYMBOL)
+		(allowed-values Alta Media Baja)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(multislot Es_Autor_De
+		(type INSTANCE)
+;+		(allowed-classes Libro)
+		(cardinality 1 ?VARIABLE)
+		(create-accessor read-write))
+	(single-slot Complejidad_Tramas
+		(type SYMBOL)
+		(allowed-values Alta Media Baja)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot Popularidad
+		(type SYMBOL)
+		(allowed-values Alta Media Baja)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot Nombre
+		(type STRING)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(multislot Idioma
+		(type SYMBOL)
+		(allowed-values Ingles Castellano Frances Aleman)
+		(cardinality 1 ?VARIABLE)
+		(create-accessor read-write)))
+
+(defclass Lugar
+	(is-a USER)
+	(role concrete)
+	(single-slot Nombre
+		(type STRING)
+;+		(cardinality 1 1)
+		(create-accessor read-write)))
+
+(defclass LugarDeAdquision
+	(is-a Lugar)
+	(role concrete)
+	(multislot Se_Adquiere
+		(type INSTANCE)
+;+		(allowed-classes Libro)
+		(cardinality 1 ?VARIABLE)
+		(create-accessor read-write)))
+
+(defclass LugarDeLectura
+	(is-a Lugar)
+	(role concrete)
+	(single-slot Clima
+		(type SYMBOL)
+		(allowed-values Tranquilo Ajetreado Silencioso Ruidoso)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass Genero "Subgenero dentro de la Sci-Fi"
+	(is-a USER)
+	(role concrete)
+	(multislot Es_Genero_De
+		(type INSTANCE)
+;+		(allowed-classes Libro)
+		(create-accessor read-write))
+	(single-slot Nombre
+		(type STRING)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot Es_Tendencia
+		(type SYMBOL)
+		(allowed-values FALSE TRUE)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+;
+; INSTANCIAS
+;
+
+; Wed Nov 27 17:09:03 CET 2019
+; 
+;+ (version "3.5")
+;+ (build "Build 660")
+(definstances instancias
 ([salu2_Class0] of  Autor
 
 	(Complejidad_Tramas Media)
@@ -616,4 +883,38 @@
 		[salu2_Class20001]
 		[salu2_Class20003])
 	(Es_Tendencia TRUE)
-	(Nombre "Dystopian"))
+	(Nombre "Dystopian")))
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;; MODULOS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;; Modulo principal de utilidades
+
+
+;
+; REGLAS
+;
+
+(deftemplate MAIN::templ
+	(slot sl (type STRING))
+)
+
+
+(defrule retorna_instancies
+    (not (retorna_instancies))
+    =>
+    (bind ?llista_instancies ( find-instance (?lib Libro) TRUE) )
+    (assert retorna_instancies)
+)
+;(defrule MAIN::system-banner ""
+;  =>
+  ;  (printout t crlf crlf)
+   ; (printout t "----El Recomendador de Libros----")
+    ;(printout t crlf crlf)
+    ;(focus obtencion-datos)
+;)
+
+
+
+
