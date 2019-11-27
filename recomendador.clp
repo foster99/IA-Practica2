@@ -895,17 +895,60 @@
 ;
 ; REGLAS
 ;
+(defmodule MAIN (export ?ALL))
 
-(deftemplate MAIN::templ
-	(slot sl (type STRING))
+(deftemplate MAIN::datos-usuario
+	(slot genero-fav (type STRING))
+)
+
+(deffunction ask-question (?question $?allowed-values)
+   (printout t ?question)
+   (bind ?answer (read))
+   (while (not (member ?answer ?allowed-values)) do
+      (printout t ?question)
+      (bind ?answer (read))
+   )
+   ?answer)
+
+;;; Hace una pregunta a la que hay que responder si o no
+(deffunction si-o-no-p (?question)
+   (bind ?response (ask-question ?question si no s n))
+   (if (or (eq ?response si) (eq ?response s))
+       then TRUE 
+       else FALSE)
 )
 
 
-(defrule retorna_instancies
-    (not (retorna_instancies))
+(defrule genero-FirstContact
     =>
-    (bind ?llista_instancies ( find-instance (?lib Libro) TRUE) )
-    (assert retorna_instancies)
+    (if  (si-o-no-p "Te gusta el genero FirstContact? (s/n) ")
+    then
+        (assert (genero FirstContact))
+    )
+)
+
+(defrule genero-GalacticEmpire
+    =>
+    (if  (si-o-no-p "Te gusta el genero GalacticEmpire? (s/n) ")
+    then
+        (assert (genero GalacticEmpire))
+    )
+)
+
+(defrule genero-GeneticEngineering
+    =>
+    (if  (si-o-no-p "Te gusta el genero GeneticEngineering? (s/n) ")
+    then
+        (assert (genero GeneticEngineering))
+    )
+)
+
+(defrule genero-HardScienceFiction
+    =>
+    (if  (si-o-no-p "Te gusta el genero HardScienceFiction? (s/n) ")
+    then
+        (assert (genero HardScienceFiction))
+    )
 )
 ;(defrule MAIN::system-banner ""
 ;  =>
