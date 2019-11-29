@@ -3,7 +3,7 @@
 ;
 
 ; Wed Nov 27 17:09:03 CET 2019
-; 
+;
 ;+ (version "3.5")
 ;+ (build "Build 660")
 
@@ -266,7 +266,7 @@
 ;
 
 ; Wed Nov 27 17:09:03 CET 2019
-; 
+;
 ;+ (version "3.5")
 ;+ (build "Build 660")
 (definstances instancias
@@ -887,19 +887,127 @@
 
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;; MODULOS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; MODULOS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;; Modulo principal de utilidades
-
-
-;
-; REGLAS
-;
+; ------------------------------ Modulo general del sistema. --------------------
 (defmodule MAIN (export ?ALL))
 
-(deftemplate MAIN::datos-usuario
-	(slot genero-fav (type STRING))
+
+; ---------------- Modulos dedicados a la recopilacion de datos. ---------------
+(defmodule recopilacion-datos-personales
+	(import MAIN ?ALL)
+	(export ?ALL)
 )
+(defmodule recopilacion-experiencia-lectura
+	(import MAIN ?ALL)
+	;(import recopilacion-datos-personales deftemplate ?ALL)
+	(export ?ALL)
+)
+
+; -------------- Modulos dedicados a la abstraccion de los datos. --------------
+(defmodule abstraccion-de-datos
+	(import MAIN ?ALL)
+	;(import recopilacion-datos-personales deftemplate ?ALL)
+	;(import recopilacion-experiencia-lectura deftemplate ?ALL)
+	(export ?ALL)
+)
+
+; ---------------- Modulos dedicados a la asociacion heuristica. ---------------
+(defmodule generacion-de-soluciones
+	(import MAIN ?ALL)
+	(export ?ALL)
+)
+
+; -------------- Modulos dedicados al refinamiento de la solucion. -------------
+(defmodule refinamiento-de-soluciones
+	(import MAIN ?ALL)
+	(export ?ALL)
+)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; CLASES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; Una recomendacion es un libro asociado a unas justificaciones.
+(defclass Recomendacion
+	(is-a USER)
+	(role concrete)
+    (slot Libro
+		(type INSTANCE)
+		(create-accessor read-write))
+    (multislot justificaciones
+		(type STRING)
+		(create-accessor read-write))
+)
+
+; Clase donde cuardar las 3 recomendaciones que hagamos
+(defclass Veredicto
+	(is-a USER)
+	(role concrete)
+	(multislot recomendaciones
+		(type INSTANCE)
+		(create-accessor read-write))
+)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; PRINTING ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defmessage-handler MAIN::Libro print ()
+	(format t "Titulo: %s %n" ?self:Nombre)
+	(printout t crlf)
+	(format t "Autor: %s" (send ?self:Tiene_Como_Autor get-Nombre))
+	(printout t crlf)
+    (format t "Genero: %s" (send ?self:Es_Del_Genero get-Nombre))
+	(printout t crlf)
+    ;(format t "Version original: %s" ?self:Es_Version_Original)
+	;(printout t crlf)
+    (format t "Numero de paginas: %d" ?self:NumPag)
+	(printout t crlf)
+    (format t "Idiomas disponibles: %s" ?self:Idioma)
+	(printout t crlf)
+    (format t "Valoracion de 1 a 10: %d" ?self:Valoracio)
+	(printout t crlf)
+	(format t "Formatos disponibles: %s" ?self:Formato)
+	(printout t crlf)
+	(format t "Puede adquirirlo en: %s" (send ?self:Se_Adquiere_En get-Nombre))
+	(printout t crlf)
+
+)
+
+(defmessage-handler MAIN::Recomendacion print ()
+	(printout t "-----------------------------------" crlf)
+	(printout t (send ?self:Libro print))
+	(printout t crlf)
+	(printout t "Justificacion de la eleccion: " crlf)
+	(progn$ (?curr-just ?self:justificaciones)
+		(printout t ?curr-just crlf)
+	)
+	(printout t crlf)
+	(printout t "-----------------------------------" crlf)
+)
+
+(defmessage-handler MAIN::Veredicto print ()
+	(printout t "============================================" crlf)
+	(bind $?recs ?self:recomendaciones)
+	(progn$ (?curr-rec $?recs)
+		(printout t (send ?curr-rec print))
+	)
+	(printout t "============================================" crlf)
+)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; TEMPLATES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(deftemplate MAIN::datos-usuario
+	(slot sexo (type STRING))						; sexo del usuario
+	(slot edad (type INTEGER)(default -1))			; edad del usuario
+	(slot genero-fav (type STRING))					; genero favorito del usuario
+	(slot lugar-de-lectura (type STRING))			; lugares de lectura del usuario
+	(slot cantidad-libros-leidos (type INTEGER)) 	; Cantidad de libros leidos por el usuario
+	; No se si faltan mas (personales del usuario)
+)
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; FUNCIONES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (deffunction ask-question (?question $?allowed-values)
    (printout t ?question)
@@ -914,10 +1022,12 @@
 (deffunction si-o-no-p (?question)
    (bind ?response (ask-question ?question si no s n))
    (if (or (eq ?response si) (eq ?response s))
-       then TRUE 
+       then TRUE
        else FALSE)
 )
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; RULES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defrule genero-FirstContact
     =>
@@ -950,6 +1060,7 @@
         (assert (genero HardScienceFiction))
     )
 )
+
 ;(defrule MAIN::system-banner ""
 ;  =>
   ;  (printout t crlf crlf)
@@ -957,7 +1068,3 @@
     ;(printout t crlf crlf)
     ;(focus obtencion-datos)
 ;)
-
-
-
-
