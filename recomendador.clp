@@ -985,22 +985,22 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; TEMPLATES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(deftemplate MAIN::datos-usuario
-	(slot sexo (type STRING))						; sexo del usuario
-	(slot edad (type INTEGER)(default -1))			; edad del usuario
-	(multislot idiomas (type STRING))				; idiomas que lee el usuario
-	(slot lugar-de-lectura (type STRING))			; lugares de lectura del usuario
-	(slot sagas (type INTEGER))						; Le gustan o no las sagas
-	(slot longitud (type INTEGER))					; Como de largos le gustan los libros
-	(slot VO (type INTEGER))						; Prioriza versiones originales
-	(slot confianza (type INTEGER))					; Confia en las valoraciones de la gente
+(deftemplate MAIN::datos_usuario
+	(slot sexo (type STRING)(default "null"))				; sexo del usuario
+	(slot edad (type INTEGER)(default -1))			        ; edad del usuario
+	(multislot idiomas (type STRING))				        ; idiomas que lee el usuario
+	(slot lugar_de_lectura (type STRING)(default "null"))   ; lugares de lectura del usuario
+	(slot sagas (type STRING)(default "null"))				    ; Le gustan o no las sagas
+	(slot longitud (type INTEGER)(default -1))		        ; Como de largos le gustan los libros
+	(slot VO (type STRING)(default "null"))      		        ; Prioriza versiones originales
+	(slot confianza (type STRING)(default "null"))				; Confia en las valoraciones de la gente
 )
 
 
 
 (deftemplate MAIN::experiencia_lectura
-	(slot cantidad-libros-leidos (type INTEGER)) 	; Cantidad de libros leidos por el usuario
-	(multislot generos-fav (type INSTANCE))			; Generos favoritos del usuario
+	(slot cantidad_libros_leidos (type INTEGER)) 	; Cantidad de libros leidos por el usuario
+	(multislot generos_fav (type INSTANCE))			; Generos favoritos del usuario
 	(multislot autores_fav (type INSTANCE))			; Autores que le gustan al usuario
 	(multislot libros_gustado (type INSTANCE))		; Libros que le hayan gustado
 	(multislot libros_disgustado (type INSTANCE))	; Libros que NO le hayan gustado
@@ -1009,10 +1009,12 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; FUNCIONES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(deffunction ask-question (?question $?allowed-values)
+
+
+(deffunction ask_question (?question $?allowed_values)
    (printout t ?question)
    (bind ?answer (read))
-   (while (not (member ?answer ?allowed-values)) do
+   (while (not (member ?answer ?allowed_values)) do
       (printout t ?question)
       (bind ?answer (read))
    )
@@ -1021,14 +1023,44 @@
 
 
 ;;; Hace una pregunta a la que hay que responder si o no
-(deffunction si-o-no-p (?question)
-   (bind ?response (ask-question ?question si no s n))
+(deffunction si_o_no_p (?question)
+   (bind ?response (ask_question ?question si no s n))
    (if (or (eq ?response si) (eq ?response s))
        then TRUE
        else FALSE)
 )
 
+;;; Funcion para hacer una pregunta numerica-univalor
+(deffunction MAIN::pregunta_numerica (?pregunta ?rangini ?rangfi)
+	(format t "%s (De %d hasta %d) " ?pregunta ?rangini ?rangfi)
+	(bind ?respuesta (read))
+	(while (not(and(>= ?respuesta ?rangini)(<= ?respuesta ?rangfi))) do
+		(format t "%s (De %d hasta %d) " ?pregunta ?rangini ?rangfi)
+		(bind ?respuesta (read))
+	)
+	?respuesta
+)
 
+(deffunction MAIN::pregunta_opciones (?question $?allowed-values)
+   (format t "%s "?question)
+   (progn$ (?curr-value $?allowed-values)
+		(format t "[%s]" ?curr-value)
+	)
+   (printout t ": ")
+   (bind ?answer (read))
+   (if (lexemep ?answer) 
+       then (bind ?answer (lowcase ?answer)))
+   (while (not (member ?answer ?allowed-values)) do
+      (format t "%s "?question)
+	  (progn$ (?curr-value $?allowed-values)
+		(format t "[%s]" ?curr-value)
+	  )
+	  (printout t ": ")
+      (bind ?answer (read))
+      (if (lexemep ?answer) 
+          then (bind ?answer (lowcase ?answer))))
+   ?answer
+)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; RULES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;(defrule MAIN::preguntas-iniciales
@@ -1037,39 +1069,40 @@
 ;	;(ask-question ("Que edad tienes?" h m hombre mujer) ?edad)
 ;	(assert (genero FirstContact))
 ;)
-
-
-(defrule MAIN::genero-FirstContact
-    =>
-    (if  (si-o-no-p "Te gusta el genero FirstContact? (s/n) ")
-    then
-        (assert (genero FirstContact))
-    )
+(defrule MAIN::crea_datos_usuario_inicial
+    (not (datos_usuario))
+	=>
+	(assert (datos_usuario))
 )
 
-(defrule MAIN::genero-GalacticEmpire
-    =>
-    (if  (si-o-no-p "Te gusta el genero GalacticEmpire? (s/n) ")
-    then
-        (assert (genero GalacticEmpire))
-    )
+(defrule MAIN::duracion_libros
+    ?d <- (datos_usuario (longitud -1))
+	=>
+	(bind ?l (pregunta_numerica "¿Duracion de los libros (paginas)? " 1 1000))
+	(modify ?d (longitud ?l))
 )
 
-(defrule  MAIN::genero-GeneticEngineering
-    =>
-    (if  (si-o-no-p "Te gusta el genero GeneticEngineering? (s/n) ")
-    then
-        (assert (genero GeneticEngineering))
-    )
+(defrule MAIN::sexo_usuario
+    ?d <- (datos_usuario (sexo "null"))
+	=>
+	(bind ?s (ask_question "¿Cual es tu genero (hombre/mujer)? " hombre mujer))
+	(modify ?d (sexo ?s))
 )
 
-(defrule  MAIN::genero-HardScienceFiction
-    =>
-    (if  (si-o-no-p "Te gusta el genero HardScienceFiction? (s/n) ")
-    then
-        (assert (genero HardScienceFiction))
-    )
+(defrule MAIN::lugar_lectura
+    ?d <- (datos_usuario (lugar_de_lectura "null"))
+	=>
+	(bind ?s (ask_question "¿Lugar de lectura favorito? (Cafeteria, Calle, Oficina, Biblioteca, Coche)? " Cafeteria Calle Oficina Biblioteca Coche))
+	(modify ?d (lugar_de_lectura ?s))
 )
+
+(defrule MAIN::edad_usuario
+    ?d <- (datos_usuario (edad -1))
+	=>
+	(bind ?e (pregunta_numerica "¿Cual es tu edad? " 3 120))
+	(modify ?d (edad ?e))
+)
+
 
 ;(defrule MAIN::system-banner ""
 ;  =>
