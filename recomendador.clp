@@ -876,7 +876,6 @@
 )
 
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; MODULOS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; ------------------------------ Modulo general del sistema. --------------------
@@ -938,8 +937,9 @@
 		(create-accessor read-write))
 )
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; PRINTING ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defmessage-handler MAIN::Libro print ()
+(defmessage-handler Libro print ()
 	(format t "Titulo: %s %n" ?self:Nombre)
 	(printout t crlf)
 	(format t "Autor: %s" (send ?self:Tiene_Como_Autor get-Nombre))
@@ -952,7 +952,7 @@
 	(printout t crlf)
     (format t "Idiomas disponibles: %s" ?self:Idioma)
 	(printout t crlf)
-    (format t "Valoracion de 1 a 10: %d" ?self:Valoracio)
+    (format t "Valoracion de 1 a 10: %d" ?self:Valoracion)
 	(printout t crlf)
 	(format t "Formatos disponibles: %s" ?self:Formato)
 	(printout t crlf)
@@ -961,7 +961,7 @@
 
 )
 
-(defmessage-handler MAIN::Recomendacion print ()
+(defmessage-handler Recomendacion print ()
 	(printout t "-----------------------------------" crlf)
 	(printout t (send ?self:Libro print))
 	(printout t crlf)
@@ -973,7 +973,7 @@
 	(printout t "-----------------------------------" crlf)
 )
 
-(defmessage-handler MAIN::Veredicto print ()
+(defmessage-handler Veredicto print ()
 	(printout t "============================================" crlf)
 	(bind $?recs ?self:recomendaciones)
 	(progn$ (?curr-rec $?recs)
@@ -984,7 +984,6 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; TEMPLATES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 
 (deftemplate MAIN::datos-usuario
 	(slot sexo (type STRING))						; sexo del usuario
@@ -1032,15 +1031,15 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; RULES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defrule preguntas-iniciales
-    =>
-    (ask-question ("Eres un hombre o una mujer?" h m hombre mujer) ?sexo)
-	(ask-question ("Que edad tienes?" h m hombre mujer) ?edad)
-	;(assert (genero FirstContact))
-)
+;(defrule MAIN::preguntas-iniciales
+;    =>
+;    (ask-question ("Eres un hombre o una mujer?" h m hombre mujer) ?sexo)
+;	;(ask-question ("Que edad tienes?" h m hombre mujer) ?edad)
+;	(assert (genero FirstContact))
+;)
 
 
-(defrule genero-FirstContact
+(defrule MAIN::genero-FirstContact
     =>
     (if  (si-o-no-p "Te gusta el genero FirstContact? (s/n) ")
     then
@@ -1048,7 +1047,7 @@
     )
 )
 
-(defrule genero-GalacticEmpire
+(defrule MAIN::genero-GalacticEmpire
     =>
     (if  (si-o-no-p "Te gusta el genero GalacticEmpire? (s/n) ")
     then
@@ -1056,7 +1055,7 @@
     )
 )
 
-(defrule genero-GeneticEngineering
+(defrule  MAIN::genero-GeneticEngineering
     =>
     (if  (si-o-no-p "Te gusta el genero GeneticEngineering? (s/n) ")
     then
@@ -1064,7 +1063,7 @@
     )
 )
 
-(defrule genero-HardScienceFiction
+(defrule  MAIN::genero-HardScienceFiction
     =>
     (if  (si-o-no-p "Te gusta el genero HardScienceFiction? (s/n) ")
     then
