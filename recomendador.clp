@@ -883,18 +883,13 @@
 
 
 ; ---------------- Modulos dedicados a la recopilacion de datos. ---------------
-(defmodule recopilacion-datos-personales
+(defmodule recopilacion_datos_personales
 	(import MAIN ?ALL)
-	(export ?ALL)
-)
-(defmodule recopilacion-experiencia-lectura
-	(import MAIN ?ALL)
-	;(import recopilacion-datos-personales deftemplate ?ALL)
 	(export ?ALL)
 )
 
 ; -------------- Modulos dedicados a la abstraccion de los datos. --------------
-(defmodule abstraccion-de-datos
+(defmodule abstraccion_de_datos
 	(import MAIN ?ALL)
 	;(import recopilacion-datos-personales deftemplate ?ALL)
 	;(import recopilacion-experiencia-lectura deftemplate ?ALL)
@@ -902,13 +897,13 @@
 )
 
 ; ---------------- Modulos dedicados a la asociacion heuristica. ---------------
-(defmodule generacion-de-soluciones
+(defmodule generacion_de_soluciones
 	(import MAIN ?ALL)
 	(export ?ALL)
 )
 
 ; -------------- Modulos dedicados al refinamiento de la solucion. -------------
-(defmodule refinamiento-de-soluciones
+(defmodule refinamiento_de_soluciones
 	(import MAIN ?ALL)
 	(export ?ALL)
 )
@@ -994,18 +989,22 @@
 	(slot longitud (type INTEGER)(default -1))		        ; Como de largos le gustan los libros
 	(slot VO (type STRING)(default "null"))      		        ; Prioriza versiones originales
 	(slot confianza (type STRING)(default "null"))				; Confia en las valoraciones de la gente
-)
-
-
-
-(deftemplate MAIN::experiencia_lectura
-	(slot cantidad_libros_leidos (type INTEGER)) 	; Cantidad de libros leidos por el usuario
+	(slot cantidad_libros_leidos (type INTEGER)(default -1)) 	; Cantidad de libros leidos por el usuario
 	(multislot generos_fav (type INSTANCE))			; Generos favoritos del usuario
 	(multislot autores_fav (type INSTANCE))			; Autores que le gustan al usuario
 	(multislot libros_gustado (type INSTANCE))		; Libros que le hayan gustado
 	(multislot libros_disgustado (type INSTANCE))	; Libros que NO le hayan gustado
 )
 
+(deftemplate MAIN::problema_abstracto
+    (slot longitud_libro (type STRING))
+    (slot puede_ser_de_saga (type INTEGER))
+    (slot mejor_si_es_VO (type INTEGER))
+    (slot valoraciones_cuentan (type INTEGER))
+    (slot nivel_lector (type STRING))
+    (multislot generos_validos (type INSTANCE))
+    (multislot autores_validos (type INSTANCE))
+)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; FUNCIONES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -1019,8 +1018,6 @@
       (bind ?answer (read))
    )
    ?answer)
-
-
 
 ;;; Hace una pregunta a la que hay que responder si o no
 (deffunction si_o_no_p (?question)
@@ -1063,51 +1060,52 @@
 )
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; RULES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;(defrule MAIN::preguntas-iniciales
-;    =>
-;    (ask-question ("Eres un hombre o una mujer?" h m hombre mujer) ?sexo)
-;	;(ask-question ("Que edad tienes?" h m hombre mujer) ?edad)
-;	(assert (genero FirstContact))
-;)
+
 (defrule MAIN::crea_datos_usuario_inicial
     (not (datos_usuario))
 	=>
 	(assert (datos_usuario))
+    (focus recopilacion_datos_personales)
 )
 
-(defrule MAIN::duracion_libros
+(defrule recopilacion_datos_personales::duracion_libros
     ?d <- (datos_usuario (longitud -1))
 	=>
 	(bind ?l (pregunta_numerica "¿Duracion de los libros (paginas)? " 1 1000))
 	(modify ?d (longitud ?l))
 )
 
-(defrule MAIN::sexo_usuario
+(defrule recopilacion_datos_personales::sexo_usuario
     ?d <- (datos_usuario (sexo "null"))
 	=>
 	(bind ?s (ask_question "¿Cual es tu genero (hombre/mujer)? " hombre mujer))
 	(modify ?d (sexo ?s))
 )
 
-(defrule MAIN::lugar_lectura
+(defrule recopilacion_datos_personales::lugar_lectura
     ?d <- (datos_usuario (lugar_de_lectura "null"))
 	=>
 	(bind ?s (ask_question "¿Lugar de lectura favorito? (Cafeteria, Calle, Oficina, Biblioteca, Coche)? " Cafeteria Calle Oficina Biblioteca Coche))
 	(modify ?d (lugar_de_lectura ?s))
 )
 
-(defrule MAIN::edad_usuario
+(defrule recopilacion_datos_personales::edad_usuario
     ?d <- (datos_usuario (edad -1))
 	=>
 	(bind ?e (pregunta_numerica "¿Cual es tu edad? " 3 120))
 	(modify ?d (edad ?e))
 )
 
-
-;(defrule MAIN::system-banner ""
-;  =>
-  ;  (printout t crlf crlf)
-   ; (printout t "----El Recomendador de Libros----")
-    ;(printout t crlf crlf)
-    ;(focus obtencion-datos)
-;)
+(defrule recopilacion_datos_personales::assignar_cantidad_libros "¿Cuantos libros has leido?"
+    ?d <- (datos_usuario (cantidad_libros_leidos -1))
+    =>
+    (bind ?l (pregunta_numerica "¿Cuantos libros has leido?" 0 100))
+    (modify ?d (cantidad_libros_leidos ?l))
+    )
+(defrule MAIN::system-banner ""
+    (declare (salience 10))  
+    =>
+    (printout t crlf crlf)
+    (printout t "----El Recomendador de Libros----")
+    (printout t crlf crlf)
+)
