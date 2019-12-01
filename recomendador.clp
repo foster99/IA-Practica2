@@ -2,257 +2,257 @@
 ; ONTOLOGIA
 ;
 (defclass %3ACLIPS_TOP_LEVEL_SLOT_CLASS "Fake class to save top-level slot information"
-	(is-a USER)
-	(role abstract)
-	(single-slot Nacionalidad
-		(type STRING)
-;+		(cardinality 1 1)
-		(create-accessor read-write))
-	(multislot Es_Del_Genero
-		(type INSTANCE)
-;+		(allowed-classes Genero)
-		(cardinality 1 ?VARIABLE)
-;+		(inverse-slot Es_Genero_De)
-		(create-accessor read-write))
-	(single-slot NumVentas
-		(type INTEGER)
-;+		(cardinality 1 1)
-		(create-accessor read-write))
-	(single-slot Complejidad_Tramas
-		(type SYMBOL)
-		(allowed-values Alta Media Baja)
-;+		(cardinality 1 1)
-		(create-accessor read-write))
-	(single-slot es_sucesor_se
-		(type INSTANCE)
-;+		(allowed-classes Libro)
-;+		(cardinality 0 1)
-;+		(inverse-slot es_predecesor_de)
-		(create-accessor read-write))
-	(single-slot Es_Version_Original
-;+		(comment "Es la version original, o una adaptacion.")
-		(type SYMBOL)
-		(allowed-values FALSE TRUE)
-;+		(cardinality 1 1)
-		(create-accessor read-write))
-	(single-slot Dificultad_Lenguaje
-		(type SYMBOL)
-		(allowed-values Alta Media Baja)
-;+		(cardinality 1 1)
-		(create-accessor read-write))
-	(single-slot Popularidad
-		(type SYMBOL)
-		(allowed-values Alta Media Baja)
-;+		(cardinality 1 1)
-		(create-accessor read-write))
-	(multislot Se_Adquiere_En
-		(type INSTANCE)
-;+		(allowed-classes LugarDeAdquision)
-		(cardinality 1 ?VARIABLE)
-;+		(inverse-slot Se_Adquiere)
-		(create-accessor read-write))
-	(multislot Formato
-		(type SYMBOL)
-		(allowed-values Paper Digital)
-		(cardinality 1 2)
-		(create-accessor read-write))
-	(multislot Es_Genero_De
-		(type INSTANCE)
-;+		(allowed-classes Libro)
-;+		(inverse-slot Es_Del_Genero)
-		(create-accessor read-write))
-	(single-slot Es_Tendencia
-		(type SYMBOL)
-		(allowed-values FALSE TRUE)
-;+		(cardinality 0 1)
-		(create-accessor read-write))
-	(single-slot NumPag
-;+		(comment "Numero de paginas del libro.")
-		(type INTEGER)
-;+		(cardinality 1 1)
-		(create-accessor read-write))
-	(single-slot es_predecesor_de
-		(type INSTANCE)
-;+		(allowed-classes Libro)
-;+		(cardinality 0 1)
-;+		(inverse-slot es_sucesor_se)
-		(create-accessor read-write))
-	(single-slot Valoracion
-;+		(comment "Valoracion de otros usuarios que han leido el libro.")
-		(type INTEGER)
-;+		(cardinality 1 1)
-		(create-accessor read-write))
-	(multislot Se_Adquiere
-		(type INSTANCE)
-;+		(allowed-classes Libro)
-		(cardinality 1 ?VARIABLE)
-;+		(inverse-slot Se_Adquiere_En)
-		(create-accessor read-write))
-	(multislot Idioma
-		(type SYMBOL)
-		(allowed-values Ingles Castellano Frances Aleman)
-		(cardinality 1 ?VARIABLE)
-		(create-accessor read-write))
-	(single-slot Clima
-		(type SYMBOL)
-		(allowed-values Tranquilo Ajetreado Silencioso Ruidoso)
-;+		(cardinality 0 1)
-		(create-accessor read-write))
-	(multislot Es_Autor_De
-		(type INSTANCE)
-;+		(allowed-classes Libro)
-		(cardinality 1 ?VARIABLE)
-;+		(inverse-slot Tiene_Como_Autor)
-		(create-accessor read-write))
-	(multislot Tiene_Como_Autor
-		(type INSTANCE)
-;+		(allowed-classes Autor)
-		(cardinality 1 ?VARIABLE)
-;+		(inverse-slot Es_Autor_De)
-		(create-accessor read-write))
-	(single-slot Nombre
-		(type STRING)
-;+		(cardinality 1 1)
-		(create-accessor read-write)))
+		(is-a USER)
+		(role abstract)
+		(single-slot Nacionalidad
+			(type STRING)
+	;+		(cardinality 1 1)
+			(create-accessor read-write))
+		(multislot Es_Del_Genero
+			(type INSTANCE)
+	;+		(allowed-classes Genero)
+			(cardinality 1 ?VARIABLE)
+	;+		(inverse-slot Es_Genero_De)
+			(create-accessor read-write))
+		(single-slot NumVentas
+			(type INTEGER)
+	;+		(cardinality 1 1)
+			(create-accessor read-write))
+		(single-slot Complejidad_Tramas
+			(type SYMBOL)
+			(allowed-values Alta Media Baja)
+	;+		(cardinality 1 1)
+			(create-accessor read-write))
+		(single-slot es_sucesor_se
+			(type INSTANCE)
+	;+		(allowed-classes Libro)
+	;+		(cardinality 0 1)
+	;+		(inverse-slot es_predecesor_de)
+			(create-accessor read-write))
+		(single-slot Es_Version_Original
+	;+		(comment "Es la version original, o una adaptacion.")
+			(type SYMBOL)
+			(allowed-values FALSE TRUE)
+	;+		(cardinality 1 1)
+			(create-accessor read-write))
+		(single-slot Dificultad_Lenguaje
+			(type SYMBOL)
+			(allowed-values Alta Media Baja)
+	;+		(cardinality 1 1)
+			(create-accessor read-write))
+		(single-slot Popularidad
+			(type SYMBOL)
+			(allowed-values Alta Media Baja)
+	;+		(cardinality 1 1)
+			(create-accessor read-write))
+		(multislot Se_Adquiere_En
+			(type INSTANCE)
+	;+		(allowed-classes LugarDeAdquision)
+			(cardinality 1 ?VARIABLE)
+	;+		(inverse-slot Se_Adquiere)
+			(create-accessor read-write))
+		(multislot Formato
+			(type SYMBOL)
+			(allowed-values Paper Digital)
+			(cardinality 1 2)
+			(create-accessor read-write))
+		(multislot Es_Genero_De
+			(type INSTANCE)
+	;+		(allowed-classes Libro)
+	;+		(inverse-slot Es_Del_Genero)
+			(create-accessor read-write))
+		(single-slot Es_Tendencia
+			(type SYMBOL)
+			(allowed-values FALSE TRUE)
+	;+		(cardinality 0 1)
+			(create-accessor read-write))
+		(single-slot NumPag
+	;+		(comment "Numero de paginas del libro.")
+			(type INTEGER)
+	;+		(cardinality 1 1)
+			(create-accessor read-write))
+		(single-slot es_predecesor_de
+			(type INSTANCE)
+	;+		(allowed-classes Libro)
+	;+		(cardinality 0 1)
+	;+		(inverse-slot es_sucesor_se)
+			(create-accessor read-write))
+		(single-slot Valoracion
+	;+		(comment "Valoracion de otros usuarios que han leido el libro.")
+			(type INTEGER)
+	;+		(cardinality 1 1)
+			(create-accessor read-write))
+		(multislot Se_Adquiere
+			(type INSTANCE)
+	;+		(allowed-classes Libro)
+			(cardinality 1 ?VARIABLE)
+	;+		(inverse-slot Se_Adquiere_En)
+			(create-accessor read-write))
+		(multislot Idioma
+			(type SYMBOL)
+			(allowed-values Ingles Castellano Frances Aleman)
+			(cardinality 1 ?VARIABLE)
+			(create-accessor read-write))
+		(single-slot Clima
+			(type SYMBOL)
+			(allowed-values Tranquilo Ajetreado Silencioso Ruidoso)
+	;+		(cardinality 0 1)
+			(create-accessor read-write))
+		(multislot Es_Autor_De
+			(type INSTANCE)
+	;+		(allowed-classes Libro)
+			(cardinality 1 ?VARIABLE)
+	;+		(inverse-slot Tiene_Como_Autor)
+			(create-accessor read-write))
+		(multislot Tiene_Como_Autor
+			(type INSTANCE)
+	;+		(allowed-classes Autor)
+			(cardinality 1 ?VARIABLE)
+	;+		(inverse-slot Es_Autor_De)
+			(create-accessor read-write))
+		(single-slot Nombre
+			(type STRING)
+	;+		(cardinality 1 1)
+			(create-accessor read-write)))
 
 (defclass Libro
-	(is-a USER)
-	(role concrete)
-	(single-slot es_sucesor_se
-		(type INSTANCE)
-;+		(allowed-classes Libro)
-;+		(cardinality 0 1)
-		(create-accessor read-write))
-	(single-slot es_predecesor_de
-		(type INSTANCE)
-;+		(allowed-classes Libro)
-;+		(cardinality 0 1)
-		(create-accessor read-write))
-	(multislot Formato
-		(type SYMBOL)
-		(allowed-values Paper Digital)
-		(cardinality 1 2)
-		(create-accessor read-write))
-	(single-slot Es_Version_Original
-;+		(comment "Es la version original, o una adaptacion.")
-		(type SYMBOL)
-		(allowed-values FALSE TRUE)
-;+		(cardinality 1 1)
-		(create-accessor read-write))
-	(single-slot Valoracion
-;+		(comment "Valoracion de otros usuarios que han leido el libro.")
-		(type INTEGER)
-;+		(cardinality 1 1)
-		(create-accessor read-write))
-	(single-slot NumPag
-;+		(comment "Numero de paginas del libro.")
-		(type INTEGER)
-;+		(cardinality 1 1)
-		(create-accessor read-write))
-	(multislot Es_Del_Genero
-		(type INSTANCE)
-;+		(allowed-classes Genero)
-		(cardinality 1 ?VARIABLE)
-		(create-accessor read-write))
-	(multislot Tiene_Como_Autor
-		(type INSTANCE)
-;+		(allowed-classes Autor)
-		(cardinality 1 ?VARIABLE)
-		(create-accessor read-write))
-	(single-slot Nombre
-		(type STRING)
-;+		(cardinality 1 1)
-		(create-accessor read-write))
-	(multislot Idioma
-		(type SYMBOL)
-		(allowed-values Ingles Castellano Frances Aleman)
-		(cardinality 1 ?VARIABLE)
-		(create-accessor read-write))
-	(multislot Se_Adquiere_En
-		(type INSTANCE)
-;+		(allowed-classes LugarDeAdquision)
-		(cardinality 1 ?VARIABLE)
-		(create-accessor read-write)))
+		(is-a USER)
+		(role concrete)
+		(single-slot es_sucesor_se
+			(type INSTANCE)
+	;+		(allowed-classes Libro)
+	;+		(cardinality 0 1)
+			(create-accessor read-write))
+		(single-slot es_predecesor_de
+			(type INSTANCE)
+	;+		(allowed-classes Libro)
+	;+		(cardinality 0 1)
+			(create-accessor read-write))
+		(multislot Formato
+			(type SYMBOL)
+			(allowed-values Paper Digital)
+			(cardinality 1 2)
+			(create-accessor read-write))
+		(single-slot Es_Version_Original
+	;+		(comment "Es la version original, o una adaptacion.")
+			(type SYMBOL)
+			(allowed-values FALSE TRUE)
+	;+		(cardinality 1 1)
+			(create-accessor read-write))
+		(single-slot Valoracion
+	;+		(comment "Valoracion de otros usuarios que han leido el libro.")
+			(type INTEGER)
+	;+		(cardinality 1 1)
+			(create-accessor read-write))
+		(single-slot NumPag
+	;+		(comment "Numero de paginas del libro.")
+			(type INTEGER)
+	;+		(cardinality 1 1)
+			(create-accessor read-write))
+		(multislot Es_Del_Genero
+			(type INSTANCE)
+	;+		(allowed-classes Genero)
+			(cardinality 1 ?VARIABLE)
+			(create-accessor read-write))
+		(multislot Tiene_Como_Autor
+			(type INSTANCE)
+	;+		(allowed-classes Autor)
+			(cardinality 1 ?VARIABLE)
+			(create-accessor read-write))
+		(single-slot Nombre
+			(type STRING)
+	;+		(cardinality 1 1)
+			(create-accessor read-write))
+		(multislot Idioma
+			(type SYMBOL)
+			(allowed-values Ingles Castellano Frances Aleman)
+			(cardinality 1 ?VARIABLE)
+			(create-accessor read-write))
+		(multislot Se_Adquiere_En
+			(type INSTANCE)
+	;+		(allowed-classes LugarDeAdquision)
+			(cardinality 1 ?VARIABLE)
+			(create-accessor read-write)))
 
 (defclass Autor
-	(is-a USER)
-	(role concrete)
-	(single-slot Nacionalidad
-		(type STRING)
-;+		(cardinality 1 1)
-		(create-accessor read-write))
-	(single-slot Dificultad_Lenguaje
-		(type SYMBOL)
-		(allowed-values Alta Media Baja)
-;+		(cardinality 1 1)
-		(create-accessor read-write))
-	(multislot Es_Autor_De
-		(type INSTANCE)
-;+		(allowed-classes Libro)
-		(cardinality 1 ?VARIABLE)
-		(create-accessor read-write))
-	(single-slot Complejidad_Tramas
-		(type SYMBOL)
-		(allowed-values Alta Media Baja)
-;+		(cardinality 1 1)
-		(create-accessor read-write))
-	(single-slot Popularidad
-		(type SYMBOL)
-		(allowed-values Alta Media Baja)
-;+		(cardinality 1 1)
-		(create-accessor read-write))
-	(single-slot Nombre
-		(type STRING)
-;+		(cardinality 1 1)
-		(create-accessor read-write))
-	(multislot Idioma
-		(type SYMBOL)
-		(allowed-values Ingles Castellano Frances Aleman)
-		(cardinality 1 ?VARIABLE)
-		(create-accessor read-write)))
+		(is-a USER)
+		(role concrete)
+		(single-slot Nacionalidad
+			(type STRING)
+	;+		(cardinality 1 1)
+			(create-accessor read-write))
+		(single-slot Dificultad_Lenguaje
+			(type SYMBOL)
+			(allowed-values Alta Media Baja)
+	;+		(cardinality 1 1)
+			(create-accessor read-write))
+		(multislot Es_Autor_De
+			(type INSTANCE)
+	;+		(allowed-classes Libro)
+			(cardinality 1 ?VARIABLE)
+			(create-accessor read-write))
+		(single-slot Complejidad_Tramas
+			(type SYMBOL)
+			(allowed-values Alta Media Baja)
+	;+		(cardinality 1 1)
+			(create-accessor read-write))
+		(single-slot Popularidad
+			(type SYMBOL)
+			(allowed-values Alta Media Baja)
+	;+		(cardinality 1 1)
+			(create-accessor read-write))
+		(single-slot Nombre
+			(type STRING)
+	;+		(cardinality 1 1)
+			(create-accessor read-write))
+		(multislot Idioma
+			(type SYMBOL)
+			(allowed-values Ingles Castellano Frances Aleman)
+			(cardinality 1 ?VARIABLE)
+			(create-accessor read-write)))
 
 (defclass Lugar
-	(is-a USER)
-	(role concrete)
-	(single-slot Nombre
-		(type STRING)
-;+		(cardinality 1 1)
-		(create-accessor read-write)))
+		(is-a USER)
+		(role concrete)
+		(single-slot Nombre
+			(type STRING)
+	;+		(cardinality 1 1)
+			(create-accessor read-write)))
 
 (defclass LugarDeAdquision
-	(is-a Lugar)
-	(role concrete)
-	(multislot Se_Adquiere
-		(type INSTANCE)
-;+		(allowed-classes Libro)
-		(cardinality 1 ?VARIABLE)
-		(create-accessor read-write)))
+		(is-a Lugar)
+		(role concrete)
+		(multislot Se_Adquiere
+			(type INSTANCE)
+	;+		(allowed-classes Libro)
+			(cardinality 1 ?VARIABLE)
+			(create-accessor read-write)))
 
 (defclass LugarDeLectura
-	(is-a Lugar)
-	(role concrete)
-	(single-slot Clima
-		(type SYMBOL)
-		(allowed-values Tranquilo Ajetreado Silencioso Ruidoso)
-;+		(cardinality 0 1)
-		(create-accessor read-write)))
+		(is-a Lugar)
+		(role concrete)
+		(single-slot Clima
+			(type SYMBOL)
+			(allowed-values Tranquilo Ajetreado Silencioso Ruidoso)
+	;+		(cardinality 0 1)
+			(create-accessor read-write)))
 
 (defclass Genero "Subgenero dentro de la Sci-Fi"
-	(is-a USER)
-	(role concrete)
-	(multislot Es_Genero_De
-		(type INSTANCE)
-;+		(allowed-classes Libro)
-		(create-accessor read-write))
-	(single-slot Nombre
-		(type STRING)
-;+		(cardinality 1 1)
-		(create-accessor read-write))
-	(single-slot Es_Tendencia
-		(type SYMBOL)
-		(allowed-values FALSE TRUE)
-;+		(cardinality 0 1)
-		(create-accessor read-write)))
+		(is-a USER)
+		(role concrete)
+		(multislot Es_Genero_De
+			(type INSTANCE)
+	;+		(allowed-classes Libro)
+			(create-accessor read-write))
+		(single-slot Nombre
+			(type STRING)
+	;+		(cardinality 1 1)
+			(create-accessor read-write))
+		(single-slot Es_Tendencia
+			(type SYMBOL)
+			(allowed-values FALSE TRUE)
+	;+		(cardinality 0 1)
+			(create-accessor read-write)))
 
 ;
 ; INSTANCIAS
@@ -1045,7 +1045,7 @@
 	)
    (printout t ": ")
    (bind ?answer (read))
-   (if (lexemep ?answer) 
+   (if (lexemep ?answer)
        then (bind ?answer (lowcase ?answer)))
    (while (not (member ?answer ?allowed-values)) do
       (format t "%s "?question)
@@ -1054,9 +1054,32 @@
 	  )
 	  (printout t ": ")
       (bind ?answer (read))
-      (if (lexemep ?answer) 
+      (if (lexemep ?answer)
           then (bind ?answer (lowcase ?answer))))
    ?answer
+)
+
+(deffunction MAIN::pregunta-multirespuesta (?pregunta $?valores-posibles)
+    (bind ?linea (format nil "%s" ?pregunta))
+    (printout t ?linea crlf)
+    (progn$ (?var ?valores-posibles)
+            (bind ?linea (format nil "  %d. %s" ?var-index ?var))
+            (printout t ?linea crlf)
+    )
+    (format t "%s" "Indica los numeros referentes a las preferencias separados por un espacio: ")
+    (bind ?resp (readline))
+    (bind ?numeros (str-explode ?resp))
+    (bind $?lista (create$))
+    (progn$ (?var ?numeros)
+        (if (and (integerp ?var) (and (>= ?var 0) (<= ?var (length$ ?valores-posibles))))
+            then
+                (if (not (member$ ?var ?lista))
+                    then (bind ?lista (insert$ ?lista (+ (length$ ?lista) 1) ?var))
+                )
+        )
+    )
+    (if (or(member$ 0 ?lista)(= (length$ ?lista) 0)) then (bind ?lista (create$ )))
+    ?lista
 )
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; RULES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -1096,14 +1119,72 @@
 	(modify ?d (edad ?e))
 )
 
-(defrule recopilacion_datos_personales::assignar_cantidad_libros "¿Cuantos libros has leido?"
+(defrule recopilacion_datos_personales::assignar_cantidad_libros
     ?d <- (datos_usuario (cantidad_libros_leidos -1))
     =>
     (bind ?l (pregunta_numerica "¿Cuantos libros has leido?" 0 100))
     (modify ?d (cantidad_libros_leidos ?l))
     )
+
+(deffacts recopilacion_datos_personales::controladores_preguntas
+	(generosF not_deff)
+	(autoresF not_deff)
+	(librosG not_deff)
+	(librosD not_deff)
+	)
+
+(defrule recopilacion_datos_personales::assignar_generos
+	?hecho <- (generosF not_deff)
+	?p-user <- (datos_usuario)
+	=>
+	(bind $?generos (find-all-instances ((?inst Genero)) TRUE))
+	(bind $?tipo_genero (create$ ))
+	(loop-for-count (?i 1 (length$ $?generos)) do
+		(bind ?obj (nth$ ?i ?generos))
+		(bind ?nombre (send ?obj get-Nombre))
+		(bind $?tipo_genero(insert$ $?tipo_genero (+ (length$ $?tipo_genero) 1) ?nombre))
+	)
+	(bind ?escogido (pregunta-multirespuesta "Escoja sus generos favoritos (o 0 si no tiene): " $?tipo_genero))
+	(assert (generosF TRUE))
+		(bind $?respuesta (create$ ))
+	(loop-for-count (?i 1 (length$ ?escogido)) do
+		(bind ?index (nth$ ?i ?escogido))
+				(if (= ?index 0) then (assert (generosF FALSE)))
+		(bind ?gen (nth$ ?index ?tipo_genero))
+		(bind $?respuesta(insert$ $?respuesta (+ (length$ $?respuesta) 1) ?gen))
+	)
+
+	(retract ?hecho)
+	(modify ?p-user (generos_fav $?respuesta))
+	)
+
+	(defrule recopilacion_datos_personales::assignar_autores
+		?hecho <- (autoresF not_deff)
+		?p-user <- (datos_usuario)
+		=>
+		(bind $?autores (find-all-instances ((?inst Autor)) TRUE))
+		(bind $?nombre_autores (create$ ))
+		(loop-for-count (?i 1 (length$ $?autores)) do
+			(bind ?obj (nth$ ?i ?autores))
+			(bind ?nombre (send ?obj get-Nombre))
+			(bind $?nombre_autores(insert$ $?nombre_autores (+ (length$ $?nombre_autores) 1) ?nombre))
+		)
+		(bind ?escogido (pregunta-multirespuesta "Escoja sus autores favoritos (o 0 si no tiene): " $?nombre_autores))
+		(assert (autoresF TRUE))
+			(bind $?respuesta (create$ ))
+		(loop-for-count (?i 1 (length$ ?escogido)) do
+			(bind ?index (nth$ ?i ?escogido))
+					(if (= ?index 0) then (assert (autoresF FALSE)))
+			(bind ?aut (nth$ ?index ?nombre_autores))
+			(bind $?respuesta(insert$ $?respuesta (+ (length$ $?respuesta) 1) ?aut))
+		)
+
+		(retract ?hecho)
+		(modify ?p-user (autores_fav $?respuesta))
+		)
+
 (defrule MAIN::system-banner ""
-    (declare (salience 10))  
+    (declare (salience 10))
     =>
     (printout t crlf crlf)
     (printout t "----El Recomendador de Libros----")
