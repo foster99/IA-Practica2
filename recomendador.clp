@@ -892,7 +892,6 @@
 (defmodule abstraccion_de_datos
 	(import MAIN ?ALL)
 	;(import recopilacion-datos-personales deftemplate ?ALL)
-	;(import recopilacion-experiencia-lectura deftemplate ?ALL)
 	(export ?ALL)
 )
 
@@ -1081,15 +1080,70 @@
     (if (or(member$ 0 ?lista)(= (length$ ?lista) 0)) then (bind ?lista (create$ )))
     ?lista
 )
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; RULES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; FACTS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(deffacts recopilacion_datos_personales::controladores_preguntas
+	(generosF not_deff)
+	(autoresF not_deff)
+	(librosG not_deff)
+	(librosD not_deff)
+)
+
+(deffacts abstraccion_de_datos::controladores_abstraccion
+	(longitud_libro not_deff)
+	(puede_ser_de_saga not_deff)
+	(mejor_si_es_VO not_deff)
+	(valoraciones_cuentan not_deff)
+	(nivel_lector not_deff)
+	(generos_validos not_deff)
+	(autores_validos not_deff)
+)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; RULES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defrule MAIN::system-banner ""
+    (declare (salience 10))
+    =>
+    (printout t crlf crlf)
+    (printout t "----El Recomendador de Libros----")
+    (printout t crlf crlf)
+)
 
 (defrule MAIN::crea_datos_usuario_inicial
+	(declare (salience 100))
     (not (datos_usuario))
 	=>
 	(assert (datos_usuario))
     (focus recopilacion_datos_personales)
 )
+
+(defrule MAIN::crea_problema_abstracto
+	(declare (salience 80))
+    (not (problema_abstracto))
+	=>
+	(assert (problema_abstracto))
+    (focus abstraccion_de_datos)
+)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;; ABSTRACCION DE DATOS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defrule abstraccion_de_datos:abstraccion_generos
+	?hecho <- (generos_validos not_deff)
+	?PA <- (problema_abstracto)
+	?datos <- (datos_usuario)
+	=>
+	(printout t "Estamos listos")
+	(bind $?generos (find-all-instances (?inst Genero) (member (send ?inst get-Nombre) (datos_usuario (generos_fav)))))
+	(assert (generos_validos deff))
+	(retract ?hecho)
+	(modify ?PA (generos_validos $?generos))
+	(printout t "Donete")
+)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;; RECOPILACION DE DATOS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defrule recopilacion_datos_personales::duracion_libros
     ?d <- (datos_usuario (longitud -1))
@@ -1124,14 +1178,7 @@
     =>
     (bind ?l (pregunta_numerica "¿Cuantos libros has leido?" 0 100))
     (modify ?d (cantidad_libros_leidos ?l))
-    )
-
-(deffacts recopilacion_datos_personales::controladores_preguntas
-	(generosF not_deff)
-	(autoresF not_deff)
-	(librosG not_deff)
-	(librosD not_deff)
-	)
+)
 
 (defrule recopilacion_datos_personales::assignar_generos
 	?hecho <- (generosF not_deff)
@@ -1156,37 +1203,28 @@
 
 	(retract ?hecho)
 	(modify ?p-user (generos_fav $?respuesta))
+)
+
+(defrule recopilacion_datos_personales::assignar_autores
+	?hecho <- (autoresF not_deff)
+	?p-user <- (datos_usuario)
+	=>
+	(bind $?autores (find-all-instances ((?inst Autor)) TRUE))
+	(bind $?nombre_autores (create$ ))
+	(loop-for-count (?i 1 (length$ $?autores)) do
+		(bind ?obj (nth$ ?i ?autores))
+		(bind ?nombre (send ?obj get-Nombre))
+		(bind $?nombre_autores(insert$ $?nombre_autores (+ (length$ $?nombre_autores) 1) ?nombre))
 	)
-
-	(defrule recopilacion_datos_personales::assignar_autores
-		?hecho <- (autoresF not_deff)
-		?p-user <- (datos_usuario)
-		=>
-		(bind $?autores (find-all-instances ((?inst Autor)) TRUE))
-		(bind $?nombre_autores (create$ ))
-		(loop-for-count (?i 1 (length$ $?autores)) do
-			(bind ?obj (nth$ ?i ?autores))
-			(bind ?nombre (send ?obj get-Nombre))
-			(bind $?nombre_autores(insert$ $?nombre_autores (+ (length$ $?nombre_autores) 1) ?nombre))
-		)
-		(bind ?escogido (pregunta-multirespuesta "Escoja sus autores favoritos (o 0 si no tiene): " $?nombre_autores))
-		(assert (autoresF TRUE))
-			(bind $?respuesta (create$ ))
-		(loop-for-count (?i 1 (length$ ?escogido)) do
-			(bind ?index (nth$ ?i ?escogido))
-					(if (= ?index 0) then (assert (autoresF FALSE)))
-			(bind ?aut (nth$ ?index ?nombre_autores))
-			(bind $?respuesta(insert$ $?respuesta (+ (length$ $?respuesta) 1) ?aut))
-		)
-
-		(retract ?hecho)
-		(modify ?p-user (autores_fav $?respuesta))
-		)
-
-(defrule MAIN::system-banner ""
-    (declare (salience 10))
-    =>
-    (printout t crlf crlf)
-    (printout t "----El Recomendador de Libros----")
-    (printout t crlf crlf)
+	(bind ?escogido (pregunta-multirespuesta "Escoja sus autores favoritos (o 0 si no tiene): " $?nombre_autores))
+	(assert (autoresF TRUE))
+		(bind $?respuesta (create$ ))
+	(loop-for-count (?i 1 (length$ ?escogido)) do
+		(bind ?index (nth$ ?i ?escogido))
+				(if (= ?index 0) then (assert (autoresF FALSE)))
+		(bind ?aut (nth$ ?index ?nombre_autores))
+		(bind $?respuesta(insert$ $?respuesta (+ (length$ $?respuesta) 1) ?aut))
+	)
+	(retract ?hecho)
+	(modify ?p-user (autores_fav $?respuesta))
 )
