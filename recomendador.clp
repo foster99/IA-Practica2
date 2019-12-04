@@ -1128,20 +1128,22 @@
     (focus abstraccion_de_datos)
 )
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;; ABSTRACCION DE DATOS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defrule abstraccion_de_datos:abstraccion_generos
-	?hecho <- (generos_validos not_deff)
-	?PA <- (problema_abstracto)
-	?datos <- (datos_usuario)
-	=>
-	(printout t "Estamos listos")
-	(bind $?generos (find-all-instances (?inst Genero) (member (send ?inst get-Nombre) (datos_usuario (generos_fav)))))
-	(assert (generos_validos deff))
-	(retract ?hecho)
-	(modify ?PA (generos_validos $?generos))
-	(printout t "Donete")
-)
+;(defrule abstraccion_de_datos:abstraccion_generos
+;	?hecho <- (generos_validos not_deff)
+;	?PA <- (problema_abstracto)
+;	?datos <- (datos_usuario)
+;	=>
+;	(printout t "Estamos listos")
+;	(bind $?generos (find-all-instances (?inst Genero) (member (send ?inst get-Nombre) (datos_usuario (generos_fav)))))
+;	(assert (generos_validos deff))
+;	(retract ?hecho)
+;	(modify ?PA (generos_validos $?generos))
+;	(printout t "Donete")
+;)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;; RECOPILACION DE DATOS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -1193,11 +1195,11 @@
 	)
 	(bind ?escogido (pregunta-multirespuesta "Escoja sus generos favoritos (o 0 si no tiene): " $?tipo_genero))
 	(assert (generosF TRUE))
-		(bind $?respuesta (create$ ))
+	(bind $?respuesta (create$ ))
 	(loop-for-count (?i 1 (length$ ?escogido)) do
 		(bind ?index (nth$ ?i ?escogido))
 				(if (= ?index 0) then (assert (generosF FALSE)))
-		(bind ?gen (nth$ ?index ?tipo_genero))
+		(bind ?gen (nth$ ?index ?generos))
 		(bind $?respuesta(insert$ $?respuesta (+ (length$ $?respuesta) 1) ?gen))
 	)
 
@@ -1222,7 +1224,7 @@
 	(loop-for-count (?i 1 (length$ ?escogido)) do
 		(bind ?index (nth$ ?i ?escogido))
 				(if (= ?index 0) then (assert (autoresF FALSE)))
-		(bind ?aut (nth$ ?index ?nombre_autores))
+		(bind ?aut (nth$ ?index ?autores))
 		(bind $?respuesta(insert$ $?respuesta (+ (length$ $?respuesta) 1) ?aut))
 	)
 	(retract ?hecho)
