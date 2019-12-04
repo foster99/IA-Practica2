@@ -981,10 +981,10 @@
 	(slot edad (type INTEGER)(default -1))			        ; edad del usuario
 	(multislot idiomas (type STRING))				        ; idiomas que lee el usuario
 	(slot lugar_de_lectura (type STRING)(default "null"))   ; lugares de lectura del usuario
-	(slot sagas (type STRING)(default "null"))				    ; Le gustan o no las sagas
+	(slot sagas (type INTEGER)(default -1))				    ; Le gustan o no las sagas
 	(slot longitud (type INTEGER)(default -1))		        ; Como de largos le gustan los libros
-	(slot VO (type STRING)(default "null"))      		        ; Prioriza versiones originales
-	(slot confianza_valoraciones (type STRING)(default "null"))				; Confia en las valoraciones de la gente
+	(slot VO (type INTEGER)(default -1))      		        ; Prioriza versiones originales
+	(slot confianza_valoraciones (type INTEGER)(default -1))				; Confia en las valoraciones de la gente
 	(slot cantidad_libros_leidos (type INTEGER)(default -1)) 	; Cantidad de libros leidos por el usuario
 	(multislot generos_fav (type INSTANCE))			; Generos favoritos del usuario
 	(multislot autores_fav (type INSTANCE))			; Autores que le gustan al usuario
@@ -1055,7 +1055,7 @@
    ?answer
 )
 
-(deffunction MAIN::pregunta-multirespuesta (?pregunta $?valores-posibles)
+(deffunction MAIN::pregunta_multirespuesta (?pregunta $?valores-posibles)
     (bind ?linea (format nil "%s" ?pregunta))
     (printout t ?linea crlf)
     (progn$ (?var ?valores-posibles)
@@ -1125,6 +1125,161 @@
     (focus abstraccion_de_datos)
 )
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;; RECOPILACION DE DATOS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defrule recopilacion_datos_personales::duracion_libros
+    ?d <- (datos_usuario (longitud -1))
+	=>
+	(bind ?l (pregunta_numerica "¿Duracion de los libros (paginas)? " 1 1000))
+	(modify ?d (longitud ?l))
+)
+
+(defrule recopilacion_datos_personales::sexo_usuario
+    ?d <- (datos_usuario (sexo "null"))
+	=>
+	(bind ?s (ask_question "¿Cual es tu genero (hombre/mujer)? " hombre mujer))
+	(modify ?d (sexo ?s))
+)
+
+(defrule recopilacion_datos_personales::lugar_lectura
+    ?d <- (datos_usuario (lugar_de_lectura "null"))
+	=>
+	(bind ?s (ask_question "¿Lugar de lectura favorito? (Cafeteria, Calle, Oficina, Biblioteca, Coche)? " Cafeteria Calle Oficina Biblioteca Coche))
+	(modify ?d (lugar_de_lectura ?s))
+)
+
+(defrule recopilacion_datos_personales::edad_usuario
+    ?d <- (datos_usuario (edad -1))
+	=>
+	(bind ?e (pregunta_numerica "¿Cual es tu edad? " 3 120))
+	(modify ?d (edad ?e))
+)
+
+(defrule recopilacion_datos_personales::assignar_cantidad_libros
+    ?d <- (datos_usuario (cantidad_libros_leidos -1))
+    =>
+    (bind ?l (pregunta_numerica "¿Cuantos libros has leido?" 0 100))
+    (modify ?d (cantidad_libros_leidos ?l))
+)
+
+(defrule recopilacion_datos_personales::assignar_generos
+	?hecho <- (generosF not_deff)
+	?p-user <- (datos_usuario)
+	=>
+	(bind $?generos (find-all-instances ((?inst Genero)) TRUE))
+	(bind $?tipo_genero (create$ ))
+	(loop-for-count (?i 1 (length$ $?generos)) do
+		(bind ?obj (nth$ ?i ?generos))
+		(bind ?nombre (send ?obj get-Nombre))
+		(bind $?tipo_genero(insert$ $?tipo_genero (+ (length$ $?tipo_genero) 1) ?nombre))
+	)
+	(bind ?escogido (pregunta-multirespuesta "Escoja sus generos favoritos (o 0 si no tiene): " $?tipo_genero))
+	;(assert (generosF TRUE))
+	(bind $?respuesta (create$ ))
+	(loop-for-count (?i 1 (length$ ?escogido)) do
+		(bind ?index (nth$ ?i ?escogido))
+		;(if (= ?index 0) then (assert (generosF FALSE)))
+		(bind ?gen (nth$ ?index ?generos))
+		(bind $?respuesta(insert$ $?respuesta (+ (length$ $?respuesta) 1) ?gen))
+	)
+
+	(retract ?hecho)
+	(modify ?p-user (generos_fav $?respuesta))
+)
+
+(defrule recopilacion_datos_personales::assignar_autores
+	?hecho <- (autoresF not_deff)
+	?p-user <- (datos_usuario)
+	=>
+	(bind $?autores (find-all-instances ((?inst Autor)) TRUE))
+	(bind $?nombre_autores (create$ ))
+	(loop-for-count (?i 1 (length$ $?autores)) do
+		(bind ?obj (nth$ ?i ?autores))
+		(bind ?nombre (send ?obj get-Nombre))
+		(bind $?nombre_autores(insert$ $?nombre_autores (+ (length$ $?nombre_autores) 1) ?nombre))
+	)
+	(bind ?escogido (pregunta-multirespuesta "Escoja sus autores favoritos (o 0 si no tiene): " $?nombre_autores))
+	;(assert (autoresF TRUE))
+	(bind $?respuesta (create$ ))
+	(loop-for-count (?i 1 (length$ ?escogido)) do
+		(bind ?index (nth$ ?i ?escogido))
+		;(if (= ?index 0) then (assert (autoresF FALSE)))
+		(bind ?aut (nth$ ?index ?autores))
+		(bind $?respuesta(insert$ $?respuesta (+ (length$ $?respuesta) 1) ?aut))
+	)
+	(retract ?hecho)
+	(modify ?p-user (autores_fav $?respuesta))
+)
+
+(defrule recopilacion_datos_personales::confianza_valoraciones
+    ?d <- (datos_usuario (confianza_valoraciones -1))
+	=>
+	(bind ?e (pregunta_numerica "¿Cuanto confias en las valoraciones (introduce 0 si no lo tienes en cuenta)? " 0 10))
+	(modify ?d (confianza_valoraciones ?e))
+)
+
+(defrule recopilacion_datos_personales::VO
+    ?d <- (datos_usuario (VO -1))
+	=>
+	(bind ?e (pregunta_numerica "¿Cuanto te importan los libros en VO (introduce 0 si no lo tienes en cuenta)? " 0 10))
+	(modify ?d (VO ?e))
+)
+
+(defrule recopilacion_datos_personales::sagas
+    ?d <- (datos_usuario (confianza_valoraciones -1))
+	=>
+	(bind ?e (pregunta_numerica "¿Cuanto te importa que los libros pertenezcan a sagas (introduce 0 si no lo tienes en cuenta)? " 0 10))
+	(modify ?d (confianza_valoraciones ?e))
+)
+
+(defrule recopilacion_datos_personales::assignar_libros_gustado
+	?hecho <- (librosG not_deff)
+	?p-user <- (datos_usuario)
+	=>
+	(bind $?libros (find-all-instances ((?inst Libro)) TRUE))
+	(bind $?nombre_libros (create$ ))
+	(loop-for-count (?i 1 (length$ $?libros)) do
+		(bind ?obj (nth$ ?i ?libros))
+		(bind ?nombre (send ?obj get-Nombre))
+		(bind $?nombre_libros(insert$ $?nombre_libros (+ (length$ $?nombre_libros) 1) ?nombre))
+	)
+	(bind ?escogido (pregunta-multirespuesta "Escoja libros que ha leido y le han gustado (o 0 si no tiene): " $?nombre_autoreslibros))
+	;(assert (autoresF TRUE))
+		(bind $?respuesta (create$ ))
+	(loop-for-count (?i 1 (length$ ?escogido)) do
+		(bind ?index (nth$ ?i ?escogido))
+		;(if (= ?index 0) then (assert (autoresF FALSE)))
+		(bind ?lib (nth$ ?index ?libros))
+		(bind $?respuesta(insert$ $?respuesta (+ (length$ $?respuesta) 1) ?lib))
+	)
+	(retract ?hecho)
+	(modify ?p-user (libros_gustado $?respuesta))
+)
+
+(defrule recopilacion_datos_personales::assignar_libros_disgustado
+	?hecho <- (librosD not_deff)
+	?p-user <- (datos_usuario)
+	=>
+	(bind $?libros (find-all-instances ((?inst Libro)) TRUE))
+	(bind $?nombre_libros (create$ ))
+	(loop-for-count (?i 1 (length$ $?libros)) do
+		(bind ?obj (nth$ ?i ?libros))
+		(bind ?nombre (send ?obj get-Nombre))
+		(bind $?nombre_libros(insert$ $?nombre_libros (+ (length$ $?nombre_libros) 1) ?nombre))
+	)
+	(bind ?escogido (pregunta-multirespuesta "Escoja libros que ha leido y no le han gustado (o 0 si no tiene): " $?nombre_autoreslibros))
+	;(assert (autoresF TRUE))
+		(bind $?respuesta (create$ ))
+	(loop-for-count (?i 1 (length$ ?escogido)) do
+		(bind ?index (nth$ ?i ?escogido))
+		;(if (= ?index 0) then (assert (autoresF FALSE)))
+		(bind ?lib (nth$ ?index ?libros))
+		(bind $?respuesta(insert$ $?respuesta (+ (length$ $?respuesta) 1) ?lib))
+	)
+	(retract ?hecho)
+	(modify ?p-user (libros_disgustado $?respuesta))
+)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;; ABSTRACCION DE DATOS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
