@@ -1,4 +1,4 @@
-; Wed Nov 27 17:09:03 CET 2019
+; Wed Dec 04 17:09:34 CET 2019
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 660")
@@ -20,14 +20,14 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[salu2_ProjectKB_Class20096]
-		[salu2_ProjectKB_Class20097]
-		[salu2_ProjectKB_Class20098]
-		[salu2_ProjectKB_Class20099]
-		[salu2_ProjectKB_Class20100]
-		[salu2_ProjectKB_Class20101]
-		[salu2_ProjectKB_Class20102]
-		[salu2_ProjectKB_Class20103]))
+		[salu2_ProjectKB_Class10058]
+		[salu2_ProjectKB_Class10059]
+		[salu2_ProjectKB_Class10060]
+		[salu2_ProjectKB_Class10061]
+		[salu2_ProjectKB_Class10062]
+		[salu2_ProjectKB_Class10063]
+		[salu2_ProjectKB_Class10064]
+		[salu2_ProjectKB_Class10065]))
 
 ([CLSES_TAB] of  Widget
 
@@ -71,9 +71,6 @@
 	(is_hidden FALSE)
 	(widget_class_name "edu.stanford.smi.protege.widget.InstancesTab"))
 
-([KB_056032_Class3] of  Map
-)
-
 ([KB_542718_Class0] of  String
 
 	(name "factory_class_name")
@@ -82,9 +79,9 @@
 ([KB_542718_Class1] of  Map
 
 	(entries
-		[salu2_ProjectKB_Class20104]
-		[salu2_ProjectKB_Class20105]
-		[salu2_ProjectKB_Class20106]))
+		[salu2_ProjectKB_Class10066]
+		[salu2_ProjectKB_Class10067]
+		[salu2_ProjectKB_Class10068]))
 
 ([KB_542718_Class100] of  String
 
@@ -177,6 +174,9 @@
 
 	(name "classes_file_name")
 	(string_value "salu2.pont"))
+
+([KB_703035_Class3] of  Map
+)
 
 ([LAYOUT_PROPERTIES] of  Property_List
 
@@ -334,6 +334,67 @@
 ([salu2_ProjectKB_Class10] of  Property_List
 )
 
+([salu2_ProjectKB_Class10058] of  String
+
+	(name ":INSTANCE-ANNOTATION")
+	(string_value "%3AANNOTATION-TEXT"))
+
+([salu2_ProjectKB_Class10059] of  String
+
+	(name "LugarDeLectura")
+	(string_value "Nombre"))
+
+([salu2_ProjectKB_Class10060] of  String
+
+	(name "Genero")
+	(string_value "Nombre"))
+
+([salu2_ProjectKB_Class10061] of  String
+
+	(name "Autor")
+	(string_value "Nombre"))
+
+([salu2_ProjectKB_Class10062] of  String
+
+	(name "LugarDeAdquision")
+	(string_value "Nombre"))
+
+([salu2_ProjectKB_Class10063] of  String
+
+	(name ":PAL-CONSTRAINT")
+	(string_value "%3APAL-NAME"))
+
+([salu2_ProjectKB_Class10064] of  String
+
+	(name ":META-CLASS")
+	(string_value "%3ANAME"))
+
+([salu2_ProjectKB_Class10065] of  String
+
+	(name "Libro")
+	(string_value "Nombre"))
+
+([salu2_ProjectKB_Class10066] of  Map_Entry
+
+	(key "suppress_instance_counting")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
+
+([salu2_ProjectKB_Class10067] of  Map_Entry
+
+	(key "add_name_on_instance_form")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
+
+([salu2_ProjectKB_Class10068] of  Map_Entry
+
+	(key "change_tracking_active")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
+
 ([salu2_ProjectKB_Class101] of  String
 
 	(name "SearchTab_Query"))
@@ -385,67 +446,6 @@
 
 ([salu2_ProjectKB_Class20] of  Property_List
 )
-
-([salu2_ProjectKB_Class20096] of  String
-
-	(name ":INSTANCE-ANNOTATION")
-	(string_value "%3AANNOTATION-TEXT"))
-
-([salu2_ProjectKB_Class20097] of  String
-
-	(name "LugarDeLectura")
-	(string_value "Nombre"))
-
-([salu2_ProjectKB_Class20098] of  String
-
-	(name "Genero")
-	(string_value "Nombre"))
-
-([salu2_ProjectKB_Class20099] of  String
-
-	(name "Autor")
-	(string_value "Nombre"))
-
-([salu2_ProjectKB_Class20100] of  String
-
-	(name "LugarDeAdquision")
-	(string_value "Nombre"))
-
-([salu2_ProjectKB_Class20101] of  String
-
-	(name ":PAL-CONSTRAINT")
-	(string_value "%3APAL-NAME"))
-
-([salu2_ProjectKB_Class20102] of  String
-
-	(name ":META-CLASS")
-	(string_value "%3ANAME"))
-
-([salu2_ProjectKB_Class20103] of  String
-
-	(name "Libro")
-	(string_value "Nombre"))
-
-([salu2_ProjectKB_Class20104] of  Map_Entry
-
-	(key "suppress_instance_counting")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
-
-([salu2_ProjectKB_Class20105] of  Map_Entry
-
-	(key "add_name_on_instance_form")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
-
-([salu2_ProjectKB_Class20106] of  Map_Entry
-
-	(key "change_tracking_active")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
 
 ([salu2_ProjectKB_Class21] of  Widget
 
