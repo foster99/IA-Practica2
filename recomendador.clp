@@ -836,9 +836,6 @@
 		(Es_Tendencia TRUE)
 		(Nombre "AlienInvasion"))
 
-	([salu2_Class40001] of  Autor
-	)
-
 	([salu2_Class5] of  Genero
 
 		(Es_Tendencia TRUE)
