@@ -987,7 +987,7 @@
 	(slot sagas (type STRING)(default "null"))				    ; Le gustan o no las sagas
 	(slot longitud (type INTEGER)(default -1))		        ; Como de largos le gustan los libros
 	(slot VO (type STRING)(default "null"))      		        ; Prioriza versiones originales
-	(slot confianza (type STRING)(default "null"))				; Confia en las valoraciones de la gente
+	(slot confianza_valoraciones (type STRING)(default "null"))				; Confia en las valoraciones de la gente
 	(slot cantidad_libros_leidos (type INTEGER)(default -1)) 	; Cantidad de libros leidos por el usuario
 	(multislot generos_fav (type INSTANCE))			; Generos favoritos del usuario
 	(multislot autores_fav (type INSTANCE))			; Autores que le gustan al usuario
@@ -1131,19 +1131,113 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;; ABSTRACCION DE DATOS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;(defrule abstraccion_de_datos:abstraccion_generos
-;	?hecho <- (generos_validos not_deff)
-;	?PA <- (problema_abstracto)
-;	?datos <- (datos_usuario)
-;	=>
-;	(printout t "Estamos listos")
-;	(bind $?generos (find-all-instances (?inst Genero) (member (send ?inst get-Nombre) (datos_usuario (generos_fav)))))
-;	(assert (generos_validos deff))
-;	(retract ?hecho)
-;	(modify ?PA (generos_validos $?generos))
-;	(printout t "Donete")
-;)
+(defrule abstraccion_de_datos:longitud_corto
+    ?pa <- (problema_abstracto (longitud_libro ?l))
+    ?d <- (datos_usuario (longitud ?x))
+    (test (< ?x 100))
+    (test (> ?x 0))
+    =>
+    (printout t "Corto")
+    (modify ?pa (longitud_libro "corto"))
+    (modify ?d (longitud -1))
+)
+(defrule abstraccion_de_datos:longitud_medio
+    ?pa <- (problema_abstracto (longitud_libro ?l))
+    ?d <- (datos_usuario (longitud ?x))
+    (test (>= ?x 100))
+    (test (< ?x 300))
+    =>
+    (printout t "Medio")
+    (modify ?pa (longitud_libro "medio"))
+    (modify ?d (longitud -1))
+)
+(defrule abstraccion_de_datos:longitud_largo
+    ?d <- (datos_usuario (longitud ?x))
+    ?pa <- (problema_abstracto (longitud_libro ?l))
+    (test (>= ?x 300))
+    =>
+    (printout t "Largo")
+    (modify ?pa (longitud_libro "largo"))
+    (modify ?d (longitud -1))
+)
 
+(defrule abstraccion_de_datos:importancia_valoracion_nulo
+    ?pa <- (problema_abstracto (valoraciones_cuentan ?l))
+    ?d <- (datos_usuario (confianza_valoraciones ?x))  
+    (test (eq ?x 0)) 
+    =>
+    (printout t "Nulo")
+    (modify ?pa (valoraciones_cuentan "nulo"))
+    (modify ?d (confianza_valoraciones -1))
+)
+(defrule abstraccion_de_datos:importancia_valoracion_bajo
+    ?pa <- (problema_abstracto (valoraciones_cuentan ?l))
+    ?d <- (datos_usuario (confianza_valoraciones ?x))
+    (test (> ?x 0))    
+    (test (< ?x 4)) 
+    =>
+    (printout t "Bajo")
+    (modify ?pa (valoraciones_cuentan "bajo"))
+    (modify ?d (confianza_valoraciones -1))
+)
+(defrule abstraccion_de_datos:importancia_valoracion_medio
+    ?pa <- (problema_abstracto (valoraciones_cuentan ?l))
+    ?d <- (datos_usuario (confianza_valoraciones ?x))
+    (test (>= ?x 4))
+    (test (< ?x 7))
+    =>
+    (printout t "Medio")
+    (modify ?pa (valoraciones_cuentan "medio"))
+    (modify ?d (confianza_valoraciones -1))
+)
+(defrule abstraccion_de_datos:importancia_valoracion_alto
+    ?pa <- (problema_abstracto (valoraciones_cuentan ?l))
+    ?d <- (datos_usuario (confianza_valoraciones ?x))
+    (test (>= ?x 7))
+    =>
+    (printout t "Alto")
+    (modify ?pa (valoraciones_cuentan "alto"))
+    (modify ?d (confianza_valoraciones -1))
+)
+
+(defrule abstraccion_de_datos:importancia_VO_nulo
+    ?pa <- (problema_abstracto (mejor_si_es_VO ?l))
+    ?d <- (datos_usuario (VO ?x))  
+    (test (eq ?x 0)) 
+    =>
+    (printout t "Nulo")
+    (modify ?pa (mejor_si_es_VO "nulo"))
+    (modify ?d (VO -1))
+)
+(defrule abstraccion_de_datos:importancia_VO_bajo
+    ?pa <- (problema_abstracto (mejor_si_es_VO ?l))
+    ?d <- (datos_usuario (VO ?x))
+    (test (> ?x 0))    
+    (test (< ?x 4)) 
+    =>
+    (printout t "Bajo")
+    (modify ?pa (mejor_si_es_VO "bajo"))
+    (modify ?d (VO -1))
+)
+(defrule abstraccion_de_datos:importancia_VO_medio
+    ?pa <- (problema_abstracto (mejor_si_es_VO ?l))
+    ?d <- (datos_usuario (VO ?x))
+    (test (>= ?x 4))
+    (test (< ?x 7))
+    =>
+    (printout t "Medio")
+    (modify ?pa (mejor_si_es_VO "medio"))
+    (modify ?d (VO -1))
+)
+(defrule abstraccion_de_datos:importancia_VO_alto
+    ?pa <- (problema_abstracto (mejor_si_es_VO ?l))
+    ?d <- (datos_usuario (VO ?x))
+    (test (>= ?x 7))
+    =>
+    (printout t "Alto")
+    (modify ?pa (mejor_si_es_VO "alto"))
+    (modify ?d (VO -1))
+)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;; RECOPILACION DE DATOS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
