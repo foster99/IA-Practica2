@@ -1093,8 +1093,8 @@
 	(mejor_si_es_VO not_deff)
 	(valoraciones_cuentan not_deff)
 	(nivel_lector not_deff)
-	(generos_validos not_deff)
-	(autores_validos not_deff)
+	(generos_v not_deff)
+	(autores_v not_deff)
 )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1128,18 +1128,35 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;; ABSTRACCION DE DATOS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;(defrule abstraccion_de_datos:abstraccion_generos
-;	?hecho <- (generos_validos not_deff)
-;	?PA <- (problema_abstracto)
-;	?datos <- (datos_usuario)
-;	=>
-;	(printout t "Estamos listos")
-;	(bind $?generos (find-all-instances (?inst Genero) (member (send ?inst get-Nombre) (datos_usuario (generos_fav)))))
-;	(assert (generos_validos deff))
-;	(retract ?hecho)
-;	(modify ?PA (generos_validos $?generos))
-;	(printout t "Donete")
-;)
+(defrule abstraccion_de_datos::generos_viables
+    ?fact <- (generos_v not_deff)
+    ?p-pab <- (problema_abstracto)
+    ?p-du <- (datos_usuario(generos_fav $?fav))
+    =>
+    (assert (generos_v TRUE))
+    (bind $?res (create$))
+    (loop-for-count (?i 1 (length$ $?fav)) do
+        (bind ?obj (nth ?i ?fav))
+        (bind $?res(insert$ $?res (+ (length$ $?res) 1) ?obj))
+    )
+    (modify ?p-pab (generos_validos ?res))    
+    (retract ?fact)
+)
+
+(defrule abstraccion_de_datos::autores_viables
+    ?fact <- (autores_v not_deff)
+    ?p-pab <- (problema_abstracto)
+    ?p-du <- (datos_usuario(autores_fav $?fav))
+    =>
+    (assert (autores_v TRUE))
+    (bind $?res (create$))
+    (loop-for-count (?i 1 (length$ $?fav)) do
+        (bind ?obj (nth ?i ?fav))
+        (bind $?res(insert$ $?res (+ (length$ $?res) 1) ?obj))
+    )
+    (modify ?p-pab (autores_validos ?res))    
+    (retract ?fact)
+)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;; RECOPILACION DE DATOS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
