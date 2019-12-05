@@ -873,6 +873,9 @@
 )
 
 
+
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; MODULOS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; ------------------------------ Modulo general del sistema. --------------------
@@ -893,7 +896,7 @@
 )
 
 ; ---------------- Modulos dedicados a la asociacion heuristica. ---------------
-(defmodule generacion_de_soluciones
+(defmodule asociacion_heuristica
 	(import MAIN ?ALL)
 	(export ?ALL)
 )
@@ -905,6 +908,9 @@
 )
 
 
+
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; CLASES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; Una recomendacion es un libro asociado a unas justificaciones.
@@ -914,8 +920,8 @@
     (slot Libro
 		(type INSTANCE)
 		(create-accessor read-write))
-    (multislot justificaciones
-		(type STRING)
+    (slot puntuacion
+		(type INTEGER)
 		(create-accessor read-write))
 )
 
@@ -929,7 +935,11 @@
 )
 
 
+
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; PRINTING ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defmessage-handler Libro print ()
 	(format t "Titulo: %s %n" ?self:Nombre)
 	(printout t crlf)
@@ -956,10 +966,10 @@
 	(printout t "-----------------------------------" crlf)
 	(printout t (send ?self:Libro print))
 	(printout t crlf)
-	(printout t "Justificacion de la eleccion: " crlf)
-	(progn$ (?curr-just ?self:justificaciones)
-		(printout t ?curr-just crlf)
-	)
+	(printout t "Puntuacion: " crlf)
+	;(progn$ (?curr-just ?self:justificaciones)
+	;	(printout t ?curr-just crlf)
+	;)
 	(printout t crlf)
 	(printout t "-----------------------------------" crlf)
 )
@@ -972,6 +982,10 @@
 	)
 	(printout t "============================================" crlf)
 )
+
+
+
+
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; TEMPLATES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -994,17 +1008,29 @@
 
 (deftemplate MAIN::problema_abstracto
     (slot longitud_libro (type STRING))
-    (slot puede_ser_de_saga (type INTEGER))
-    (slot mejor_si_es_VO (type INTEGER))
-    (slot valoraciones_cuentan (type INTEGER))
+    (slot puede_ser_de_saga (type STRING))
+    (slot mejor_si_es_VO (type STRING))
+    (slot valoraciones_cuentan (type STRING))
     (slot nivel_lector (type STRING))
     (multislot generos_validos (type INSTANCE))
     (multislot autores_validos (type INSTANCE))
 )
 
+(deftemplate MAIN::solucion_abstracta
+    (multislot libros_recomendados(type INSTANCE))
+)
+
+(deftemplate MAIN::lista_libros
+    (multislot libros (type INSTANCE))
+)
+
+
+
+
+
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; FUNCIONES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
 
 (deffunction ask_question (?question $?allowed_values)
    (printout t ?question)
@@ -1078,6 +1104,10 @@
     ?lista
 )
 
+
+
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; FACTS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (deffacts recopilacion_datos_personales::controladores_preguntas
@@ -1088,18 +1118,21 @@
 )
 
 (deffacts abstraccion_de_datos::controladores_abstraccion
-	(longitud_libro not_deff)
-	(puede_ser_de_saga not_deff)
-	(mejor_si_es_VO not_deff)
-	(valoraciones_cuentan not_deff)
-	(nivel_lector not_deff)
+	;(longitud_libro not_deff)
+	;(puede_ser_de_saga not_deff)
+	;(mejor_si_es_VO not_deff)
+	;(valoraciones_cuentan not_deff)
+	;(nivel_lector not_deff)
 	(generos_v not_deff)
 	(autores_v not_deff)
 )
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; RULES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defrule MAIN::system-banner ""
     (declare (salience 10))
@@ -1119,11 +1152,23 @@
 
 (defrule MAIN::crea_problema_abstracto
 	(declare (salience 80))
+    (datos_usuario)
     (not (problema_abstracto))
 	=>
 	(assert (problema_abstracto))
     (focus abstraccion_de_datos)
 )
+
+(defrule MAIN:crea_solucion_abstracta
+	(declare (salience 60))
+    (problema_abstracto)
+    (not (solucion_abstracta))
+	=>
+	(assert (solucion_abstracta))
+    (focus asociacion_heuristica)
+)
+
+
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;; RECOPILACION DE DATOS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1174,7 +1219,7 @@
 		(bind ?nombre (send ?obj get-Nombre))
 		(bind $?tipo_genero(insert$ $?tipo_genero (+ (length$ $?tipo_genero) 1) ?nombre))
 	)
-	(bind ?escogido (pregunta-multirespuesta "Escoja sus generos favoritos (o 0 si no tiene): " $?tipo_genero))
+	(bind ?escogido (pregunta_multirespuesta "Escoja sus generos favoritos (o 0 si no tiene): " $?tipo_genero))
 	;(assert (generosF TRUE))
 	(bind $?respuesta (create$ ))
 	(loop-for-count (?i 1 (length$ ?escogido)) do
@@ -1199,7 +1244,7 @@
 		(bind ?nombre (send ?obj get-Nombre))
 		(bind $?nombre_autores(insert$ $?nombre_autores (+ (length$ $?nombre_autores) 1) ?nombre))
 	)
-	(bind ?escogido (pregunta-multirespuesta "Escoja sus autores favoritos (o 0 si no tiene): " $?nombre_autores))
+	(bind ?escogido (pregunta_multirespuesta "Escoja sus autores favoritos (o 0 si no tiene): " $?nombre_autores))
 	;(assert (autoresF TRUE))
 	(bind $?respuesta (create$ ))
 	(loop-for-count (?i 1 (length$ ?escogido)) do
@@ -1244,7 +1289,7 @@
 		(bind ?nombre (send ?obj get-Nombre))
 		(bind $?nombre_libros(insert$ $?nombre_libros (+ (length$ $?nombre_libros) 1) ?nombre))
 	)
-	(bind ?escogido (pregunta-multirespuesta "Escoja libros que ha leido y le han gustado (o 0 si no tiene): " $?nombre_autoreslibros))
+	(bind ?escogido (pregunta_multirespuesta "Escoja libros que ha leido y le han gustado (o 0 si no tiene): " $?nombre_libros))
 	;(assert (autoresF TRUE))
 		(bind $?respuesta (create$ ))
 	(loop-for-count (?i 1 (length$ ?escogido)) do
@@ -1268,7 +1313,7 @@
 		(bind ?nombre (send ?obj get-Nombre))
 		(bind $?nombre_libros(insert$ $?nombre_libros (+ (length$ $?nombre_libros) 1) ?nombre))
 	)
-	(bind ?escogido (pregunta-multirespuesta "Escoja libros que ha leido y no le han gustado (o 0 si no tiene): " $?nombre_autoreslibros))
+	(bind ?escogido (pregunta_multirespuesta "Escoja libros que ha leido y no le han gustado (o 0 si no tiene): " $?nombre_libros))
 	;(assert (autoresF TRUE))
 		(bind $?respuesta (create$ ))
 	(loop-for-count (?i 1 (length$ ?escogido)) do
@@ -1281,8 +1326,10 @@
 	(modify ?p-user (libros_disgustado $?respuesta))
 )
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;; ABSTRACCION DE DATOS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;; ABSTRACCION DE DATOS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defrule abstraccion_de_datos::generos_viables
     ?fact <- (generos_v not_deff)
@@ -1421,3 +1468,110 @@
     (modify ?pa (mejor_si_es_VO "alto"))
     (modify ?d (VO -1))
 )
+
+(defrule abstraccion_de_datos:importancia_sagas_nulo
+    ?pa <- (problema_abstracto (puede_ser_de_saga ?l))
+    ?d <- (datos_usuario (sagas ?x))  
+    (test (eq ?x 0)) 
+    =>
+    (printout t "Nulo")
+    (modify ?pa (puede_ser_de_saga "nulo"))
+    (modify ?d (sagas -1))
+)
+(defrule abstraccion_de_datos:importancia_sagas_bajo
+    ?pa <- (problema_abstracto (puede_ser_de_saga ?l))
+    ?d <- (datos_usuario (sagas ?x))
+    (test (> ?x 0))    
+    (test (< ?x 4)) 
+    =>
+    (printout t "Bajo")
+    (modify ?pa (puede_ser_de_saga "bajo"))
+    (modify ?d (sagas -1))
+)
+(defrule abstraccion_de_datos:importancia_sagas_medio
+    ?pa <- (problema_abstracto (puede_ser_de_saga ?l))
+    ?d <- (datos_usuario (sagas ?x))
+    (test (>= ?x 4))
+    (test (< ?x 7))
+    =>
+    (printout t "Medio")
+    (modify ?pa (puede_ser_de_saga "medio"))
+    (modify ?d (sagas -1))
+)
+(defrule abstraccion_de_datos:importancia_sagas_alto
+    ?pa <- (problema_abstracto (puede_ser_de_saga ?l))
+    ?d <- (datos_usuario (sagas ?x))
+    (test (>= ?x 7))
+    =>
+    (printout t "Alto")
+    (modify ?pa (puede_ser_de_saga "alto"))
+    (modify ?d (sagas -1))
+)
+
+(defrule abstraccion_de_datos:nivel_bajo
+    ?pa <- (problema_abstracto (nivel_lector ?l))
+    ?d <- (datos_usuario (cantidad_libros_leidos ?x))
+    (test (>= ?x 0))    
+    (test (< ?x 4)) 
+    =>
+    (printout t "Bajo")
+    (modify ?pa (nivel_lector "bajo"))
+    (modify ?d (cantidad_libros_leidos -1))
+)
+(defrule abstraccion_de_datos:nivel_medio
+    ?pa <- (problema_abstracto (nivel_lector ?l))
+    ?d <- (datos_usuario (cantidad_libros_leidos ?x))
+    (test (>= ?x 4))
+    (test (< ?x 7))
+    =>
+    (printout t "Medio")
+    (modify ?pa (nivel_lector "medio"))
+    (modify ?d (cantidad_libros_leidos -1))
+)
+(defrule abstraccion_de_datos:nivel_alto
+    ?pa <- (problema_abstracto (nivel_lector ?l))
+    ?d <- (datos_usuario (cantidad_libros_leidos ?x))
+    (test (>= ?x 7))
+    =>
+    (printout t "Alto")
+    (modify ?pa (nivel_lector "alto"))
+    (modify ?d (cantidad_libros_leidos -1))
+)
+
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;; ASOCIACION HEURISTICA ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defrule asociacion_heuristica::inicializar_lista_libros
+    (not (lista_libros))
+	=>
+    (bind $?allLibros (find-all-instances ((?inst Libro)) TRUE))
+    (assert (lista_libros))
+    (bind ?l (lista_libros))
+    (modify ?l (libros $?allLibros))
+)
+
+(defrule asociacion_heuristica::saludos
+    (lista_libros (libros ?l))
+	=>
+    (bind ?lib (nth$ 1 ?l))
+    (printout t (send ?lib print))
+    ;(modify ?all (libros $?all))
+)
+
+
+;;;;;; cositas ;;;;;
+
+;(defrule generacion_soluciones::crea-lista-ordenada "Regla para pasar lista, a lista ordenada"
+;	(not (lista-rec-ordenada))
+;	(lista-rec-desordenada (recomendaciones $?lista))
+;	=>
+;	(bind $?resultado (create$ ))
+;	(while (not (eq (length$ $?lista) 0))  do
+;		(bind ?curr-rec (maximo-puntuacion $?lista))
+;		(bind $?lista (delete-member$ $?lista ?curr-rec))
+;		(bind $?resultado (insert$ $?resultado (+ (length$ $?resultado) 1) ?curr-rec))
+;	)
+;	(assert (lista-rec-ordenada (recomendaciones $?resultado)))
+;    (printout t "Ordenando obras de arte..." crlf)
+;)
