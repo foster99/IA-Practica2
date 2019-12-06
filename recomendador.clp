@@ -1272,10 +1272,10 @@
 )
 
 (defrule recopilacion_datos_personales::sagas
-    ?d <- (datos_usuario (confianza_valoraciones -1))
+    ?d <- (datos_usuario (sagas -1))
 	=>
 	(bind ?e (pregunta_numerica "¿Cuanto te importa que los libros pertenezcan a sagas (introduce 0 si no lo tienes en cuenta)? " 0 10))
-	(modify ?d (confianza_valoraciones ?e))
+	(modify ?d (sagas ?e))
 )
 
 (defrule recopilacion_datos_personales::assignar_libros_gustado
@@ -1558,7 +1558,6 @@
     (printout t (send ?lib print))
     ;(modify ?all (libros $?all))
 )
-
 
 ;;;;;; cositas ;;;;;
 
