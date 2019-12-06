@@ -1020,11 +1020,6 @@
     (multislot libros_recomendados(type INSTANCE))
 )
 
-(deftemplate MAIN::lista_libros
-    (multislot libros (type INSTANCE))
-)
-
-
 
 
 
@@ -1127,6 +1122,10 @@
 	(autores_v not_deff)
 )
 
+(deffacts asociacion_heuristica::controladores_asociacion_heuristica
+    (libros_obtenidos not_deff)
+    (libros_printed not_deff)
+)
 
 
 
@@ -1135,7 +1134,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; RULES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defrule MAIN::system-banner ""
-    (declare (salience 10))
+    (declare (salience 1000))
     =>
     (printout t crlf crlf)
     (printout t "----El Recomendador de Libros----")
@@ -1542,20 +1541,26 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;; ASOCIACION HEURISTICA ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defrule asociacion_heuristica::inicializar_lista_libros
-    (not (lista_libros))
+    ?fact <- (libros_obtenidos not_deff)
+    ?l <- (solucion_abstracta)
 	=>
     (bind $?allLibros (find-all-instances ((?inst Libro)) TRUE))
-    (assert (lista_libros))
-    (bind ?l (lista_libros))
-    (modify ?l (libros $?allLibros))
+    (retract ?fact)
+    (modify ?l (libros_recomendados $?allLibros))
 )
-
 (defrule asociacion_heuristica::saludos
-    (lista_libros (libros ?l))
+    ?fact <- (libros_printed not_deff)
+    ?sol <- (solucion_abstracta (libros_recomendados $?libs))
 	=>
-    (bind ?lib (nth$ 1 ?l))
-    (printout t (send ?lib print))
+    (printout t "ESTOS SON LOS LIBROS RECOMENDADOS:" crlf)
+    (loop-for-count (?i 1 (length$ $?libs)) do
+        (bind ?obj (nth$ ?i $?libs))
+		(bind ?nombre (send ?obj get-Nombre))
+        (printout t ?nombre crlf)
+    )
+    (retract ?fact)
     ;(modify ?all (libros $?all))
 )
 
