@@ -1175,7 +1175,7 @@
 (defrule recopilacion_datos_personales::duracion_libros
     ?d <- (datos_usuario (longitud -1))
 	=>
-	(bind ?l (pregunta_numerica "¿Duracion de los libros (paginas)? " 1 1000))
+	(bind ?l (pregunta_numerica "¿Duracion de los libros (paginas) (0 si te es indiferente)? " 0 1000))
 	(modify ?d (longitud ?l))
 )
 
@@ -1360,6 +1360,16 @@
     (retract ?fact)
 )
 	
+(defrule abstraccion_de_datos:longitud_nulo
+    ?pa <- (problema_abstracto (longitud_libro ?l))
+    ?d <- (datos_usuario (longitud ?x))
+    (test (eq ?x 0)) 
+    =>
+    (printout t "Nulo")
+    (modify ?pa (longitud_libro "nulo"))
+    (modify ?d (longitud -1))
+)
+
 (defrule abstraccion_de_datos:longitud_corto
     ?pa <- (problema_abstracto (longitud_libro ?l))
     ?d <- (datos_usuario (longitud ?x))
