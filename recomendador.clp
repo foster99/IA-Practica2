@@ -917,10 +917,10 @@
 (defclass Recomendacion
 	(is-a USER)
 	(role concrete)
-    (slot Libro
+    (single-slot Libro
 		(type INSTANCE)
 		(create-accessor read-write))
-    (slot puntuacion
+    (single-slot puntuacion
 		(type INTEGER)
 		(create-accessor read-write))
 )
@@ -1365,18 +1365,15 @@
     ?d <- (datos_usuario (longitud ?x))
     (test (eq ?x 0)) 
     =>
-    (printout t "Nulo")
     (modify ?pa (longitud_libro "nulo"))
     (modify ?d (longitud -1))
 )
-
 (defrule abstraccion_de_datos:longitud_corto
     ?pa <- (problema_abstracto (longitud_libro ?l))
     ?d <- (datos_usuario (longitud ?x))
     (test (< ?x 100))
     (test (> ?x 0))
     =>
-    (printout t "Corto")
     (modify ?pa (longitud_libro "corto"))
     (modify ?d (longitud -1))
 )
@@ -1386,7 +1383,6 @@
     (test (>= ?x 100))
     (test (< ?x 300))
     =>
-    (printout t "Medio")
     (modify ?pa (longitud_libro "medio"))
     (modify ?d (longitud -1))
 )
@@ -1395,7 +1391,6 @@
     ?pa <- (problema_abstracto (longitud_libro ?l))
     (test (>= ?x 300))
     =>
-    (printout t "Largo")
     (modify ?pa (longitud_libro "largo"))
     (modify ?d (longitud -1))
 )
@@ -1405,7 +1400,6 @@
     ?d <- (datos_usuario (confianza_valoraciones ?x))  
     (test (eq ?x 0)) 
     =>
-    (printout t "Nulo")
     (modify ?pa (valoraciones_cuentan "nulo"))
     (modify ?d (confianza_valoraciones -1))
 )
@@ -1415,7 +1409,6 @@
     (test (> ?x 0))    
     (test (< ?x 4)) 
     =>
-    (printout t "Bajo")
     (modify ?pa (valoraciones_cuentan "bajo"))
     (modify ?d (confianza_valoraciones -1))
 )
@@ -1425,7 +1418,6 @@
     (test (>= ?x 4))
     (test (< ?x 7))
     =>
-    (printout t "Medio")
     (modify ?pa (valoraciones_cuentan "medio"))
     (modify ?d (confianza_valoraciones -1))
 )
@@ -1434,7 +1426,6 @@
     ?d <- (datos_usuario (confianza_valoraciones ?x))
     (test (>= ?x 7))
     =>
-    (printout t "Alto")
     (modify ?pa (valoraciones_cuentan "alto"))
     (modify ?d (confianza_valoraciones -1))
 )
@@ -1444,7 +1435,6 @@
     ?d <- (datos_usuario (VO ?x))  
     (test (eq ?x 0)) 
     =>
-    (printout t "Nulo")
     (modify ?pa (mejor_si_es_VO "nulo"))
     (modify ?d (VO -1))
 )
@@ -1454,7 +1444,6 @@
     (test (> ?x 0))    
     (test (< ?x 4)) 
     =>
-    (printout t "Bajo")
     (modify ?pa (mejor_si_es_VO "bajo"))
     (modify ?d (VO -1))
 )
@@ -1464,7 +1453,6 @@
     (test (>= ?x 4))
     (test (< ?x 7))
     =>
-    (printout t "Medio")
     (modify ?pa (mejor_si_es_VO "medio"))
     (modify ?d (VO -1))
 )
@@ -1473,7 +1461,6 @@
     ?d <- (datos_usuario (VO ?x))
     (test (>= ?x 7))
     =>
-    (printout t "Alto")
     (modify ?pa (mejor_si_es_VO "alto"))
     (modify ?d (VO -1))
 )
@@ -1483,7 +1470,6 @@
     ?d <- (datos_usuario (sagas ?x))  
     (test (eq ?x 0)) 
     =>
-    (printout t "Nulo")
     (modify ?pa (puede_ser_de_saga "nulo"))
     (modify ?d (sagas -1))
 )
@@ -1493,7 +1479,6 @@
     (test (> ?x 0))    
     (test (< ?x 4)) 
     =>
-    (printout t "Bajo")
     (modify ?pa (puede_ser_de_saga "bajo"))
     (modify ?d (sagas -1))
 )
@@ -1503,7 +1488,6 @@
     (test (>= ?x 4))
     (test (< ?x 7))
     =>
-    (printout t "Medio")
     (modify ?pa (puede_ser_de_saga "medio"))
     (modify ?d (sagas -1))
 )
@@ -1512,7 +1496,6 @@
     ?d <- (datos_usuario (sagas ?x))
     (test (>= ?x 7))
     =>
-    (printout t "Alto")
     (modify ?pa (puede_ser_de_saga "alto"))
     (modify ?d (sagas -1))
 )
@@ -1523,7 +1506,6 @@
     (test (>= ?x 0))    
     (test (< ?x 4)) 
     =>
-    (printout t "Bajo")
     (modify ?pa (nivel_lector "bajo"))
     (modify ?d (cantidad_libros_leidos -1))
 )
@@ -1533,7 +1515,6 @@
     (test (>= ?x 4))
     (test (< ?x 7))
     =>
-    (printout t "Medio")
     (modify ?pa (nivel_lector "medio"))
     (modify ?d (cantidad_libros_leidos -1))
 )
@@ -1542,7 +1523,6 @@
     ?d <- (datos_usuario (cantidad_libros_leidos ?x))
     (test (>= ?x 7))
     =>
-    (printout t "Alto")
     (modify ?pa (nivel_lector "alto"))
     (modify ?d (cantidad_libros_leidos -1))
 )
@@ -1557,6 +1537,9 @@
     ?l <- (solucion_abstracta)
 	=>
     (bind $?allLibros (find-all-instances ((?inst Libro)) TRUE))
+    (progn$ (?curr-con ?allLibros)
+		(make-instance (gensym) of Recomendacion (Libro ?curr-con)(puntuacion 0))
+	)	
     (retract ?fact)
     (modify ?l (libros_recomendados $?allLibros))
 )
@@ -1567,7 +1550,8 @@
     (printout t "ESTOS SON LOS LIBROS RECOMENDADOS:" crlf)
     (loop-for-count (?i 1 (length$ $?libs)) do
         (bind ?obj (nth$ ?i $?libs))
-		(bind ?nombre (send ?obj get-Nombre))
+        ;(printout t (send ?obj print))
+        (bind ?nombre (send ?obj get-Nombre))
         (printout t ?nombre crlf)
     )
     (retract ?fact)
