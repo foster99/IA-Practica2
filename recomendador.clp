@@ -872,6 +872,30 @@
 		(Nombre "Dystopian"))
 )
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; CLASES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; Una recomendacion es un libro asociado a unas justificaciones.
+(defclass Recomendacion
+	(is-a USER)
+	(role concrete)
+    (single-slot Libro
+		(type INSTANCE)
+		(create-accessor read-write))
+    (single-slot puntuacion
+		(type INTEGER)
+		(create-accessor read-write))
+)
+
+; Clase donde cuardar las 3 recomendaciones que hagamos
+(defclass Veredicto
+	(is-a USER)
+	(role concrete)
+	(multislot recomendaciones
+		(type INSTANCE)
+		(create-accessor read-write))
+)
+
+
 
 
 
@@ -907,32 +931,6 @@
 	(export ?ALL)
 )
 
-
-
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; CLASES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-; Una recomendacion es un libro asociado a unas justificaciones.
-(defclass Recomendacion
-	(is-a USER)
-	(role concrete)
-    (single-slot Libro
-		(type INSTANCE)
-		(create-accessor read-write))
-    (single-slot puntuacion
-		(type INTEGER)
-		(create-accessor read-write))
-)
-
-; Clase donde cuardar las 3 recomendaciones que hagamos
-(defclass Veredicto
-	(is-a USER)
-	(role concrete)
-	(multislot recomendaciones
-		(type INSTANCE)
-		(create-accessor read-write))
-)
 
 
 
@@ -1543,6 +1541,8 @@
     (retract ?fact)
     (modify ?l (libros_recomendados $?allLibros))
 )
+
+
 (defrule asociacion_heuristica::saludos
     ?fact <- (libros_printed not_deff)
     ?sol <- (solucion_abstracta (libros_recomendados $?libs))
@@ -1550,9 +1550,9 @@
     (printout t "ESTOS SON LOS LIBROS RECOMENDADOS:" crlf)
     (loop-for-count (?i 1 (length$ $?libs)) do
         (bind ?obj (nth$ ?i $?libs))
-        ;(printout t (send ?obj print))
-        (bind ?nombre (send ?obj get-Nombre))
-        (printout t ?nombre crlf)
+        (printout t (send ?obj print))
+        ;(bind ?nombre (send ?obj get-Nombre))
+        ;(printout t ?nombre crlf)
     )
     (retract ?fact)
     ;(modify ?all (libros $?all))
