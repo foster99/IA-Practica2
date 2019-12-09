@@ -878,7 +878,7 @@
 (defclass Recomendacion
 	(is-a USER)
 	(role concrete)
-    (single-slot Libro
+    (single-slot libro
 		(type INSTANCE)
 		(create-accessor read-write))
     (single-slot puntuacion
@@ -939,30 +939,31 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; PRINTING ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defmessage-handler Libro print ()
+    (printout t "---------------------------------------------------" crlf)
 	(format t "Titulo: %s %n" ?self:Nombre)
 	(printout t crlf)
-	(format t "Autor: %s" (send ?self:Tiene_Como_Autor get-Nombre))
+	;(format t "Autor: %s" (send ?self:Tiene_Como_Autor get-Nombre))
 	(printout t crlf)
-    (format t "Genero: %s" (send ?self:Es_Del_Genero get-Nombre))
+    ;(format t "Genero: %s" (send ?self:Es_Del_Genero get-Nombre))
 	(printout t crlf)
     ;(format t "Version original: %s" ?self:Es_Version_Original)
-	;(printout t crlf)
-    (format t "Numero de paginas: %d" ?self:NumPag)
 	(printout t crlf)
-    (format t "Idiomas disponibles: %s" ?self:Idioma)
+    ;(format t "Numero de paginas: %d" ?self:NumPag)
 	(printout t crlf)
-    (format t "Valoracion de 1 a 10: %d" ?self:Valoracion)
+    ;(format t "Idiomas disponibles: %s" ?self:Idioma)
 	(printout t crlf)
-	(format t "Formatos disponibles: %s" ?self:Formato)
+    ;(format t "Valoracion de 1 a 10: %d" ?self:Valoracion)
 	(printout t crlf)
-	(format t "Puede adquirirlo en: %s" (send ?self:Se_Adquiere_En get-Nombre))
+	;(format t "Formatos disponibles: %s" ?self:Formato)
 	(printout t crlf)
+	;(format t "Puede adquirirlo en: %s" (send ?self:Se_Adquiere_En get-Nombre))
+	(printout t "---------------------------------------------------" crlf)
 
 )
 
 (defmessage-handler Recomendacion print ()
 	(printout t "-----------------------------------" crlf)
-	(printout t (send ?self:Libro print))
+	(printout t (send ?self:libro print))
 	(printout t crlf)
 	(printout t "Puntuacion: " crlf)
 	;(progn$ (?curr-just ?self:justificaciones)
@@ -1123,6 +1124,7 @@
 (deffacts asociacion_heuristica::controladores_asociacion_heuristica
     (libros_obtenidos not_deff)
     (libros_printed not_deff)
+    (sol_genero not_deff)
 )
 
 
@@ -1531,15 +1533,29 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;; ASOCIACION HEURISTICA ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defrule asociacion_heuristica::inicializar_lista_libros
-    ?fact <- (libros_obtenidos not_deff)
-    ?l <- (solucion_abstracta)
+    ?ctrl <- (libros_obtenidos not_deff)
+    ?sol <- (solucion_abstracta)
 	=>
     (bind $?allLibros (find-all-instances ((?inst Libro)) TRUE))
     (progn$ (?curr-con ?allLibros)
-		(make-instance (gensym) of Recomendacion (Libro ?curr-con)(puntuacion 0))
+		(make-instance (gensym) of Recomendacion (libro ?curr-con)(puntuacion 0))
 	)	
-    (retract ?fact)
-    (modify ?l (libros_recomendados $?allLibros))
+    (retract ?ctrl)
+;    (assert (sol_genero not_deff))
+    (modify ?sol (libros_recomendados $?allLibros))
+)
+
+(defrule asociacion_heuristica::coincidencia_genero
+    ;?fact <- (sol_genero not_deff)
+    ;?sol <- (solucion_abstracta (libros_recomendados ?rec))
+    ?pa <- (problema_abstracto (generos_validos $?all_gen))
+    
+    =>
+    (bind ?gen (first$ $?all_gen))
+    (bind ?nombre (send ?gen get-Nombre))
+    (printout t ?nombre crlf)
+    (printout t "cabrones" crlf)
+    
 )
 
 
@@ -1572,4 +1588,13 @@
 ;	)
 ;	(assert (lista-rec-ordenada (recomendaciones $?resultado)))
 ;    (printout t "Ordenando obras de arte..." crlf)
+;)
+
+;(do-for-all-instances 
+;        ; Set
+;        ((?r Recomendacion))
+;        ; Query
+;        (eq (send (send ?r:libro get-Es_Del_Genero) get-Nombre) "Dystopian" )
+;        ; Action        
+;        (printout t "cabrones" crlf)
 ;)
