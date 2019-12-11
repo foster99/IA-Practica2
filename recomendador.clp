@@ -1569,6 +1569,12 @@
 
     ; ENCENDER TODOS LOS TRATAMIENTOS DEL LIBRO
     (assert (targeted_genero on))
+    ;(assert (targeted_autor on))
+    ;(assert (targeted_valoraciones on))
+    ;(assert (targeted_VO on))
+    ;(assert (targeted_sagas on))
+    ;(assert (targeted_nivel on))
+    ;(assert (targeted_longitud on))
 
     ; ESTABLECER LIBRO TARGETEADO
     (bind ?lt (nth$ 1 $?lnt))
@@ -1583,6 +1589,12 @@
     ?sol <- (solucion_abstracta (targeted_rec ?lt) (libros_recomendados $?rec))
     (libros_obtenidos deff)   
     ?cgen<-(targeted_genero off)
+    ;?caut <-(targeted_autor off)
+    ;?cval <-(targeted_valoraciones off)
+    ;?cVO <-(targeted_VO off)
+    ;?csag <-(targeted_sagas off)
+    ;?cniv <-(targeted_nivel off)
+    ;?clon <-(targeted_longitud ff)
     =>
     
     ; GUARDAR LIBRO TARGETEADO
@@ -1612,9 +1624,20 @@
     (assert (targeted_genero off))
     (bind ?libro (send ?obj get-libro))
     (bind $?gen (send ?libro get-Es_Del_Genero))
-    (loop-for-count (?i 1 (length$ $?gen)) do   
-        (bind ?ith (nth$ ?i $?gen))
-        (printout t (send ?ith get-Nombre))
+    (loop-for-count (?j 1 (length$ $?gen)) do    
+        (bind ?genName (send (nth$ ?j $?gen) get-Nombre))
+        
+        (loop-for-count (?i 1 (length$ $?all_gen)) do   
+            (bind ?ithName (send (nth$ ?i $?all_gen) get-Nombre))
+            
+            (if (eq ?genName ?ithName) then
+                (bind ?punt (send ?obj get-puntuacion))
+                (bind ?punt (+ ?punt 10))
+                (printout t ?punt crlf)
+                (modify-instance ?obj (puntuacion ?punt))
+                (break)
+            )
+        )
     )
 )
 
