@@ -896,10 +896,6 @@
 )
 
 
-
-
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; MODULOS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; ------------------------------ Modulo general del sistema. --------------------
@@ -1544,15 +1540,22 @@
     ?sol <- (solucion_abstracta)
     ?target <- (target_mode off)
 	=>
+    (bind $?listaRec (create$ ))    
     (bind $?allLibros (find-all-instances ((?inst Libro)) TRUE))
-    (progn$ (?curr-con ?allLibros)
-		(make-instance (gensym) of Recomendacion (libro ?curr-con)(puntuacion 0))
-	)	
+    ; (progn$ (?curr-con ?allLibros)
+    ;    (bind ?elem (make-instance (gensym) of Recomendacion (libro ?curr-con)(puntuacion 0)))
+	;    (insert$ $?listaRec 1 ?elem)
+	;)
+ 	(loop-for-count (?i 1 (length$ $?allLibros)) do
+		(bind ?obj (nth$ ?i ?allLibros))
+         (bind ?elem (make-instance (gensym) of Recomendacion (libro ?obj)(puntuacion 0)))
+		(bind $?listaRec(insert$ $?listaRec (+ (length$ $?listaRec) 1) ?elem))
+	)
     (retract ?ctrl)
     (assert (libros_obtenidos deff))
     (retract ?target)
     (assert (target_mode on))
-    (modify ?sol (libros_no_tratados $?allLibros))
+    (modify ?sol (libros_no_tratados $?listaRec))
 )
 
 (defrule asociacion_heuristica::target
@@ -1569,24 +1572,33 @@
 
     ; ESTABLECER LIBRO TARGETEADO
     (bind ?lt (nth$ 1 $?lnt))
-    (modify ?sol (targeted_rec ?lt))
 
     ; ELIMINAR TARGETEADO DE LA LISTA DE NO TRATADOS
-    (delete$ $?lnt 1 1)
+    (bind $?F (delete$ $?lnt 1 1))
+    (modify ?sol (targeted_rec ?lt)(libros_no_tratados $?F))
 )
 
 (defrule asociacion_heuristica::end_tratamiento_targeteado
     ?target <- (target_mode off)
     ?sol <- (solucion_abstracta (targeted_rec ?lt) (libros_recomendados $?rec))
     (libros_obtenidos deff)   
-    (targeted_genero off)
+    ?cgen<-(targeted_genero off)
     =>
+    
     ; GUARDAR LIBRO TARGETEADO
-    (insert$ $?rec 1 ?lt)
-
+    
+    (bind $?rec(insert$ $?rec (+ (length$ $?rec) 1) ?lt))
+    (modify ?sol (libros_recomendados $?rec))
+    
+    ; BORRAR HECHOS CONTROL
+    
+    (retract ?cgen)
+    
     ; ENCENDER EL MODO TARGET
+    
     (retract ?target)
     (assert (target_mode on))
+    
     
 
 )
@@ -1596,22 +1608,14 @@
     ?sol <- (solucion_abstracta (targeted_rec ?obj))
     ?pa <- (problema_abstracto (generos_validos $?all_gen))
     =>
-    (printout t "debug 1" crlf)
     (retract ?ctrl)
     (assert (targeted_genero off))
-    (printout t "debug 2" crlf)
-    (bind ?libro (send ?obj getLibro))
-    (printout t "debug 3" crlf)
+    (bind ?libro (send ?obj get-libro))
     (bind $?gen (send ?libro get-Es_Del_Genero))
-    (printout t "debug 4" crlf)
-    (loop-for-count (?i 1 (length$ $?gen)) do
-        (printout t "dentro del bucle" crlf)        
+    (loop-for-count (?i 1 (length$ $?gen)) do   
         (bind ?ith (nth$ ?i $?gen))
         (printout t (send ?ith get-Nombre))
     )
-
-    (printout t "cabrones he llegado hasta aqui" crlf)
-    
 )
 
 
