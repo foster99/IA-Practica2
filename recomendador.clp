@@ -936,7 +936,7 @@
 
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; PRINTING ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; MESSAGE HANDLERS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defmessage-handler Libro print ()
     (printout t "---------------------------------------------------" crlf)
@@ -971,6 +971,11 @@
 	;)
 	(printout t crlf)
 	(printout t "-----------------------------------" crlf)
+)
+
+(defmessage-handler Recomendacion getLibro ()
+    (printout t "Tu puta madre" crlf)
+    (dynamic-get libro)
 )
 
 (defmessage-handler Veredicto print ()
@@ -1016,7 +1021,9 @@
 )
 
 (deftemplate MAIN::solucion_abstracta
+    (slot targeted_rec (type INSTANCE))
     (multislot libros_recomendados(type INSTANCE))
+    (multislot libros_no_tratados (type INSTANCE))    
 )
 
 
@@ -1122,9 +1129,9 @@
 )
 
 (deffacts asociacion_heuristica::controladores_asociacion_heuristica
-    (libros_obtenidos not_deff)
-    (libros_printed not_deff)
-    (sol_genero not_deff)
+    (libros_obtenidos not_deff)    ; Controla inicializacion de la solucion abstracta
+    (target_mode off)              ; Modo target apagado
+    (libros_printed not_deff)      ; Controla que se hayan impreso los libros
 )
 
 
@@ -1535,26 +1542,75 @@
 (defrule asociacion_heuristica::inicializar_lista_libros
     ?ctrl <- (libros_obtenidos not_deff)
     ?sol <- (solucion_abstracta)
+    ?target <- (target_mode off)
 	=>
     (bind $?allLibros (find-all-instances ((?inst Libro)) TRUE))
     (progn$ (?curr-con ?allLibros)
 		(make-instance (gensym) of Recomendacion (libro ?curr-con)(puntuacion 0))
 	)	
     (retract ?ctrl)
-;    (assert (sol_genero not_deff))
-    (modify ?sol (libros_recomendados $?allLibros))
+    (assert (libros_obtenidos deff))
+    (retract ?target)
+    (assert (target_mode on))
+    (modify ?sol (libros_no_tratados $?allLibros))
+)
+
+(defrule asociacion_heuristica::target
+    ?target <- (target_mode on)
+    ?sol <- (solucion_abstracta (libros_no_tratados $?lnt))
+    (test (> (length $?lnt) 0)) ; si aun quedan libros por tratar (la lista no esta vacia)
+    =>
+    ; APAGAR EL MODO TARGET
+    (retract ?target)
+    (assert (target_mode off))
+
+    ; ENCENDER TODOS LOS TRATAMIENTOS DEL LIBRO
+    (assert (targeted_genero on))
+
+    ; ESTABLECER LIBRO TARGETEADO
+    (bind ?lt (nth$ 1 $?lnt))
+    (modify ?sol (targeted_rec ?lt))
+
+    ; ELIMINAR TARGETEADO DE LA LISTA DE NO TRATADOS
+    (delete$ $?lnt 1 1)
+)
+
+(defrule asociacion_heuristica::end_tratamiento_targeteado
+    ?target <- (target_mode off)
+    ?sol <- (solucion_abstracta (targeted_rec ?lt) (libros_recomendados $?rec))
+    (libros_obtenidos deff)   
+    (targeted_genero off)
+    =>
+    ; GUARDAR LIBRO TARGETEADO
+    (insert$ $?rec 1 ?lt)
+
+    ; ENCENDER EL MODO TARGET
+    (retract ?target)
+    (assert (target_mode on))
+    
+
 )
 
 (defrule asociacion_heuristica::coincidencia_genero
-    ;?fact <- (sol_genero not_deff)
-    ;?sol <- (solucion_abstracta (libros_recomendados ?rec))
+    ?ctrl <- (targeted_genero on)
+    ?sol <- (solucion_abstracta (targeted_rec ?obj))
     ?pa <- (problema_abstracto (generos_validos $?all_gen))
-    
     =>
-    (bind ?gen (first$ $?all_gen))
-    (bind ?nombre (send ?gen get-Nombre))
-    (printout t ?nombre crlf)
-    (printout t "cabrones" crlf)
+    (printout t "debug 1" crlf)
+    (retract ?ctrl)
+    (assert (targeted_genero off))
+    (printout t "debug 2" crlf)
+    (bind ?libro (send ?obj getLibro))
+    (printout t "debug 3" crlf)
+    (bind $?gen (send ?libro get-Es_Del_Genero))
+    (printout t "debug 4" crlf)
+    (loop-for-count (?i 1 (length$ $?gen)) do
+        (printout t "dentro del bucle" crlf)        
+        (bind ?ith (nth$ ?i $?gen))
+        (printout t (send ?ith get-Nombre))
+    )
+
+    (printout t "cabrones he llegado hasta aqui" crlf)
     
 )
 
