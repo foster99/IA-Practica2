@@ -1582,7 +1582,7 @@
     (assert (targeted_genero on))
     (assert (targeted_autor on))
     ;(assert (targeted_valoraciones on))
-    ;(assert (targeted_VO on))
+    (assert (targeted_VO on))
     ;(assert (targeted_sagas on))
     ;(assert (targeted_nivel on))
     ;(assert (targeted_longitud on))
@@ -1602,7 +1602,7 @@
     ?cgen<-(targeted_genero off)
     ?caut <-(targeted_autor off)
     ;?cval <-(targeted_valoraciones off)
-    ;?cVO <-(targeted_VO off)
+    ?cVO <-(targeted_VO off)
     ;?csag <-(targeted_sagas off)
     ;?cniv <-(targeted_nivel off)
     ;?clon <-(targeted_longitud ff)
@@ -1617,6 +1617,7 @@
     
     (retract ?cgen)
     (retract ?caut)
+    (retract ?cVO)
     
     ; ENCENDER EL MODO TARGET
     
@@ -1677,6 +1678,53 @@
             )
         )
     )
+)
+
+(defrule asociacion_heuristica::coincidencia_VO_nulo
+    ?ctrl <- (targeted_VO on)
+    ?sol <- (solucion_abstracta (targeted_rec ?obj))
+    ?pa <- (problema_abstracto (mejor_si_es_VO ?typeVO))
+    (test (eq ?typeVO "nulo"))
+    =>
+    (retract ?ctrl)
+    (assert (targeted_VO off))
+    
+)
+(defrule asociacion_heuristica::coincidencia_VO_bajo
+    ?ctrl <- (targeted_VO on)
+    ?sol <- (solucion_abstracta (targeted_rec ?obj))
+    ?pa <- (problema_abstracto (mejor_si_es_VO ?typeVO))
+    (test (eq ?typeVO "bajo"))
+    =>
+    (retract ?ctrl)
+    (assert (targeted_VO off))
+    (bind ?punt (send ?obj get-puntuacion))
+    (bind ?punt (+ ?punt 30))
+    (modify-instance ?obj (puntuacion ?punt))
+)
+(defrule asociacion_heuristica::coincidencia_VO_medio
+    ?ctrl <- (targeted_VO on)
+    ?sol <- (solucion_abstracta (targeted_rec ?obj))
+    ?pa <- (problema_abstracto (mejor_si_es_VO ?typeVO))
+    (test (eq ?typeVO "medio"))
+    =>
+    (retract ?ctrl)
+    (assert (targeted_VO off))
+    (bind ?punt (send ?obj get-puntuacion))
+    (bind ?punt (+ ?punt 60))
+    (modify-instance ?obj (puntuacion ?punt))
+)
+(defrule asociacion_heuristica::coincidencia_VO_alto
+    ?ctrl <- (targeted_VO on)
+    ?sol <- (solucion_abstracta (targeted_rec ?obj))
+    ?pa <- (problema_abstracto (mejor_si_es_VO ?typeVO))
+    (test (eq ?typeVO "alto"))
+    =>
+    (retract ?ctrl)
+    (assert (targeted_VO off))
+    (bind ?punt (send ?obj get-puntuacion))
+    (bind ?punt (+ ?punt 100))
+    (modify-instance ?obj (puntuacion ?punt))
 )
 
 (defrule asociacion_heuristica::saludos
