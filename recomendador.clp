@@ -2209,12 +2209,11 @@
     )
     ; Eliminar ganadores de la lista ordenada
     (bind $?F (delete$ $?libs 1 ?num))
-    (modify ?sol (recomendaciones_ordenadas $?F))
     
     ; Metemos el veredicto dentro del template
-    (bind ?veredicto (make-instance (gensym) of Veredicto (recomendaciones $?ganadores)))
-    (modify ?sol (solucion_no_refinada ?veredicto))
+    (bind ?inst (make-instance (gensym) of Veredicto (recomendaciones $?ganadores)))    
     
+    (modify ?sol (solucion_no_refinada ?inst) (recomendaciones_ordenadas $?F))    
     (retract ?fact)
     (assert (veredicto inicial))
 )
