@@ -935,53 +935,87 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; MESSAGE HANDLERS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defmessage-handler Autor print ()
-    (printout t "Autor: %s %n" (dynamic-get Nombre))
+    (printout t "Autor: %s" (dynamic-get Nombre))
 )
+
 (defmessage-handler Genero print ()
     (printout t "Genero: %s" (dynamic-get Nombre))
 )
 
 (defmessage-handler Libro print ()
-    (printout t "---------------------------------------------------" crlf)
-	(format t "Titulo: %s %n" (dynamic-get Nombre))
-    (printout t crlf)	
-    (printout t (send (dynamic-get Tiene_Como_Autor) print) crlf)
-    (send (dynamic-get Es_Del_Genero) print)
-	(printout t crlf)
-    (format t "Version original: %s" ?self:Es_Version_Original)
-	(printout t crlf)
+	(format t "Titulo: %s" (dynamic-get Nombre))
+    (printout t crlf)
+
+    (printout t "Genero:" crlf)
+    (bind $?gen ?self:Es_Del_Genero)
+    (loop-for-count (?j 1 (length$ $?gen)) do    
+        (bind ?genName (send (nth$ ?j $?gen) get-Nombre))
+        (format t "- %s" ?genName)
+        (printout t crlf)  
+    )
+    (printout t crlf) 
+
+    (printout t "Autor:" crlf)
+    (bind $?aut ?self:Tiene_Como_Autor)
+    (loop-for-count (?j 1 (length$ $?aut)) do    
+        (bind ?autorName (send (nth$ ?j $?aut) get-Nombre))
+        (format t "- %s" ?autorName)
+        (printout t crlf)  
+    )
+    (printout t crlf) 
+
     (format t "Numero de paginas: %d" ?self:NumPag)
-	(printout t crlf)
-    (format t "Idiomas disponibles: %s" ?self:Idioma)
-	(printout t crlf)
+    (printout t crlf)
+    (printout t crlf)
+
     (format t "Valoracion de 1 a 10: %d" ?self:Valoracion)
 	(printout t crlf)
-	;(format t "Formatos disponibles: %s" ?self:Formato)
-	(printout t crlf)
-	;(format t "Puede adquirirlo en: %s" (send ?self:Se_Adquiere_En get-Nombre))
+    (printout t crlf) 
+
+    (format t "Version original: %s" ?self:Es_Version_Original)
+    (printout t crlf)
+    (printout t crlf) 
+
+    (printout t "Idiomas disponibles:" crlf)
+    (bind $?lang ?self:Idioma)
+    (loop-for-count (?j 1 (length$ $?lang)) do    
+        (bind ?langName (nth$ ?j $?lang))
+        (format t "- %s" ?langName)
+        (printout t crlf)  
+    )
+    (printout t crlf) 
+	
+	(printout t "Formatos disponibles:" crlf)
+    (bind $?form ?self:Formato)
+    (loop-for-count (?j 1 (length$ $?form)) do    
+        (format t "- %s" (nth$ ?j $?form))
+        (printout t crlf)  
+    )
+    (printout t crlf) 
+
+    (printout t "Puede adquirirlo en:" crlf)
+    (bind $?tienda ?self:Se_Adquiere_En)
+    (loop-for-count (?j 1 (length$ $?tienda)) do    
+        (bind ?tiendaName (send (nth$ ?j $?tienda) get-Nombre))
+        (format t "- %s" ?tiendaName)
+        (printout t crlf)  
+    )
 	(printout t "---------------------------------------------------" crlf)
 
 )
 
 (defmessage-handler Recomendacion print ()
-	(printout t "-----------------------------------" crlf)
-	(printout t (send ?self:libro print))
-	(printout t crlf)
+	(printout t (send ?self:libro print) crlf)
 	(printout t "Puntuacion: " (dynamic-get puntuacion) crlf)
-	;(progn$ (?curr-just ?self:justificaciones)
-	;	(printout t ?curr-just crlf)
-	;)
-	(printout t crlf)
-	(printout t "-----------------------------------" crlf)
 )
 
 (defmessage-handler Veredicto print ()
-	(printout t "============================================" crlf)
+	(printout t "===================================================" crlf)
 	(bind $?recs ?self:recomendaciones)
 	(progn$ (?curr-rec $?recs)
 		(printout t (send ?curr-rec print))
 	)
-	(printout t "============================================" crlf)
+	(printout t "===================================================" crlf)
 )
 
 
@@ -1651,7 +1685,6 @@
     )
 )
 
-
 (defrule asociacion_heuristica::ordenar_recomendaciones
     ?sol <- (solucion_abstracta (libros_no_tratados $?lnt) (libros_recomendados $?lista) (recomendaciones_ordenadas $?resultado))
     ?target <- (target_mode on)    
@@ -1672,14 +1705,13 @@
     ?sol <- (solucion_abstracta (recomendaciones_ordenadas $?libs))
 	=>
     (printout t "ESTOS SON LOS LIBROS RECOMENDADOS:" crlf)
+    (printout t "***************************************************" crlf)
     (loop-for-count (?i 1 (length$ $?libs)) do
         (bind ?obj (nth$ ?i $?libs))
         (printout t (send ?obj print))
-        ;(bind ?nombre (send ?obj get-Nombre))
-        ;(printout t ?nombre crlf)
+        (printout t "***************************************************" crlf)
     )
     (retract ?fact)
-    ;(modify ?all (libros $?all))
 )
 
 ;;;;;; cositas ;;;;;
