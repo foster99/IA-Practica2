@@ -983,11 +983,6 @@
 	(printout t "============================================" crlf)
 )
 
-
-
-
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; TEMPLATES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (deftemplate MAIN::datos_usuario
@@ -1021,11 +1016,6 @@
     (multislot libros_recomendados(type INSTANCE))
     (multislot libros_no_tratados (type INSTANCE))    
 )
-
-
-
-
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; FUNCIONES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -1581,11 +1571,11 @@
     ; ENCENDER TODOS LOS TRATAMIENTOS DEL LIBRO
     (assert (targeted_genero on))
     (assert (targeted_autor on))
-    ;(assert (targeted_valoraciones on))
+    (assert (targeted_valoraciones on))
     (assert (targeted_VO on))
-    ;(assert (targeted_sagas on))
-    ;(assert (targeted_nivel on))
-    ;(assert (targeted_longitud on))
+    (assert (targeted_sagas on))
+    (assert (targeted_nivel on))
+    (assert (targeted_longitud on))
 
     ; ESTABLECER LIBRO TARGETEADO
     (bind ?lt (nth$ 1 $?lnt))
@@ -1601,11 +1591,11 @@
     (libros_obtenidos deff)   
     ?cgen<-(targeted_genero off)
     ?caut <-(targeted_autor off)
-    ;?cval <-(targeted_valoraciones off)
+    ?cval <-(targeted_valoraciones off)
     ?cVO <-(targeted_VO off)
-    ;?csag <-(targeted_sagas off)
-    ;?cniv <-(targeted_nivel off)
-    ;?clon <-(targeted_longitud ff)
+    ?csag <-(targeted_sagas off)
+    ?cniv <-(targeted_nivel off)
+    ?clon <-(targeted_longitud off)
     =>
     
     ; GUARDAR LIBRO TARGETEADO
@@ -1618,7 +1608,10 @@
     (retract ?cgen)
     (retract ?caut)
     (retract ?cVO)
-    
+    (retract ?cval)
+    (retract ?csag)
+    (retract ?clon)
+    (retract ?cniv)    
     ; ENCENDER EL MODO TARGET
     
     (retract ?target)
@@ -1725,6 +1718,288 @@
     (bind ?punt (send ?obj get-puntuacion))
     (bind ?punt (+ ?punt 100))
     (modify-instance ?obj (puntuacion ?punt))
+)
+
+(defrule asociacion_heuristica::coincidencia_valoraciones_nulo
+    ?ctrl <- (targeted_valoraciones on)
+    ?sol <- (solucion_abstracta (targeted_rec ?obj))
+    ?pa <- (problema_abstracto (valoraciones_cuentan ?typeVA))
+    (test (eq ?typeVA "nulo"))
+    =>
+    (retract ?ctrl)
+    (assert (targeted_valoraciones off))
+    
+)
+(defrule asociacion_heuristica::coincidencia_valoraciones_bajo
+    ?ctrl <- (targeted_valoraciones on)
+    ?sol <- (solucion_abstracta (targeted_rec ?obj))
+    ?pa <- (problema_abstracto (valoraciones_cuentan ?typeVA))
+    (test (eq ?typeVA "bajo"))
+    =>
+    (retract ?ctrl)
+    (assert (targeted_valoraciones off))
+    (bind ?libro (send ?obj get-libro))
+    (bind ?punt (send ?obj get-puntuacion))
+    (bind ?val (send ?libro get-Valoracion))
+    (bind ?val (* ?val 3))
+    (bind ?punt (+ ?punt ?val))
+    (modify-instance ?obj (puntuacion ?punt))
+    
+)
+(defrule asociacion_heuristica::coincidencia_valoraciones_medio
+    ?ctrl <- (targeted_valoraciones on)
+    ?sol <- (solucion_abstracta (targeted_rec ?obj))
+    ?pa <- (problema_abstracto (valoraciones_cuentan ?typeVA))
+    (test (eq ?typeVA "medio"))
+    =>
+    (retract ?ctrl)
+    (assert (targeted_valoraciones off))
+    (bind ?libro (send ?obj get-libro))
+    (bind ?punt (send ?obj get-puntuacion))
+    (bind ?val (send ?libro get-Valoracion))
+    (bind ?val (* ?val 6))
+    (bind ?punt (+ ?punt ?val))
+    (modify-instance ?obj (puntuacion ?punt))
+    
+)
+(defrule asociacion_heuristica::coincidencia_valoraciones_alto
+    ?ctrl <- (targeted_valoraciones on)
+    ?sol <- (solucion_abstracta (targeted_rec ?obj))
+    ?pa <- (problema_abstracto (valoraciones_cuentan ?typeVA))
+    (test (eq ?typeVA "alto"))
+    =>
+    (retract ?ctrl)
+    (assert (targeted_valoraciones off))
+    (bind ?libro (send ?obj get-libro))
+    (bind ?punt (send ?obj get-puntuacion))
+    (bind ?val (send ?libro get-Valoracion))
+    (bind ?val (* ?val 10))
+    (bind ?punt (+ ?punt ?val))
+    (modify-instance ?obj (puntuacion ?punt))
+)
+
+(defrule asociacion_heuristica::coincidencia_saga_nulo
+    ?ctrl <- (targeted_sagas on)
+    ?sol <- (solucion_abstracta (targeted_rec ?obj))
+    ?pa <- (problema_abstracto (puede_ser_de_saga ?typeSAG))
+    (test (eq ?typeSAG "nulo"))
+    =>
+    (retract ?ctrl)
+    (assert (targeted_sagas off))
+)
+(defrule asociacion_heuristica::coincidencia_saga_bajo
+    ?ctrl <- (targeted_sagas on)
+    ?sol <- (solucion_abstracta (targeted_rec ?obj))
+    ?pa <- (problema_abstracto (puede_ser_de_saga ?typeSAG))
+    (test (eq ?typeSAG "bajo"))
+    =>
+    (retract ?ctrl)
+    (assert (targeted_sagas off))
+    (bind ?libro (send ?obj get-libro))
+    (bind ?pre (send ?libro get-es_predecesor_de))
+    (bind ?post (send ?libro get-es_sucesor_se))
+    (bind ?elem 0)    
+    (if (neq ?pre nil) then
+        (bind ?elem (+ ?elem 1))
+    )
+    (if (neq ?post nil) then
+        (bind ?elem (+ ?elem 1))
+    )
+    (if (> ?elem 0) then
+        (bind ?punt (send ?obj get-puntuacion))
+        (bind ?punt (+ ?punt 30))
+        (modify-instance ?obj (puntuacion ?punt))
+    )
+)
+(defrule asociacion_heuristica::coincidencia_saga_medio
+    ?ctrl <- (targeted_sagas on)
+    ?sol <- (solucion_abstracta (targeted_rec ?obj))
+    ?pa <- (problema_abstracto (puede_ser_de_saga ?typeSAG))
+    (test (eq ?typeSAG "medio"))
+    =>
+    (retract ?ctrl)
+    (assert (targeted_sagas off))
+    (bind ?libro (send ?obj get-libro))
+    (bind ?pre (send ?libro get-es_predecesor_de))
+    (bind ?post (send ?libro get-es_sucesor_se))
+    (bind ?elem 0)    
+    (if (neq ?pre nil) then
+        (bind ?elem (+ ?elem 1))
+    )
+    (if (neq ?post nil) then
+        (bind ?elem (+ ?elem 1))
+    )
+    (if (> ?elem 0) then
+        (bind ?punt (send ?obj get-puntuacion))
+        (bind ?punt (+ ?punt 60))
+        (modify-instance ?obj (puntuacion ?punt))
+    )
+)
+(defrule asociacion_heuristica::coincidencia_saga_alto
+    ?ctrl <- (targeted_sagas on)
+    ?sol <- (solucion_abstracta (targeted_rec ?obj))
+    ?pa <- (problema_abstracto (puede_ser_de_saga ?typeSAG))
+    (test (eq ?typeSAG "alto"))
+    =>
+    (retract ?ctrl)
+    (assert (targeted_sagas off))
+    (bind ?libro (send ?obj get-libro))
+    (bind ?pre (send ?libro get-es_predecesor_de))
+    (bind ?post (send ?libro get-es_sucesor_se))
+    (bind ?elem 0)    
+    (if (neq ?pre nil) then
+        (bind ?elem (+ ?elem 1))
+    )
+    (if (neq ?post nil) then
+        (bind ?elem (+ ?elem 1))
+    )
+    (if (> ?elem 0) then
+        (bind ?punt (send ?obj get-puntuacion))
+        (bind ?punt (+ ?punt 100))
+        (modify-instance ?obj (puntuacion ?punt))
+    )
+)
+
+(defrule asociacion_heuristica::coincidencia_longitud_nulo
+    ?ctrl <- (targeted_longitud on)
+    ?sol <- (solucion_abstracta (targeted_rec ?obj))
+    ?pa <- (problema_abstracto (longitud_libro ?typeLON))
+    (test (eq ?typeLON "nulo"))
+    =>
+    (retract ?ctrl)
+    (assert (targeted_longitud off))    
+)
+(defrule asociacion_heuristica::coincidencia_longitud_corto
+    ?ctrl <- (targeted_longitud on)
+    ?sol <- (solucion_abstracta (targeted_rec ?obj))
+    ?pa <- (problema_abstracto (longitud_libro ?typeLON))
+    (test (eq ?typeLON "corto"))
+    =>
+    (retract ?ctrl)
+    (assert (targeted_longitud off))
+    (bind ?libro (send ?obj get-libro))
+    (bind ?lon (send ?libro get-NumPag))
+    (bind ?punt (send ?obj get-puntuacion))
+    (if (<= ?lon 100) then
+        (bind ?punt (+ ?punt 50))
+        (modify-instance ?obj (puntuacion ?punt))                
+    )
+    (if (and (> ?lon 100) (<= ?lon 300)) then
+        (bind ?punt (+ ?punt 25))
+        (modify-instance ?obj (puntuacion ?punt))                
+    )
+)
+(defrule asociacion_heuristica::coincidencia_longitud_medio
+    ?ctrl <- (targeted_longitud on)
+    ?sol <- (solucion_abstracta (targeted_rec ?obj))
+    ?pa <- (problema_abstracto (longitud_libro ?typeLON))
+    (test (eq ?typeLON "medio"))
+    =>
+    (retract ?ctrl)
+    (assert (targeted_longitud off))
+    (bind ?libro (send ?obj get-libro))
+    (bind ?lon (send ?libro get-NumPag))
+    (bind ?punt (send ?obj get-puntuacion))
+    (if (<= ?lon 100) then
+        (bind ?punt (+ ?punt 25))
+        (modify-instance ?obj (puntuacion ?punt))
+    )
+    (if (and (> ?lon 100) (<= ?lon 300)) then
+        (bind ?punt (+ ?punt 50))
+        (modify-instance ?obj (puntuacion ?punt))
+    )
+    (if (> ?lon 300) then
+        (bind ?punt (+ ?punt 25))
+        (modify-instance ?obj (puntuacion ?punt))
+    )    
+)
+(defrule asociacion_heuristica::coincidencia_longitud_largo
+    ?ctrl <- (targeted_longitud on)
+    ?sol <- (solucion_abstracta (targeted_rec ?obj))
+    ?pa <- (problema_abstracto (longitud_libro ?typeLON))
+    (test (eq ?typeLON "largo"))
+    =>
+    (retract ?ctrl)
+    (assert (targeted_longitud off))
+    (bind ?libro (send ?obj get-libro))
+    (bind ?lon (send ?libro get-NumPag))
+    (bind ?punt (send ?obj get-puntuacion))
+    (if (and (> ?lon 100) (<= ?lon 300)) then
+        (bind ?punt (+ ?punt 25))
+        (modify-instance ?obj (puntuacion ?punt))                
+    )
+    (if (> ?lon 300) then
+        (bind ?punt (+ ?punt 50))
+        (modify-instance ?obj (puntuacion ?punt))
+    )    
+)
+
+(defrule asociacion_heuristica::coincidencia_nivel_bajo
+    ?ctrl <- (targeted_nivel on)
+    ?sol <- (solucion_abstracta (targeted_rec ?obj))
+    ?pa <- (problema_abstracto (nivel_lector ?typeLVL))
+    (test (eq ?typeLVL "bajo"))
+    =>
+    (retract ?ctrl)
+    (assert (targeted_nivel off))
+    (bind ?libro (send ?obj get-libro))
+    (bind ?punt (send ?obj get-puntuacion))
+    (bind $?autores (send $?libro get-Tiene_Como_Autor))
+    (bind ?diff (send (nth$ 1 $?autores) get-Dificultad_Lenguaje))
+    (if (eq ?diff Baja) then
+        (bind ?punt (+ ?punt 50))
+        (modify-instance ?obj (puntuacion ?punt))
+    )
+    (if (eq ?diff Media) then
+        (bind ?punt (+ ?punt 25))
+        (modify-instance ?obj (puntuacion ?punt))
+    )
+)
+(defrule asociacion_heuristica::coincidencia_nivel_medio
+    ?ctrl <- (targeted_nivel on)
+    ?sol <- (solucion_abstracta (targeted_rec ?obj))
+    ?pa <- (problema_abstracto (nivel_lector ?typeLVL))
+    (test (eq ?typeLVL "medio"))
+    =>
+    (retract ?ctrl)
+    (assert (targeted_nivel off))
+    (bind ?libro (send ?obj get-libro))
+    (bind ?punt (send ?obj get-puntuacion))
+    (bind $?autores (send $?libro get-Tiene_Como_Autor))
+    (bind ?diff (send (nth$ 1 $?autores) get-Dificultad_Lenguaje))
+    (if (eq ?diff Baja) then
+        (bind ?punt (+ ?punt 25))
+        (modify-instance ?obj (puntuacion ?punt))
+    )
+    (if (eq ?diff Media) then
+        (bind ?punt (+ ?punt 50))
+        (modify-instance ?obj (puntuacion ?punt))
+    )
+    (if (eq ?diff Alta) then
+        (bind ?punt (+ ?punt 25))
+        (modify-instance ?obj (puntuacion ?punt))
+    )
+)
+(defrule asociacion_heuristica::coincidencia_nivel_alto
+    ?ctrl <- (targeted_nivel on)
+    ?sol <- (solucion_abstracta (targeted_rec ?obj))
+    ?pa <- (problema_abstracto (nivel_lector ?typeLVL))
+    (test (eq ?typeLVL "alto"))
+    =>
+    (retract ?ctrl)
+    (assert (targeted_nivel off))
+    (bind ?libro (send ?obj get-libro))
+    (bind ?punt (send ?obj get-puntuacion))
+    (bind $?autores (send $?libro get-Tiene_Como_Autor))
+    (bind ?diff (send (nth$ 1 $?autores) get-Dificultad_Lenguaje))
+    (if (eq ?diff Media) then
+        (bind ?punt (+ ?punt 25))
+        (modify-instance ?obj (puntuacion ?punt))
+    )
+    (if (eq ?diff Alta) then
+        (bind ?punt (+ ?punt 50))
+        (modify-instance ?obj (puntuacion ?punt))
+    )
 )
 
 (defrule asociacion_heuristica::saludos
