@@ -898,9 +898,9 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; MODULOS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+
 ; ------------------------------ Modulo general del sistema. --------------------
 (defmodule MAIN (export ?ALL))
-
 
 ; ---------------- Modulos dedicados a la recopilacion de datos. ---------------
 (defmodule recopilacion_datos_personales
@@ -926,10 +926,6 @@
 	(import MAIN ?ALL)
 	(export ?ALL)
 )
-
-
-
-
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; MESSAGE HANDLERS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1018,11 +1014,6 @@
 	(printout t "===================================================" crlf)
 )
 
-
-
-
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; TEMPLATES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (deftemplate MAIN::datos_usuario
@@ -1060,16 +1051,17 @@
 )
 
 (deftemplate MAIN::solucion_abstracta
+    (slot solucion_no_refinada(type INSTANCE))
     (slot targeted_rec (type INSTANCE))
     (multislot libros_recomendados(type INSTANCE))
     (multislot libros_no_tratados (type INSTANCE))
-    (multislot recomendaciones_ordenadas(type INSTANCE))    
+    (multislot recomendaciones_ordenadas(type INSTANCE))
+    
 )
 
-
-
-
-
+(deftemplate MAIN::solucion_refinada
+    (slot solucion_final(type INSTANCE))
+)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; FUNCIONES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -1164,26 +1156,20 @@
 	(autoresF not_deff)
 	(librosG not_deff)
 	(librosD not_deff)
-    	(lugarLect not_deff)
+    (lugarLect not_deff)
 )
 
 (deffacts abstraccion_de_datos::controladores_abstraccion
-	;(longitud_libro not_deff)
-	;(puede_ser_de_saga not_deff)
-	;(mejor_si_es_VO not_deff)
-	;(valoraciones_cuentan not_deff)
-	;(nivel_lector not_deff)
 	(generos_v not_deff)
 	(autores_v not_deff)
-    	(tipo_lugar_lect not_deff)
-    	(libros_g not_deff)
-    	(libros_dg not_deff)
+    (tipo_lugar_lect not_deff)
+    (libros_g not_deff)
+    (libros_dg not_deff)
 )
 
 (deffacts asociacion_heuristica::controladores_asociacion_heuristica
     (libros_obtenidos not_deff)    ; Controla inicializacion de la solucion abstracta
     (target_mode off)              ; Modo target apagado
-    (libros_printed not_deff)      ; Controla que se hayan impreso los libros
 )
 
 
@@ -1226,7 +1212,15 @@
     (focus asociacion_heuristica)
 )
 
-
+(defrule MAIN:iniciar_refinamiento
+    (declare (salience 40))
+    (solucion_abstracta)
+    (not (solucion_refinada))
+    =>
+    (assert (solucion_refinada))
+    (assert (goprint))
+    (focus refinamiento_de_soluciones)
+)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;; RECOPILACION DE DATOS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1241,7 +1235,7 @@
 (defrule recopilacion_datos_personales::sexo_usuario
     ?d <- (datos_usuario (sexo "null"))
 	=>
-	(bind ?s (ask_question "- ¿Cual es tu genero (Hombre/Mujer)? " Hombre Mujer))
+	(bind ?s (ask_question "- ï¿½Cual es tu genero (Hombre/Mujer)? " Hombre Mujer))
 	(modify ?d (sexo ?s))
 )
 
@@ -1706,14 +1700,11 @@
 )
 
 (defrule abstraccion_de_datos:idioma_lector
-    ?pa <- (problema_abstracto (idioma_lector ?i))
+    ?pa <- (problema_abstracto)
     ?d <- (datos_usuario (idioma ?x))
     (test (neq ?x "null"))
     =>
-    (if (eq ?x Ingles) then (modify ?pa (idioma_lector "Ingles"))
-    else (if (eq ?x Castellano) then (modify ?pa (idioma_lector "Castellano"))
-    else (if (eq ?x Aleman) then (modify ?pa (idioma_lector "Aleman"))
-    else (if (eq ?x Frances) then (modify ?pa (idioma_lector "Frances"))))))
+    (modify ?pa (idioma_lector ?x))    
     (modify ?d (idioma "null"))
 )
 
@@ -1728,10 +1719,6 @@
 	=>
     (bind $?listaRec (create$ ))    
     (bind $?allLibros (find-all-instances ((?inst Libro)) TRUE))
-    ; (progn$ (?curr-con ?allLibros)
-    ;    (bind ?elem (make-instance (gensym) of Recomendacion (libro ?curr-con)(puntuacion 0)))
-	;    (insert$ $?listaRec 1 ?elem)
-	;)
  	(loop-for-count (?i 1 (length$ $?allLibros)) do
         (bind ?obj (nth$ ?i ?allLibros))
         (bind $?lang (send ?obj get-Idioma))
@@ -2203,43 +2190,44 @@
 	)
 	(modify ?sol (recomendaciones_ordenadas $?resultado))
     (printout t "Recomendaciones ordenadas con exito!!" crlf)
+    (assert (veredicto not_deff))
 )
 
-(defrule asociacion_heuristica::saludos
-    ?fact <- (libros_printed not_deff)
+(defrule asociacion_heuristica::veredicto_inicial
+    ?fact <- (veredicto not_deff)
     ?sol <- (solucion_abstracta (recomendaciones_ordenadas $?libs))
-	=>
-    (printout t "ESTOS SON LOS LIBROS RECOMENDADOS:" crlf)
-    (printout t "***************************************************" crlf)
-    (loop-for-count (?i 1 (length$ $?libs)) do
-        (bind ?obj (nth$ ?i $?libs))
-        (printout t (send ?obj print))
-        (printout t "***************************************************" crlf)
+    =>
+    ; Anadiremos 3 ganadores, si los hay
+    (bind ?num 3)
+    (if (> ?num (length$ $?libs)) then (bind ?num (length$ $?libs)))
+    
+    ; Anadir los libros ganadores
+    (bind $?ganadores (create$ ))
+    (loop-for-count (?i 1 ?num) do
+        (bind ?elem (nth$ ?i $?libs)) 
+    	(bind $?ganadores(insert$ $?ganadores (+ (length$ $?ganadores) 1) ?elem))
     )
+    ; Eliminar ganadores de la lista ordenada
+    (bind $?F (delete$ $?libs 1 ?num))
+    (modify ?sol (recomendaciones_ordenadas $?F))
+    
+    ; Metemos el veredicto dentro del template
+    (bind ?veredicto (make-instance (gensym) of Veredicto (recomendaciones $?ganadores)))
+    (modify ?sol (solucion_no_refinada ?veredicto))
+    
+    (retract ?fact)
+    (assert (veredicto inicial))
+)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;; REFINAMIENTO DE SOLUCIONES ;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(defrule refinamiento_de_soluciones::saludos
+    ?fact <- (goprint)
+    ?sol <- (solucion_abstracta (solucion_no_refinada ?veredicto))
+	=>
+    (printout t "AQUI LLEGA EL VEREDICTO:" crlf)
+    (printout t (send ?veredicto print) crlf)
     (retract ?fact)
 )
-
-;;;;;; cositas ;;;;;
-
-;(defrule generacion_soluciones::crea-lista-ordenada "Regla para pasar lista, a lista ordenada"
-;	(not (lista-rec-ordenada))
-;	(lista-rec-desordenada (recomendaciones $?lista))
-;	=>
-;	(bind $?resultado (create$ ))
-;	(while (not (eq (length$ $?lista) 0))  do
-;		(bind ?curr-rec (maximo-puntuacion $?lista))
-;		(bind $?lista (delete-member$ $?lista ?curr-rec))
-;		(bind $?resultado (insert$ $?resultado (+ (length$ $?resultado) 1) ?curr-rec))
-;	)
-;	(assert (lista-rec-ordenada (recomendaciones $?resultado)))
-;    (printout t "Ordenando obras de arte..." crlf)
-;)
-
-;(do-for-all-instances 
-;        ; Set
-;        ((?r Recomendacion))
-;        ; Query
-;        (eq (send (send ?r:libro get-Es_Del_Genero) get-Nombre) "Dystopian" )
-;        ; Action        
-;        (printout t "cabrones" crlf)
-;)
