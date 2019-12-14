@@ -1194,14 +1194,6 @@
    )
    ?answer)
 
-;;; Hace una pregunta a la que hay que responder si o no
-(deffunction si_o_no_p (?question)
-   (bind ?response (ask_question ?question si no s n))
-   (if (or (eq ?response si) (eq ?response s))
-       then TRUE
-       else FALSE)
-)
-
 ;;; Funcion para hacer una pregunta numerica-univalor
 (deffunction MAIN::pregunta_numerica (?pregunta ?rangini ?rangfi)
 	(format t "%s (De %d hasta %d) " ?pregunta ?rangini ?rangfi)
@@ -1250,6 +1242,22 @@
                 )
         )
     )
+    (if (or(member$ 0 ?lista)(= (length$ ?lista) 0)) then (bind ?lista (create$ )))
+    ?lista
+)
+
+(deffunction MAIN::pregunta_unirespuesta (?pregunta $?valores-posibles)
+    (bind ?linea (format nil "%s" ?pregunta))
+    (printout t ?linea crlf)
+    (progn$ (?var ?valores-posibles)
+            (bind ?linea (format nil "  %d. %s" ?var-index ?var))
+            (printout t ?linea crlf)
+    )
+    (bind ?resp (read))
+    (bind $?lista (create$))
+        (if (and (integerp ?resp) (and (>= ?resp 0) (<= ?resp (length$ ?valores-posibles))))
+            then (bind ?lista (insert$ ?lista 1 ?resp))
+        )
     (if (or(member$ 0 ?lista)(= (length$ ?lista) 0)) then (bind ?lista (create$ )))
     ?lista
 )
@@ -1389,14 +1397,14 @@
 (defrule recopilacion_datos_personales::edad_usuario
     ?d <- (datos_usuario (edad -1))
 	=>
-	(bind ?e (pregunta_numerica "- ¿Cual es tu edad? " 3 120))
+	(bind ?e (pregunta_numerica "- ï¿½Cual es tu edad? " 3 120))
 	(modify ?d (edad ?e))
 )
 
 (defrule recopilacion_datos_personales::assignar_cantidad_libros
     ?d <- (datos_usuario (cantidad_libros_leidos -1))
     =>
-    (bind ?l (pregunta_numerica "- ¿Cuantos libros has leido?" 0 100))
+    (bind ?l (pregunta_numerica "- ï¿½Cuantos libros has leido?" 0 100))
     (modify ?d (cantidad_libros_leidos ?l))
 )
 
@@ -2629,8 +2637,10 @@
     ?sol_abs <- (solucion_abstracta (recomendaciones_ordenadas $?rec_ord))
     =>
     (bind ?next_rec (nth$ 1 $?rec_ord))
-    (printout t crlf crlf "RECOMENDACIONES ACTUALIZADAS. HEMOS AÃ‘ADIDO UN NUEVO LIBRO" crlf)
     (slot-insert$ ?s recomendaciones 3 ?next_rec)
+    (printout t crlf crlf "RECOMENDACIONES ACTUALIZADAS. HEMOS ANADIDO UN NUEVO LIBRO" crlf)
+    (bind $?F (delete$ $?rec_ord 1 1))
+    (modify ?sol_abs (recomendaciones_ordenadas $?F))    
     (retract ?fact)
 )
 
@@ -2646,12 +2656,12 @@
         (bind ?nombre_libro (send ?libro get-Nombre))
 		(bind $?nombre_libros(insert$ $?nombre_libros (+ (length$ $?nombre_libros) 1) ?nombre_libro))
 	)
-	(bind ?escogido (pregunta_multirespuesta "Alguno de estos libros no te interesa? (ya lo has leido, no te gusta...) (0 si te gustan todos): " $?nombre_libros))
+	(bind ?escogido (pregunta_unirespuesta "Si deseas eliminar UNO de estos libros (ya lo has leido, no te gusta...) introduce su numero (0 si te gustan todos): " $?nombre_libros))
     (if (eq 0 (length$ ?escogido)) then (assert (fin)) else (assert (add_siguiente)))	
     (loop-for-count (?i 1 (length$ ?escogido)) do
-		;(bind ?index (nth$ ?i ?escogido))
+		(bind ?index (nth$ ?i ?escogido))
 		;(if (= ?index 0) then (assert (fin)))
-        (slot-delete$ ?s recomendaciones ?i ?i)
+        (slot-delete$ ?s recomendaciones ?index ?index)
 	)
     (assert (goprint))
     (retract ?fact)   
