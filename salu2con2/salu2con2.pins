@@ -1,11 +1,10 @@
-; Sat Dec 14 16:25:19 CET 2019
+; Sat Dec 14 17:18:19 CET 2019
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
 
 ([salu2_Class0] of  Autor
 
-	(Complejidad_Tramas Media)
 	(Dificultad_Lenguaje Media)
 	(Es_Autor_De
 		[salu2_Class10000]
@@ -18,12 +17,16 @@
 
 ([salu2_Class1] of  Libro
 
+	(edad_minima 16)
+	(edad_recomendada 18)
 	(Es_Del_Genero [salu2_Class9])
 	(Es_Version_Original TRUE)
 	(Formato Paper Digital)
 	(Idioma Ingles)
 	(Nombre "Ready Player One: A Novel")
 	(NumPag 400)
+	(popular_F TRUE)
+	(popular_M TRUE)
 	(Se_Adquiere_En [salu2_Class25])
 	(Tiene_Como_Autor [salu2_Class26])
 	(Valoracion 9))
@@ -34,6 +37,8 @@
 
 ([salu2_Class10000] of  Libro
 
+	(edad_minima 15)
+	(edad_recomendada 30)
 	(Es_Del_Genero [salu2_Class9])
 	(es_predecesor_de [salu2_Class10001])
 	(Es_Version_Original TRUE)
@@ -41,12 +46,16 @@
 	(Idioma Ingles)
 	(Nombre "Of Blood and Bone: Chronicles of The One, Book 1")
 	(NumPag 448)
+	(popular_F FALSE)
+	(popular_M TRUE)
 	(Se_Adquiere_En [salu2_Class25])
 	(Tiene_Como_Autor [salu2_Class0])
 	(Valoracion 8))
 
 ([salu2_Class10001] of  Libro
 
+	(edad_minima 15)
+	(edad_recomendada 30)
 	(Es_Del_Genero [salu2_Class9])
 	(es_predecesor_de [salu2_Class20001])
 	(es_sucesor_se [salu2_Class10000])
@@ -55,6 +64,8 @@
 	(Idioma Ingles)
 	(Nombre "Of Blood and Bone: Chronicles of The One, Book 2")
 	(NumPag 480)
+	(popular_F FALSE)
+	(popular_M TRUE)
 	(Se_Adquiere_En [salu2_Class25])
 	(Tiene_Como_Autor [salu2_Class0])
 	(Valoracion 9))
@@ -73,7 +84,6 @@
 
 ([salu2_Class14] of  Genero
 
-	(Es_Tendencia TRUE)
 	(Nombre "HardScienceFiction"))
 
 ([salu2_Class15] of  Genero
@@ -86,17 +96,14 @@
 
 ([salu2_Class17] of  Genero
 
-	(Es_Tendencia TRUE)
 	(Nombre "Military"))
 
 ([salu2_Class18] of  Genero
 
-	(Es_Tendencia TRUE)
 	(Nombre "Post-Apocalyptic"))
 
 ([salu2_Class19] of  Genero
 
-	(Es_Tendencia TRUE)
 	(Nombre "SpaceOpera"))
 
 ([salu2_Class20] of  Genero
@@ -110,6 +117,8 @@
 
 ([salu2_Class20001] of  Libro
 
+	(edad_minima 15)
+	(edad_recomendada 30)
 	(Es_Del_Genero [salu2_Class9])
 	(es_sucesor_se [salu2_Class10001])
 	(Es_Version_Original TRUE)
@@ -117,13 +126,14 @@
 	(Idioma Ingles)
 	(Nombre "Of Blood and Bone: Chronicles of The One, Book 3")
 	(NumPag 464)
+	(popular_F FALSE)
+	(popular_M TRUE)
 	(Se_Adquiere_En [salu2_Class25])
 	(Tiene_Como_Autor [salu2_Class0])
 	(Valoracion 8))
 
 ([salu2_Class20002] of  Autor
 
-	(Complejidad_Tramas Alta)
 	(Dificultad_Lenguaje Media)
 	(Es_Autor_De [salu2_Class20003])
 	(Idioma Ingles)
@@ -133,12 +143,16 @@
 
 ([salu2_Class20003] of  Libro
 
+	(edad_minima 18)
+	(edad_recomendada 50)
 	(Es_Del_Genero [salu2_Class9])
 	(Es_Version_Original TRUE)
 	(Formato Paper)
 	(Idioma Ingles Castellano)
 	(Nombre "Tales of Horror")
 	(NumPag 768)
+	(popular_F TRUE)
+	(popular_M FALSE)
 	(Se_Adquiere_En
 		[salu2_Class25]
 		[salu2_Class30010])
@@ -147,7 +161,6 @@
 
 ([salu2_Class20004] of  Autor
 
-	(Complejidad_Tramas Alta)
 	(Dificultad_Lenguaje Alta)
 	(Es_Autor_De
 		[salu2_Class20005]
@@ -160,6 +173,8 @@
 
 ([salu2_Class20005] of  Libro
 
+	(edad_minima 6)
+	(edad_recomendada 30)
 	(Es_Del_Genero [salu2_Class4])
 	(es_predecesor_de [salu2_Class20007])
 	(Es_Version_Original TRUE)
@@ -167,6 +182,8 @@
 	(Idioma Ingles)
 	(Nombre "The Three-Body Problem")
 	(NumPag 416)
+	(popular_F TRUE)
+	(popular_M FALSE)
 	(Se_Adquiere_En [salu2_Class25])
 	(Tiene_Como_Autor [salu2_Class20004])
 	(Valoracion 7))
@@ -176,6 +193,8 @@
 
 ([salu2_Class20007] of  Libro
 
+	(edad_minima 16)
+	(edad_recomendada 30)
 	(Es_Del_Genero [salu2_Class4])
 	(es_predecesor_de [salu2_Class20008])
 	(es_sucesor_se [salu2_Class20005])
@@ -184,12 +203,16 @@
 	(Idioma Ingles)
 	(Nombre "The Dark Forest (Remembrance of Earth's Past)")
 	(NumPag 528)
+	(popular_F FALSE)
+	(popular_M TRUE)
 	(Se_Adquiere_En [salu2_Class25])
 	(Tiene_Como_Autor [salu2_Class20004])
 	(Valoracion 9))
 
 ([salu2_Class20008] of  Libro
 
+	(edad_minima 18)
+	(edad_recomendada 42)
 	(Es_Del_Genero [salu2_Class4])
 	(es_sucesor_se [salu2_Class20007])
 	(Es_Version_Original TRUE)
@@ -197,25 +220,30 @@
 	(Idioma Ingles)
 	(Nombre "Death's End (Remembrance of Earth's Past)")
 	(NumPag 624)
+	(popular_F FALSE)
+	(popular_M TRUE)
 	(Se_Adquiere_En [salu2_Class25])
 	(Tiene_Como_Autor [salu2_Class20004])
 	(Valoracion 8))
 
 ([salu2_Class20009] of  Libro
 
+	(edad_minima 21)
+	(edad_recomendada 20)
 	(Es_Del_Genero [salu2_Class4])
 	(Es_Version_Original TRUE)
 	(Formato Digital Paper)
 	(Idioma Ingles Frances)
 	(Nombre "Stories of Your Life and Others")
 	(NumPag 304)
+	(popular_F TRUE)
+	(popular_M FALSE)
 	(Se_Adquiere_En [salu2_Class25])
 	(Tiene_Como_Autor [salu2_Class20010])
 	(Valoracion 6))
 
 ([salu2_Class20010] of  Autor
 
-	(Complejidad_Tramas Baja)
 	(Dificultad_Lenguaje Baja)
 	(Es_Autor_De [salu2_Class20009])
 	(Idioma Ingles)
@@ -225,19 +253,22 @@
 
 ([salu2_Class20011] of  Libro
 
+	(edad_minima 16)
+	(edad_recomendada 25)
 	(Es_Del_Genero [salu2_Class4])
 	(Es_Version_Original TRUE)
 	(Formato Paper)
 	(Idioma Ingles)
 	(Nombre "Childhood's End: A Novel")
 	(NumPag 224)
+	(popular_F TRUE)
+	(popular_M FALSE)
 	(Se_Adquiere_En [salu2_Class25])
 	(Tiene_Como_Autor [salu2_Class20012])
 	(Valoracion 7))
 
 ([salu2_Class20012] of  Autor
 
-	(Complejidad_Tramas Alta)
 	(Dificultad_Lenguaje Media)
 	(Es_Autor_De [salu2_Class20011])
 	(Idioma Ingles)
@@ -247,19 +278,22 @@
 
 ([salu2_Class20013] of  Libro
 
+	(edad_minima 6)
+	(edad_recomendada 20)
 	(Es_Del_Genero [salu2_Class8])
 	(Es_Version_Original TRUE)
 	(Formato Paper Digital)
 	(Idioma Ingles)
 	(Nombre "Snow Crash")
 	(NumPag 440)
+	(popular_F FALSE)
+	(popular_M TRUE)
 	(Se_Adquiere_En [salu2_Class25])
 	(Tiene_Como_Autor [salu2_Class20014])
 	(Valoracion 6))
 
 ([salu2_Class20014] of  Autor
 
-	(Complejidad_Tramas Media)
 	(Dificultad_Lenguaje Baja)
 	(Es_Autor_De [salu2_Class20013])
 	(Idioma Ingles)
@@ -269,6 +303,8 @@
 
 ([salu2_Class20015] of  Libro
 
+	(edad_minima 12)
+	(edad_recomendada 22)
 	(Es_Del_Genero [salu2_Class8])
 	(es_predecesor_de [salu2_Class20017])
 	(Es_Version_Original TRUE)
@@ -276,13 +312,14 @@
 	(Idioma Ingles Castellano)
 	(Nombre "City of Golden Shadow (Otherland, Volume 1)")
 	(NumPag 800)
+	(popular_F FALSE)
+	(popular_M TRUE)
 	(Se_Adquiere_En [salu2_Class25])
 	(Tiene_Como_Autor [salu2_Class20016])
 	(Valoracion 7))
 
 ([salu2_Class20016] of  Autor
 
-	(Complejidad_Tramas Baja)
 	(Dificultad_Lenguaje Baja)
 	(Es_Autor_De
 		[salu2_Class20015]
@@ -296,6 +333,8 @@
 
 ([salu2_Class20017] of  Libro
 
+	(edad_minima 12)
+	(edad_recomendada 22)
 	(Es_Del_Genero [salu2_Class8])
 	(es_predecesor_de [salu2_Class20018])
 	(es_sucesor_se [salu2_Class20015])
@@ -304,12 +343,16 @@
 	(Idioma Ingles Castellano)
 	(Nombre "River of Blue Fire (Otherland, Volume 2)")
 	(NumPag 704)
+	(popular_F FALSE)
+	(popular_M TRUE)
 	(Se_Adquiere_En [salu2_Class25])
 	(Tiene_Como_Autor [salu2_Class20016])
 	(Valoracion 7))
 
 ([salu2_Class20018] of  Libro
 
+	(edad_minima 12)
+	(edad_recomendada 22)
 	(Es_Del_Genero [salu2_Class8])
 	(es_predecesor_de [salu2_Class20019])
 	(es_sucesor_se [salu2_Class20017])
@@ -318,12 +361,16 @@
 	(Idioma Ingles Castellano)
 	(Nombre "Mountain of Black Glass (Otherland, Volume 3)")
 	(NumPag 784)
+	(popular_F FALSE)
+	(popular_M TRUE)
 	(Se_Adquiere_En [salu2_Class25])
 	(Tiene_Como_Autor [salu2_Class20016])
 	(Valoracion 8))
 
 ([salu2_Class20019] of  Libro
 
+	(edad_minima 12)
+	(edad_recomendada 22)
 	(Es_Del_Genero [salu2_Class8])
 	(es_sucesor_se [salu2_Class20018])
 	(Es_Version_Original TRUE)
@@ -331,25 +378,30 @@
 	(Idioma Ingles Castellano)
 	(Nombre "Sea of Silver Light (Otherland, Volume 4)")
 	(NumPag 1072)
+	(popular_F FALSE)
+	(popular_M TRUE)
 	(Se_Adquiere_En [salu2_Class25])
 	(Tiene_Como_Autor [salu2_Class20016])
 	(Valoracion 9))
 
 ([salu2_Class20020] of  Libro
 
+	(edad_minima 6)
+	(edad_recomendada 20)
 	(Es_Del_Genero [salu2_Class22])
 	(Es_Version_Original TRUE)
 	(Formato Paper)
 	(Idioma Ingles)
 	(Nombre "The Time Machine")
 	(NumPag 113)
+	(popular_F FALSE)
+	(popular_M FALSE)
 	(Se_Adquiere_En [salu2_Class25])
 	(Tiene_Como_Autor [salu2_Class20021])
 	(Valoracion 8))
 
 ([salu2_Class20021] of  Autor
 
-	(Complejidad_Tramas Alta)
 	(Dificultad_Lenguaje Alta)
 	(Es_Autor_De [salu2_Class20020])
 	(Idioma Ingles)
@@ -359,12 +411,16 @@
 
 ([salu2_Class20022] of  Libro
 
+	(edad_minima 16)
+	(edad_recomendada 30)
 	(Es_Del_Genero [salu2_Class22])
 	(Es_Version_Original TRUE)
 	(Formato Paper Digital)
 	(Idioma Ingles)
 	(Nombre "1636: The Atlantic Encounter (28) (Ring of Fire)")
 	(NumPag 368)
+	(popular_F FALSE)
+	(popular_M TRUE)
 	(Se_Adquiere_En [salu2_Class25])
 	(Tiene_Como_Autor
 		[salu2_Class20023]
@@ -373,7 +429,6 @@
 
 ([salu2_Class20023] of  Autor
 
-	(Complejidad_Tramas Media)
 	(Dificultad_Lenguaje Baja)
 	(Es_Autor_De [salu2_Class20022])
 	(Idioma Ingles)
@@ -383,7 +438,6 @@
 
 ([salu2_Class20024] of  Autor
 
-	(Complejidad_Tramas Media)
 	(Dificultad_Lenguaje Baja)
 	(Es_Autor_De [salu2_Class20022])
 	(Idioma Ingles Frances)
@@ -393,19 +447,22 @@
 
 ([salu2_Class20025] of  Libro
 
+	(edad_minima 12)
+	(edad_recomendada 66)
 	(Es_Del_Genero [salu2_Class22])
 	(Es_Version_Original FALSE)
 	(Formato Digital)
 	(Idioma Ingles Aleman)
 	(Nombre "How to Stop Time: A Novel")
 	(NumPag 352)
+	(popular_F FALSE)
+	(popular_M FALSE)
 	(Se_Adquiere_En [salu2_Class25])
 	(Tiene_Como_Autor [salu2_Class20026])
 	(Valoracion 7))
 
 ([salu2_Class20026] of  Autor
 
-	(Complejidad_Tramas Media)
 	(Dificultad_Lenguaje Media)
 	(Es_Autor_De [salu2_Class20025])
 	(Idioma Ingles)
@@ -415,19 +472,22 @@
 
 ([salu2_Class20027] of  Libro
 
+	(edad_minima 6)
+	(edad_recomendada 10)
 	(Es_Del_Genero [salu2_Class22])
 	(Es_Version_Original FALSE)
 	(Formato Paper)
 	(Idioma Ingles)
 	(Nombre "Lightning")
 	(NumPag 372)
+	(popular_F FALSE)
+	(popular_M FALSE)
 	(Se_Adquiere_En [salu2_Class25])
 	(Tiene_Como_Autor [salu2_Class20028])
 	(Valoracion 6))
 
 ([salu2_Class20028] of  Autor
 
-	(Complejidad_Tramas Alta)
 	(Dificultad_Lenguaje Alta)
 	(Es_Autor_De [salu2_Class20027])
 	(Idioma Ingles)
@@ -437,19 +497,22 @@
 
 ([salu2_Class20029] of  Libro
 
+	(edad_minima 18)
+	(edad_recomendada 30)
 	(Es_Del_Genero [salu2_Class22])
 	(Es_Version_Original FALSE)
 	(Formato Paper Digital)
 	(Idioma Ingles Aleman Frances Castellano)
 	(Nombre "Flatland: A Romance of Many Dimensions")
 	(NumPag 119)
+	(popular_F TRUE)
+	(popular_M TRUE)
 	(Se_Adquiere_En [salu2_Class25])
 	(Tiene_Como_Autor [salu2_Class20030])
 	(Valoracion 10))
 
 ([salu2_Class20030] of  Autor
 
-	(Complejidad_Tramas Alta)
 	(Dificultad_Lenguaje Baja)
 	(Es_Autor_De [salu2_Class20029])
 	(Idioma Ingles Aleman)
@@ -479,7 +542,6 @@
 		[salu2_Class20025]
 		[salu2_Class20027]
 		[salu2_Class20029])
-	(Es_Tendencia TRUE)
 	(Nombre "TimeTravel"))
 
 ([salu2_Class25] of  LugarDeAdquision
@@ -509,7 +571,6 @@
 
 ([salu2_Class26] of  Autor
 
-	(Complejidad_Tramas Media)
 	(Dificultad_Lenguaje Media)
 	(Es_Autor_De [salu2_Class1])
 	(Idioma Ingles)
@@ -519,7 +580,6 @@
 
 ([salu2_Class3] of  Genero
 
-	(Es_Tendencia TRUE)
 	(Nombre "Adventure"))
 
 ([salu2_Class30001] of  LugarDeLectura
@@ -580,12 +640,10 @@
 		[salu2_Class20008]
 		[salu2_Class20009]
 		[salu2_Class20011])
-	(Es_Tendencia TRUE)
 	(Nombre "AlienInvasion"))
 
 ([salu2_Class5] of  Genero
 
-	(Es_Tendencia TRUE)
 	(Nombre "AlternateHistory"))
 
 ([salu2_Class6] of  Genero
@@ -604,7 +662,6 @@
 		[salu2_Class20017]
 		[salu2_Class20018]
 		[salu2_Class20019])
-	(Es_Tendencia TRUE)
 	(Nombre "Cyberpunk"))
 
 ([salu2_Class9] of  Genero
@@ -615,5 +672,4 @@
 		[salu2_Class10001]
 		[salu2_Class20001]
 		[salu2_Class20003])
-	(Es_Tendencia TRUE)
 	(Nombre "Dystopian"))
