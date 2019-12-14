@@ -1,875 +1,995 @@
 ;
 ; ONTOLOGIA
 ;
+
 (defclass %3ACLIPS_TOP_LEVEL_SLOT_CLASS "Fake class to save top-level slot information"
-		(is-a USER)
-		(role abstract)
-		(single-slot Nacionalidad
-			(type STRING)
-	;+		(cardinality 1 1)
-			(create-accessor read-write))
-		(multislot Es_Del_Genero
-			(type INSTANCE)
-	;+		(allowed-classes Genero)
-			(cardinality 1 ?VARIABLE)
-	;+		(inverse-slot Es_Genero_De)
-			(create-accessor read-write))
-		(single-slot NumVentas
-			(type INTEGER)
-	;+		(cardinality 1 1)
-			(create-accessor read-write))
-		(single-slot Complejidad_Tramas
-			(type SYMBOL)
-			(allowed-values Alta Media Baja)
-	;+		(cardinality 1 1)
-			(create-accessor read-write))
-		(single-slot es_sucesor_se
-			(type INSTANCE)
-	;+		(allowed-classes Libro)
-	;+		(cardinality 0 1)
-	;+		(inverse-slot es_predecesor_de)
-			(create-accessor read-write))
-		(single-slot Es_Version_Original
-	;+		(comment "Es la version original, o una adaptacion.")
-			(type SYMBOL)
-			(allowed-values FALSE TRUE)
-	;+		(cardinality 1 1)
-			(create-accessor read-write))
-		(single-slot Dificultad_Lenguaje
-			(type SYMBOL)
-			(allowed-values Alta Media Baja)
-	;+		(cardinality 1 1)
-			(create-accessor read-write))
-		(single-slot Popularidad
-			(type SYMBOL)
-			(allowed-values Alta Media Baja)
-	;+		(cardinality 1 1)
-			(create-accessor read-write))
-		(multislot Se_Adquiere_En
-			(type INSTANCE)
-	;+		(allowed-classes LugarDeAdquision)
-			(cardinality 1 ?VARIABLE)
-	;+		(inverse-slot Se_Adquiere)
-			(create-accessor read-write))
-		(multislot Formato
-			(type SYMBOL)
-			(allowed-values Paper Digital)
-			(cardinality 1 2)
-			(create-accessor read-write))
-		(multislot Es_Genero_De
-			(type INSTANCE)
-	;+		(allowed-classes Libro)
-	;+		(inverse-slot Es_Del_Genero)
-			(create-accessor read-write))
-		(single-slot Es_Tendencia
-			(type SYMBOL)
-			(allowed-values FALSE TRUE)
-	;+		(cardinality 0 1)
-			(create-accessor read-write))
-		(single-slot NumPag
-	;+		(comment "Numero de paginas del libro.")
-			(type INTEGER)
-	;+		(cardinality 1 1)
-			(create-accessor read-write))
-		(single-slot es_predecesor_de
-			(type INSTANCE)
-	;+		(allowed-classes Libro)
-	;+		(cardinality 0 1)
-	;+		(inverse-slot es_sucesor_se)
-			(create-accessor read-write))
-		(single-slot Valoracion
-	;+		(comment "Valoracion de otros usuarios que han leido el libro.")
-			(type INTEGER)
-	;+		(cardinality 1 1)
-			(create-accessor read-write))
-		(multislot Se_Adquiere
-			(type INSTANCE)
-	;+		(allowed-classes Libro)
-			(cardinality 1 ?VARIABLE)
-	;+		(inverse-slot Se_Adquiere_En)
-			(create-accessor read-write))
-		(multislot Idioma
-			(type SYMBOL)
-			(allowed-values Ingles Castellano Frances Aleman)
-			(cardinality 1 ?VARIABLE)
-			(create-accessor read-write))
-		(single-slot Clima
-			(type SYMBOL)
-			(allowed-values Tranquilo Ajetreado Silencioso Ruidoso)
-	;+		(cardinality 0 1)
-			(create-accessor read-write))
-		(multislot Es_Autor_De
-			(type INSTANCE)
-	;+		(allowed-classes Libro)
-			(cardinality 1 ?VARIABLE)
-	;+		(inverse-slot Tiene_Como_Autor)
-			(create-accessor read-write))
-		(multislot Tiene_Como_Autor
-			(type INSTANCE)
-	;+		(allowed-classes Autor)
-			(cardinality 1 ?VARIABLE)
-	;+		(inverse-slot Es_Autor_De)
-			(create-accessor read-write))
-		(single-slot Nombre
-			(type STRING)
-	;+		(cardinality 1 1)
-			(create-accessor read-write)))
+	(is-a USER)
+	(role abstract)
+	(multislot Idioma
+;+		(comment "Idiomas en los que esta disponible un libro concreto.")
+		(type SYMBOL)
+		(allowed-values Ingles Castellano Frances Aleman)
+		(cardinality 1 ?VARIABLE)
+		(create-accessor read-write))
+	(multislot Es_Genero_De
+		(type INSTANCE)
+;+		(allowed-classes Libro)
+;+		(inverse-slot Es_Del_Genero)
+		(create-accessor read-write))
+	(single-slot Nombre
+;+		(comment "Nombre")
+		(type STRING)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(multislot Es_Autor_De
+		(type INSTANCE)
+;+		(allowed-classes Libro)
+		(cardinality 1 ?VARIABLE)
+;+		(inverse-slot Tiene_Como_Autor)
+		(create-accessor read-write))
+	(single-slot popular_F
+;+		(comment "Indica si es un libro popular entre el publico femenino.")
+		(type SYMBOL)
+		(allowed-values FALSE TRUE)
+		(default FALSE)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot edad_recomendada
+;+		(comment "Edad recomendada para su lectura")
+		(type INTEGER)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot es_predecesor_de
+		(type INSTANCE)
+;+		(allowed-classes Libro)
+;+		(cardinality 0 1)
+;+		(inverse-slot es_sucesor_se)
+		(create-accessor read-write))
+	(multislot Se_Adquiere
+;+		(comment "Conjunto de objetos que se pueden adquirir en un lugar.")
+		(type INSTANCE)
+;+		(allowed-classes Libro)
+		(cardinality 1 ?VARIABLE)
+;+		(inverse-slot Se_Adquiere_En)
+		(create-accessor read-write))
+	(single-slot Valoracion
+;+		(comment "Valoracion de otros usuarios que han leido el libro.")
+		(type INTEGER)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot popular_M
+;+		(comment "Indica si es un libro popular entre el publico masculino.")
+		(type SYMBOL)
+		(allowed-values FALSE TRUE)
+		(default FALSE)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot Popularidad
+;+		(comment "Nivel de popularidad de un autor.")
+		(type SYMBOL)
+		(allowed-values Alta Media Baja)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(multislot Se_Adquiere_En
+;+		(comment "Lugares donde se puede adquirir un objeto.")
+		(type INSTANCE)
+;+		(allowed-classes LugarDeAdquision)
+		(cardinality 1 ?VARIABLE)
+;+		(inverse-slot Se_Adquiere)
+		(create-accessor read-write))
+	(multislot Formato
+;+		(comment "Formato en el que un libro esta escrito")
+		(type SYMBOL)
+		(allowed-values Paper Digital)
+		(cardinality 1 2)
+		(create-accessor read-write))
+	(single-slot edad_minima
+;+		(comment "Edad minima que se debe tener para leer el libro")
+		(type INTEGER)
+		(default 3)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot Dificultad_Lenguaje
+;+		(comment "Nivel del lenguaje utilizado por un autor concreto.")
+		(type SYMBOL)
+		(allowed-values Alta Media Baja)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot Complejidad_Tramas
+;+		(comment "Cuan complejas suelen ser las del autor")
+		(type SYMBOL)
+		(allowed-values Alta Media Baja)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot Es_Version_Original
+;+		(comment "Es la version original, o una adaptacion.")
+		(type SYMBOL)
+		(allowed-values FALSE TRUE)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(multislot Es_Del_Genero
+		(type INSTANCE)
+;+		(allowed-classes Genero)
+		(cardinality 1 ?VARIABLE)
+;+		(inverse-slot Es_Genero_De)
+		(create-accessor read-write))
+	(multislot Tiene_Como_Autor
+		(type INSTANCE)
+;+		(allowed-classes Autor)
+		(cardinality 1 ?VARIABLE)
+;+		(inverse-slot Es_Autor_De)
+		(create-accessor read-write))
+	(single-slot Nacionalidad
+;+		(comment "Lugar de nacimiento del autor.")
+		(type STRING)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot Clima
+;+		(comment "Ambiente comunmente encontrado en un lugar.")
+		(type SYMBOL)
+		(allowed-values Tranquilo Ajetreado Silencioso Ruidoso)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot NumPag
+;+		(comment "Numero de paginas del libro.")
+		(type INTEGER)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot es_sucesor_se
+		(type INSTANCE)
+;+		(allowed-classes Libro)
+;+		(cardinality 0 1)
+;+		(inverse-slot es_predecesor_de)
+		(create-accessor read-write)))
 
 (defclass Libro
-		(is-a USER)
-		(role concrete)
-		(single-slot es_sucesor_se
-			(type INSTANCE)
-	;+		(allowed-classes Libro)
-	;+		(cardinality 0 1)
-			(create-accessor read-write))
-		(single-slot es_predecesor_de
-			(type INSTANCE)
-	;+		(allowed-classes Libro)
-	;+		(cardinality 0 1)
-			(create-accessor read-write))
-		(multislot Formato
-			(type SYMBOL)
-			(allowed-values Paper Digital)
-			(cardinality 1 2)
-			(create-accessor read-write))
-		(single-slot Es_Version_Original
-	;+		(comment "Es la version original, o una adaptacion.")
-			(type SYMBOL)
-			(allowed-values FALSE TRUE)
-	;+		(cardinality 1 1)
-			(create-accessor read-write))
-		(single-slot Valoracion
-	;+		(comment "Valoracion de otros usuarios que han leido el libro.")
-			(type INTEGER)
-	;+		(cardinality 1 1)
-			(create-accessor read-write))
-		(single-slot NumPag
-	;+		(comment "Numero de paginas del libro.")
-			(type INTEGER)
-	;+		(cardinality 1 1)
-			(create-accessor read-write))
-		(multislot Es_Del_Genero
-			(type INSTANCE)
-	;+		(allowed-classes Genero)
-			(cardinality 1 ?VARIABLE)
-			(create-accessor read-write))
-		(multislot Tiene_Como_Autor
-			(type INSTANCE)
-	;+		(allowed-classes Autor)
-			(cardinality 1 ?VARIABLE)
-			(create-accessor read-write))
-		(single-slot Nombre
-			(type STRING)
-	;+		(cardinality 1 1)
-			(create-accessor read-write))
-		(multislot Idioma
-			(type SYMBOL)
-			(allowed-values Ingles Castellano Frances Aleman)
-			(cardinality 1 ?VARIABLE)
-			(create-accessor read-write))
-		(multislot Se_Adquiere_En
-			(type INSTANCE)
-	;+		(allowed-classes LugarDeAdquision)
-			(cardinality 1 ?VARIABLE)
-			(create-accessor read-write)))
+	(is-a USER)
+	(role concrete)
+	(single-slot popular_F
+;+		(comment "Indica si es un libro popular entre el publico femenino.")
+		(type SYMBOL)
+		(allowed-values FALSE TRUE)
+		(default FALSE)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot edad_recomendada
+;+		(comment "Edad recomendada para su lectura")
+		(type INTEGER)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot es_predecesor_de
+		(type INSTANCE)
+;+		(allowed-classes Libro)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot Es_Del_Genero
+		(type INSTANCE)
+;+		(allowed-classes Genero)
+		(cardinality 1 ?VARIABLE)
+		(create-accessor read-write))
+	(multislot Se_Adquiere_En
+;+		(comment "Lugares donde se puede adquirir un objeto.")
+		(type INSTANCE)
+;+		(allowed-classes LugarDeAdquision)
+		(cardinality 1 ?VARIABLE)
+		(create-accessor read-write))
+	(multislot Idioma
+;+		(comment "Idiomas en los que esta disponible un libro concreto.")
+		(type SYMBOL)
+		(allowed-values Ingles Castellano Frances Aleman)
+		(cardinality 1 ?VARIABLE)
+		(create-accessor read-write))
+	(multislot Tiene_Como_Autor
+		(type INSTANCE)
+;+		(allowed-classes Autor)
+		(cardinality 1 ?VARIABLE)
+		(create-accessor read-write))
+	(multislot Formato
+;+		(comment "Formato en el que un libro esta escrito")
+		(type SYMBOL)
+		(allowed-values Paper Digital)
+		(cardinality 1 2)
+		(create-accessor read-write))
+	(single-slot Nombre
+;+		(comment "Nombre")
+		(type STRING)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot edad_minima
+;+		(comment "Edad minima que se debe tener para leer el libro")
+		(type INTEGER)
+		(default 3)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot Valoracion
+;+		(comment "Valoracion de otros usuarios que han leido el libro.")
+		(type INTEGER)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot NumPag
+;+		(comment "Numero de paginas del libro.")
+		(type INTEGER)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot es_sucesor_se
+		(type INSTANCE)
+;+		(allowed-classes Libro)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot popular_M
+;+		(comment "Indica si es un libro popular entre el publico masculino.")
+		(type SYMBOL)
+		(allowed-values FALSE TRUE)
+		(default FALSE)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot Es_Version_Original
+;+		(comment "Es la version original, o una adaptacion.")
+		(type SYMBOL)
+		(allowed-values FALSE TRUE)
+;+		(cardinality 1 1)
+		(create-accessor read-write)))
 
 (defclass Autor
-		(is-a USER)
-		(role concrete)
-		(single-slot Nacionalidad
-			(type STRING)
-	;+		(cardinality 1 1)
-			(create-accessor read-write))
-		(single-slot Dificultad_Lenguaje
-			(type SYMBOL)
-			(allowed-values Alta Media Baja)
-	;+		(cardinality 1 1)
-			(create-accessor read-write))
-		(multislot Es_Autor_De
-			(type INSTANCE)
-	;+		(allowed-classes Libro)
-			(cardinality 1 ?VARIABLE)
-			(create-accessor read-write))
-		(single-slot Complejidad_Tramas
-			(type SYMBOL)
-			(allowed-values Alta Media Baja)
-	;+		(cardinality 1 1)
-			(create-accessor read-write))
-		(single-slot Popularidad
-			(type SYMBOL)
-			(allowed-values Alta Media Baja)
-	;+		(cardinality 1 1)
-			(create-accessor read-write))
-		(single-slot Nombre
-			(type STRING)
-	;+		(cardinality 1 1)
-			(create-accessor read-write))
-		(multislot Idioma
-			(type SYMBOL)
-			(allowed-values Ingles Castellano Frances Aleman)
-			(cardinality 1 ?VARIABLE)
-			(create-accessor read-write)))
+	(is-a USER)
+	(role concrete)
+	(single-slot Nombre
+;+		(comment "Nombre")
+		(type STRING)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot Dificultad_Lenguaje
+;+		(comment "Nivel del lenguaje utilizado por un autor concreto.")
+		(type SYMBOL)
+		(allowed-values Alta Media Baja)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(multislot Es_Autor_De
+		(type INSTANCE)
+;+		(allowed-classes Libro)
+		(cardinality 1 ?VARIABLE)
+		(create-accessor read-write))
+	(multislot Idioma
+;+		(comment "Idiomas en los que esta disponible un libro concreto.")
+		(type SYMBOL)
+		(allowed-values Ingles Castellano Frances Aleman)
+		(cardinality 1 ?VARIABLE)
+		(create-accessor read-write))
+	(single-slot Popularidad
+;+		(comment "Nivel de popularidad de un autor.")
+		(type SYMBOL)
+		(allowed-values Alta Media Baja)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot Nacionalidad
+;+		(comment "Lugar de nacimiento del autor.")
+		(type STRING)
+;+		(cardinality 1 1)
+		(create-accessor read-write)))
 
 (defclass Lugar
-		(is-a USER)
-		(role concrete)
-		(single-slot Nombre
-			(type STRING)
-	;+		(cardinality 1 1)
-			(create-accessor read-write)))
+	(is-a USER)
+	(role concrete)
+	(single-slot Nombre
+;+		(comment "Nombre")
+		(type STRING)
+;+		(cardinality 1 1)
+		(create-accessor read-write)))
 
 (defclass LugarDeAdquision
-		(is-a Lugar)
-		(role concrete)
-		(multislot Se_Adquiere
-			(type INSTANCE)
-	;+		(allowed-classes Libro)
-			(cardinality 1 ?VARIABLE)
-			(create-accessor read-write)))
+	(is-a Lugar)
+	(role concrete)
+	(multislot Se_Adquiere
+;+		(comment "Conjunto de objetos que se pueden adquirir en un lugar.")
+		(type INSTANCE)
+;+		(allowed-classes Libro)
+		(cardinality 1 ?VARIABLE)
+		(create-accessor read-write)))
 
 (defclass LugarDeLectura
-		(is-a Lugar)
-		(role concrete)
-		(single-slot Clima
-			(type SYMBOL)
-			(allowed-values Tranquilo Ajetreado Silencioso Ruidoso)
-	;+		(cardinality 0 1)
-			(create-accessor read-write)))
+	(is-a Lugar)
+	(role concrete)
+	(single-slot Clima
+;+		(comment "Ambiente comunmente encontrado en un lugar.")
+		(type SYMBOL)
+		(allowed-values Tranquilo Ajetreado Silencioso Ruidoso)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
 
 (defclass Genero "Subgenero dentro de la Sci-Fi"
-		(is-a USER)
-		(role concrete)
-		(multislot Es_Genero_De
-			(type INSTANCE)
-	;+		(allowed-classes Libro)
-			(create-accessor read-write))
-		(single-slot Nombre
-			(type STRING)
-	;+		(cardinality 1 1)
-			(create-accessor read-write))
-		(single-slot Es_Tendencia
-			(type SYMBOL)
-			(allowed-values FALSE TRUE)
-	;+		(cardinality 0 1)
-			(create-accessor read-write)))
+	(is-a USER)
+	(role concrete)
+	(multislot Es_Genero_De
+		(type INSTANCE)
+;+		(allowed-classes Libro)
+		(create-accessor read-write))
+	(single-slot Nombre
+;+		(comment "Nombre")
+		(type STRING)
+;+		(cardinality 1 1)
+		(create-accessor read-write)))
 
 ;
 ; INSTANCIAS
 ;
 
 (definstances instancias
-	([salu2_Class0] of  Autor
+; Sat Dec 14 17:18:19 CET 2019
+; 
+;+ (version "3.5")
+;+ (build "Build 663")
 
-		(Complejidad_Tramas Media)
-		(Dificultad_Lenguaje Media)
-		(Es_Autor_De
-			[salu2_Class10000]
-			[salu2_Class10001]
-			[salu2_Class20001])
-		(Idioma Ingles)
-		(Nacionalidad "USA")
-		(Nombre "Nora Roberts")
-		(Popularidad Media))
+([salu2_Class0] of  Autor
 
-	([salu2_Class1] of  Libro
+	(Dificultad_Lenguaje Media)
+	(Es_Autor_De
+		[salu2_Class10000]
+		[salu2_Class10001]
+		[salu2_Class20001])
+	(Idioma Ingles)
+	(Nacionalidad "USA")
+	(Nombre "Nora Roberts")
+	(Popularidad Media))
 
-		(Es_Del_Genero [salu2_Class9])
-		(Es_Version_Original TRUE)
-		(Formato Paper Digital)
-		(Idioma Ingles)
-		(Nombre "Ready Player One: A Novel")
-		(NumPag 400)
-		(Se_Adquiere_En [salu2_Class25])
-		(Tiene_Como_Autor [salu2_Class26])
-		(Valoracion 9))
+([salu2_Class1] of  Libro
 
-	([salu2_Class10] of  Genero
+	(edad_minima 16)
+	(edad_recomendada 18)
+	(Es_Del_Genero [salu2_Class9])
+	(Es_Version_Original TRUE)
+	(Formato Paper Digital)
+	(Idioma Ingles)
+	(Nombre "Ready Player One: A Novel")
+	(NumPag 400)
+	(popular_F TRUE)
+	(popular_M TRUE)
+	(Se_Adquiere_En [salu2_Class25])
+	(Tiene_Como_Autor [salu2_Class26])
+	(Valoracion 9))
 
-		(Nombre "Exploration"))
+([salu2_Class10] of  Genero
 
-	([salu2_Class10000] of  Libro
+	(Nombre "Exploration"))
 
-		(Es_Del_Genero [salu2_Class9])
-		(es_predecesor_de [salu2_Class10001])
-		(Es_Version_Original TRUE)
-		(Formato Paper Digital)
-		(Idioma Ingles)
-		(Nombre "Of Blood and Bone: Chronicles of The One, Book 1")
-		(NumPag 448)
-		(Se_Adquiere_En [salu2_Class25])
-		(Tiene_Como_Autor [salu2_Class0])
-		(Valoracion 8))
+([salu2_Class10000] of  Libro
 
-	([salu2_Class10001] of  Libro
+	(edad_minima 15)
+	(edad_recomendada 30)
+	(Es_Del_Genero [salu2_Class9])
+	(es_predecesor_de [salu2_Class10001])
+	(Es_Version_Original TRUE)
+	(Formato Paper Digital)
+	(Idioma Ingles)
+	(Nombre "Of Blood and Bone: Chronicles of The One, Book 1")
+	(NumPag 448)
+	(popular_F FALSE)
+	(popular_M TRUE)
+	(Se_Adquiere_En [salu2_Class25])
+	(Tiene_Como_Autor [salu2_Class0])
+	(Valoracion 8))
+
+([salu2_Class10001] of  Libro
+
+	(edad_minima 15)
+	(edad_recomendada 30)
+	(Es_Del_Genero [salu2_Class9])
+	(es_predecesor_de [salu2_Class20001])
+	(es_sucesor_se [salu2_Class10000])
+	(Es_Version_Original TRUE)
+	(Formato Paper Digital)
+	(Idioma Ingles)
+	(Nombre "Of Blood and Bone: Chronicles of The One, Book 2")
+	(NumPag 480)
+	(popular_F FALSE)
+	(popular_M TRUE)
+	(Se_Adquiere_En [salu2_Class25])
+	(Tiene_Como_Autor [salu2_Class0])
+	(Valoracion 9))
+
+([salu2_Class11] of  Genero
+
+	(Nombre "FirstContact"))
+
+([salu2_Class12] of  Genero
+
+	(Nombre "GalacticEmpire"))
+
+([salu2_Class13] of  Genero
+
+	(Nombre "GeneticEngineering"))
+
+([salu2_Class14] of  Genero
+
+	(Nombre "HardScienceFiction"))
+
+([salu2_Class15] of  Genero
+
+	(Nombre "History&Criticism"))
+
+([salu2_Class16] of  Genero
+
+	(Nombre "Humorous"))
+
+([salu2_Class17] of  Genero
+
+	(Nombre "Military"))
+
+([salu2_Class18] of  Genero
+
+	(Nombre "Post-Apocalyptic"))
+
+([salu2_Class19] of  Genero
+
+	(Nombre "SpaceOpera"))
+
+([salu2_Class20] of  Genero
+
+	(Nombre "ShortStories"))
+
+([salu2_Class20000] of  LugarDeLectura
+
+	(Clima Tranquilo)
+	(Nombre "Tren"))
+
+([salu2_Class20001] of  Libro
+
+	(edad_minima 15)
+	(edad_recomendada 30)
+	(Es_Del_Genero [salu2_Class9])
+	(es_sucesor_se [salu2_Class10001])
+	(Es_Version_Original TRUE)
+	(Formato Paper Digital)
+	(Idioma Ingles)
+	(Nombre "Of Blood and Bone: Chronicles of The One, Book 3")
+	(NumPag 464)
+	(popular_F FALSE)
+	(popular_M TRUE)
+	(Se_Adquiere_En [salu2_Class25])
+	(Tiene_Como_Autor [salu2_Class0])
+	(Valoracion 8))
+
+([salu2_Class20002] of  Autor
+
+	(Dificultad_Lenguaje Media)
+	(Es_Autor_De [salu2_Class20003])
+	(Idioma Ingles)
+	(Nacionalidad "USA")
+	(Nombre "H. P. Lovecraft")
+	(Popularidad Alta))
+
+([salu2_Class20003] of  Libro
+
+	(edad_minima 18)
+	(edad_recomendada 50)
+	(Es_Del_Genero [salu2_Class9])
+	(Es_Version_Original TRUE)
+	(Formato Paper)
+	(Idioma Ingles Castellano)
+	(Nombre "Tales of Horror")
+	(NumPag 768)
+	(popular_F TRUE)
+	(popular_M FALSE)
+	(Se_Adquiere_En
+		[salu2_Class25]
+		[salu2_Class30010])
+	(Tiene_Como_Autor [salu2_Class20002])
+	(Valoracion 7))
+
+([salu2_Class20004] of  Autor
+
+	(Dificultad_Lenguaje Alta)
+	(Es_Autor_De
+		[salu2_Class20005]
+		[salu2_Class20007]
+		[salu2_Class20008])
+	(Idioma Ingles Aleman)
+	(Nacionalidad "China")
+	(Nombre "Cixin Liu")
+	(Popularidad Baja))
+
+([salu2_Class20005] of  Libro
+
+	(edad_minima 6)
+	(edad_recomendada 30)
+	(Es_Del_Genero [salu2_Class4])
+	(es_predecesor_de [salu2_Class20007])
+	(Es_Version_Original TRUE)
+	(Formato Paper)
+	(Idioma Ingles)
+	(Nombre "The Three-Body Problem")
+	(NumPag 416)
+	(popular_F TRUE)
+	(popular_M FALSE)
+	(Se_Adquiere_En [salu2_Class25])
+	(Tiene_Como_Autor [salu2_Class20004])
+	(Valoracion 7))
+
+([salu2_Class20006] of  Genero
+)
+
+([salu2_Class20007] of  Libro
+
+	(edad_minima 16)
+	(edad_recomendada 30)
+	(Es_Del_Genero [salu2_Class4])
+	(es_predecesor_de [salu2_Class20008])
+	(es_sucesor_se [salu2_Class20005])
+	(Es_Version_Original TRUE)
+	(Formato Paper)
+	(Idioma Ingles)
+	(Nombre "The Dark Forest (Remembrance of Earth's Past)")
+	(NumPag 528)
+	(popular_F FALSE)
+	(popular_M TRUE)
+	(Se_Adquiere_En [salu2_Class25])
+	(Tiene_Como_Autor [salu2_Class20004])
+	(Valoracion 9))
+
+([salu2_Class20008] of  Libro
+
+	(edad_minima 18)
+	(edad_recomendada 42)
+	(Es_Del_Genero [salu2_Class4])
+	(es_sucesor_se [salu2_Class20007])
+	(Es_Version_Original TRUE)
+	(Formato Paper)
+	(Idioma Ingles)
+	(Nombre "Death's End (Remembrance of Earth's Past)")
+	(NumPag 624)
+	(popular_F FALSE)
+	(popular_M TRUE)
+	(Se_Adquiere_En [salu2_Class25])
+	(Tiene_Como_Autor [salu2_Class20004])
+	(Valoracion 8))
+
+([salu2_Class20009] of  Libro
+
+	(edad_minima 21)
+	(edad_recomendada 20)
+	(Es_Del_Genero [salu2_Class4])
+	(Es_Version_Original TRUE)
+	(Formato Digital Paper)
+	(Idioma Ingles Frances)
+	(Nombre "Stories of Your Life and Others")
+	(NumPag 304)
+	(popular_F TRUE)
+	(popular_M FALSE)
+	(Se_Adquiere_En [salu2_Class25])
+	(Tiene_Como_Autor [salu2_Class20010])
+	(Valoracion 6))
+
+([salu2_Class20010] of  Autor
+
+	(Dificultad_Lenguaje Baja)
+	(Es_Autor_De [salu2_Class20009])
+	(Idioma Ingles)
+	(Nacionalidad "China")
+	(Nombre "Ted Chiang")
+	(Popularidad Media))
+
+([salu2_Class20011] of  Libro
+
+	(edad_minima 16)
+	(edad_recomendada 25)
+	(Es_Del_Genero [salu2_Class4])
+	(Es_Version_Original TRUE)
+	(Formato Paper)
+	(Idioma Ingles)
+	(Nombre "Childhood's End: A Novel")
+	(NumPag 224)
+	(popular_F TRUE)
+	(popular_M FALSE)
+	(Se_Adquiere_En [salu2_Class25])
+	(Tiene_Como_Autor [salu2_Class20012])
+	(Valoracion 7))
+
+([salu2_Class20012] of  Autor
+
+	(Dificultad_Lenguaje Media)
+	(Es_Autor_De [salu2_Class20011])
+	(Idioma Ingles)
+	(Nacionalidad "UK")
+	(Nombre "Arthur C. Clarke")
+	(Popularidad Media))
+
+([salu2_Class20013] of  Libro
+
+	(edad_minima 6)
+	(edad_recomendada 20)
+	(Es_Del_Genero [salu2_Class8])
+	(Es_Version_Original TRUE)
+	(Formato Paper Digital)
+	(Idioma Ingles)
+	(Nombre "Snow Crash")
+	(NumPag 440)
+	(popular_F FALSE)
+	(popular_M TRUE)
+	(Se_Adquiere_En [salu2_Class25])
+	(Tiene_Como_Autor [salu2_Class20014])
+	(Valoracion 6))
+
+([salu2_Class20014] of  Autor
+
+	(Dificultad_Lenguaje Baja)
+	(Es_Autor_De [salu2_Class20013])
+	(Idioma Ingles)
+	(Nacionalidad "USA")
+	(Nombre "Neal Stephenson")
+	(Popularidad Alta))
+
+([salu2_Class20015] of  Libro
+
+	(edad_minima 12)
+	(edad_recomendada 22)
+	(Es_Del_Genero [salu2_Class8])
+	(es_predecesor_de [salu2_Class20017])
+	(Es_Version_Original TRUE)
+	(Formato Paper)
+	(Idioma Ingles Castellano)
+	(Nombre "City of Golden Shadow (Otherland, Volume 1)")
+	(NumPag 800)
+	(popular_F FALSE)
+	(popular_M TRUE)
+	(Se_Adquiere_En [salu2_Class25])
+	(Tiene_Como_Autor [salu2_Class20016])
+	(Valoracion 7))
+
+([salu2_Class20016] of  Autor
+
+	(Dificultad_Lenguaje Baja)
+	(Es_Autor_De
+		[salu2_Class20015]
+		[salu2_Class20017]
+		[salu2_Class20018]
+		[salu2_Class20019])
+	(Idioma Ingles Castellano)
+	(Nacionalidad "USA")
+	(Nombre "Tad Williams")
+	(Popularidad Media))
+
+([salu2_Class20017] of  Libro
+
+	(edad_minima 12)
+	(edad_recomendada 22)
+	(Es_Del_Genero [salu2_Class8])
+	(es_predecesor_de [salu2_Class20018])
+	(es_sucesor_se [salu2_Class20015])
+	(Es_Version_Original TRUE)
+	(Formato Paper)
+	(Idioma Ingles Castellano)
+	(Nombre "River of Blue Fire (Otherland, Volume 2)")
+	(NumPag 704)
+	(popular_F FALSE)
+	(popular_M TRUE)
+	(Se_Adquiere_En [salu2_Class25])
+	(Tiene_Como_Autor [salu2_Class20016])
+	(Valoracion 7))
+
+([salu2_Class20018] of  Libro
+
+	(edad_minima 12)
+	(edad_recomendada 22)
+	(Es_Del_Genero [salu2_Class8])
+	(es_predecesor_de [salu2_Class20019])
+	(es_sucesor_se [salu2_Class20017])
+	(Es_Version_Original TRUE)
+	(Formato Paper)
+	(Idioma Ingles Castellano)
+	(Nombre "Mountain of Black Glass (Otherland, Volume 3)")
+	(NumPag 784)
+	(popular_F FALSE)
+	(popular_M TRUE)
+	(Se_Adquiere_En [salu2_Class25])
+	(Tiene_Como_Autor [salu2_Class20016])
+	(Valoracion 8))
+
+([salu2_Class20019] of  Libro
+
+	(edad_minima 12)
+	(edad_recomendada 22)
+	(Es_Del_Genero [salu2_Class8])
+	(es_sucesor_se [salu2_Class20018])
+	(Es_Version_Original TRUE)
+	(Formato Paper)
+	(Idioma Ingles Castellano)
+	(Nombre "Sea of Silver Light (Otherland, Volume 4)")
+	(NumPag 1072)
+	(popular_F FALSE)
+	(popular_M TRUE)
+	(Se_Adquiere_En [salu2_Class25])
+	(Tiene_Como_Autor [salu2_Class20016])
+	(Valoracion 9))
+
+([salu2_Class20020] of  Libro
+
+	(edad_minima 6)
+	(edad_recomendada 20)
+	(Es_Del_Genero [salu2_Class22])
+	(Es_Version_Original TRUE)
+	(Formato Paper)
+	(Idioma Ingles)
+	(Nombre "The Time Machine")
+	(NumPag 113)
+	(popular_F FALSE)
+	(popular_M FALSE)
+	(Se_Adquiere_En [salu2_Class25])
+	(Tiene_Como_Autor [salu2_Class20021])
+	(Valoracion 8))
+
+([salu2_Class20021] of  Autor
+
+	(Dificultad_Lenguaje Alta)
+	(Es_Autor_De [salu2_Class20020])
+	(Idioma Ingles)
+	(Nacionalidad "UK")
+	(Nombre "H.G. Wells")
+	(Popularidad Baja))
+
+([salu2_Class20022] of  Libro
+
+	(edad_minima 16)
+	(edad_recomendada 30)
+	(Es_Del_Genero [salu2_Class22])
+	(Es_Version_Original TRUE)
+	(Formato Paper Digital)
+	(Idioma Ingles)
+	(Nombre "1636: The Atlantic Encounter (28) (Ring of Fire)")
+	(NumPag 368)
+	(popular_F FALSE)
+	(popular_M TRUE)
+	(Se_Adquiere_En [salu2_Class25])
+	(Tiene_Como_Autor
+		[salu2_Class20023]
+		[salu2_Class20024])
+	(Valoracion 7))
+
+([salu2_Class20023] of  Autor
+
+	(Dificultad_Lenguaje Baja)
+	(Es_Autor_De [salu2_Class20022])
+	(Idioma Ingles)
+	(Nacionalidad "USA")
+	(Nombre "Eric Flint")
+	(Popularidad Media))
+
+([salu2_Class20024] of  Autor
+
+	(Dificultad_Lenguaje Baja)
+	(Es_Autor_De [salu2_Class20022])
+	(Idioma Ingles Frances)
+	(Nacionalidad "USA")
+	(Nombre "Walter H. Hunt")
+	(Popularidad Media))
+
+([salu2_Class20025] of  Libro
+
+	(edad_minima 12)
+	(edad_recomendada 66)
+	(Es_Del_Genero [salu2_Class22])
+	(Es_Version_Original FALSE)
+	(Formato Digital)
+	(Idioma Ingles Aleman)
+	(Nombre "How to Stop Time: A Novel")
+	(NumPag 352)
+	(popular_F FALSE)
+	(popular_M FALSE)
+	(Se_Adquiere_En [salu2_Class25])
+	(Tiene_Como_Autor [salu2_Class20026])
+	(Valoracion 7))
+
+([salu2_Class20026] of  Autor
+
+	(Dificultad_Lenguaje Media)
+	(Es_Autor_De [salu2_Class20025])
+	(Idioma Ingles)
+	(Nacionalidad "UK")
+	(Nombre "Matt Haig")
+	(Popularidad Alta))
+
+([salu2_Class20027] of  Libro
+
+	(edad_minima 6)
+	(edad_recomendada 10)
+	(Es_Del_Genero [salu2_Class22])
+	(Es_Version_Original FALSE)
+	(Formato Paper)
+	(Idioma Ingles)
+	(Nombre "Lightning")
+	(NumPag 372)
+	(popular_F FALSE)
+	(popular_M FALSE)
+	(Se_Adquiere_En [salu2_Class25])
+	(Tiene_Como_Autor [salu2_Class20028])
+	(Valoracion 6))
+
+([salu2_Class20028] of  Autor
+
+	(Dificultad_Lenguaje Alta)
+	(Es_Autor_De [salu2_Class20027])
+	(Idioma Ingles)
+	(Nacionalidad "USA")
+	(Nombre "Dean Koontz")
+	(Popularidad Baja))
+
+([salu2_Class20029] of  Libro
+
+	(edad_minima 18)
+	(edad_recomendada 30)
+	(Es_Del_Genero [salu2_Class22])
+	(Es_Version_Original FALSE)
+	(Formato Paper Digital)
+	(Idioma Ingles Aleman Frances Castellano)
+	(Nombre "Flatland: A Romance of Many Dimensions")
+	(NumPag 119)
+	(popular_F TRUE)
+	(popular_M TRUE)
+	(Se_Adquiere_En [salu2_Class25])
+	(Tiene_Como_Autor [salu2_Class20030])
+	(Valoracion 10))
+
+([salu2_Class20030] of  Autor
+
+	(Dificultad_Lenguaje Baja)
+	(Es_Autor_De [salu2_Class20029])
+	(Idioma Ingles Aleman)
+	(Nacionalidad "UK")
+	(Nombre "Edwin A. Abbot")
+	(Popularidad Alta))
+
+([salu2_Class20031] of  LugarDeLectura
+
+	(Clima Ruidoso)
+	(Nombre "Autobus"))
+
+([salu2_Class20032] of  LugarDeLectura
+
+	(Clima Ruidoso)
+	(Nombre "Metro"))
+
+([salu2_Class21] of  Genero
+
+	(Nombre "Steampunk"))
+
+([salu2_Class22] of  Genero
+
+	(Es_Genero_De
+		[salu2_Class20020]
+		[salu2_Class20022]
+		[salu2_Class20025]
+		[salu2_Class20027]
+		[salu2_Class20029])
+	(Nombre "TimeTravel"))
+
+([salu2_Class25] of  LugarDeAdquision
+
+	(Nombre "Amazon.com")
+	(Se_Adquiere
+		[salu2_Class1]
+		[salu2_Class10000]
+		[salu2_Class10001]
+		[salu2_Class20001]
+		[salu2_Class20003]
+		[salu2_Class20005]
+		[salu2_Class20007]
+		[salu2_Class20008]
+		[salu2_Class20009]
+		[salu2_Class20011]
+		[salu2_Class20013]
+		[salu2_Class20015]
+		[salu2_Class20017]
+		[salu2_Class20018]
+		[salu2_Class20019]
+		[salu2_Class20020]
+		[salu2_Class20022]
+		[salu2_Class20025]
+		[salu2_Class20027]
+		[salu2_Class20029]))
+
+([salu2_Class26] of  Autor
+
+	(Dificultad_Lenguaje Media)
+	(Es_Autor_De [salu2_Class1])
+	(Idioma Ingles)
+	(Nacionalidad "USA")
+	(Nombre "Ernest_Cline")
+	(Popularidad Media))
+
+([salu2_Class3] of  Genero
+
+	(Nombre "Adventure"))
+
+([salu2_Class30001] of  LugarDeLectura
+
+	(Clima Ajetreado)
+	(Nombre "Avion"))
+
+([salu2_Class30002] of  LugarDeLectura
+
+	(Clima Ajetreado)
+	(Nombre "Restaurante"))
+
+([salu2_Class30003] of  LugarDeLectura
+
+	(Clima Tranquilo)
+	(Nombre "Cafeteria"))
+
+([salu2_Class30004] of  LugarDeLectura
+
+	(Clima Silencioso)
+	(Nombre "Dormitorio"))
+
+([salu2_Class30005] of  LugarDeLectura
+
+	(Clima Tranquilo)
+	(Nombre "Oficina"))
+
+([salu2_Class30006] of  LugarDeLectura
+
+	(Clima Ruidoso)
+	(Nombre "Calle"))
+
+([salu2_Class30007] of  LugarDeLectura
+
+	(Clima Tranquilo)
+	(Nombre "Montana"))
+
+([salu2_Class30008] of  LugarDeLectura
+
+	(Clima Silencioso)
+	(Nombre "Biblioteca"))
+
+([salu2_Class30009] of  LugarDeLectura
+
+	(Clima Tranquilo)
+	(Nombre "Coche"))
+
+([salu2_Class30010] of  LugarDeAdquision
+
+	(Nombre "Biblioteca")
+	(Se_Adquiere [salu2_Class20003]))
+
+([salu2_Class4] of  Genero
+
+	(Es_Genero_De
+		[salu2_Class20005]
+		[salu2_Class20007]
+		[salu2_Class20008]
+		[salu2_Class20009]
+		[salu2_Class20011])
+	(Nombre "AlienInvasion"))
+
+([salu2_Class5] of  Genero
+
+	(Nombre "AlternateHistory"))
+
+([salu2_Class6] of  Genero
+
+	(Nombre "Anthologies"))
+
+([salu2_Class7] of  Genero
+
+	(Nombre "Colonization"))
+
+([salu2_Class8] of  Genero
+
+	(Es_Genero_De
+		[salu2_Class20013]
+		[salu2_Class20015]
+		[salu2_Class20017]
+		[salu2_Class20018]
+		[salu2_Class20019])
+	(Nombre "Cyberpunk"))
+
+([salu2_Class9] of  Genero
+
+	(Es_Genero_De
+		[salu2_Class1]
+		[salu2_Class10000]
+		[salu2_Class10001]
+		[salu2_Class20001]
+		[salu2_Class20003])
+	(Nombre "Dystopian"))
 
-		(Es_Del_Genero [salu2_Class9])
-		(es_predecesor_de [salu2_Class20001])
-		(es_sucesor_se [salu2_Class10000])
-		(Es_Version_Original TRUE)
-		(Formato Paper Digital)
-		(Idioma Ingles)
-		(Nombre "Of Blood and Bone: Chronicles of The One, Book 2")
-		(NumPag 480)
-		(Se_Adquiere_En [salu2_Class25])
-		(Tiene_Como_Autor [salu2_Class0])
-		(Valoracion 9))
-
-	([salu2_Class11] of  Genero
-
-		(Nombre "FirstContact"))
-
-	([salu2_Class12] of  Genero
-
-		(Nombre "GalacticEmpire"))
-
-	([salu2_Class13] of  Genero
-
-		(Nombre "GeneticEngineering"))
-
-	([salu2_Class14] of  Genero
-
-		(Es_Tendencia TRUE)
-		(Nombre "HardScienceFiction"))
-
-	([salu2_Class15] of  Genero
-
-		(Nombre "History&Criticism"))
-
-	([salu2_Class16] of  Genero
-
-		(Nombre "Humorous"))
-
-	([salu2_Class17] of  Genero
-
-		(Es_Tendencia TRUE)
-		(Nombre "Military"))
-
-	([salu2_Class18] of  Genero
-
-		(Es_Tendencia TRUE)
-		(Nombre "Post-Apocalyptic"))
-
-	([salu2_Class19] of  Genero
-
-		(Es_Tendencia TRUE)
-		(Nombre "SpaceOpera"))
-
-	([salu2_Class20] of  Genero
-
-		(Nombre "ShortStories"))
-
-	([salu2_Class20000] of  LugarDeLectura
-
-		(Clima Tranquilo)
-		(Nombre "Tren"))
-
-	([salu2_Class20001] of  Libro
-
-		(Es_Del_Genero [salu2_Class9])
-		(es_sucesor_se [salu2_Class10001])
-		(Es_Version_Original TRUE)
-		(Formato Paper Digital)
-		(Idioma Ingles)
-		(Nombre "Of Blood and Bone: Chronicles of The One, Book 3")
-		(NumPag 464)
-		(Se_Adquiere_En [salu2_Class25])
-		(Tiene_Como_Autor [salu2_Class0])
-		(Valoracion 8))
-
-	([salu2_Class20002] of  Autor
-
-		(Complejidad_Tramas Alta)
-		(Dificultad_Lenguaje Media)
-		(Es_Autor_De [salu2_Class20003])
-		(Idioma Ingles)
-		(Nacionalidad "USA")
-		(Nombre "H. P. Lovecraft")
-		(Popularidad Alta))
-
-	([salu2_Class20003] of  Libro
-
-		(Es_Del_Genero [salu2_Class9])
-		(Es_Version_Original TRUE)
-		(Formato Paper)
-		(Idioma Ingles Castellano)
-		(Nombre "Tales of Horror")
-		(NumPag 768)
-		(Se_Adquiere_En
-			[salu2_Class25]
-			[salu2_Class30010])
-		(Tiene_Como_Autor [salu2_Class20002])
-		(Valoracion 7))
-
-	([salu2_Class20004] of  Autor
-
-		(Complejidad_Tramas Alta)
-		(Dificultad_Lenguaje Alta)
-		(Es_Autor_De
-			[salu2_Class20005]
-			[salu2_Class20007]
-			[salu2_Class20008])
-		(Idioma Ingles Aleman)
-		(Nacionalidad "China")
-		(Nombre "Cixin Liu")
-		(Popularidad Baja))
-
-	([salu2_Class20005] of  Libro
-
-		(Es_Del_Genero [salu2_Class4])
-		(es_predecesor_de [salu2_Class20007])
-		(Es_Version_Original TRUE)
-		(Formato Paper)
-		(Idioma Ingles)
-		(Nombre "The Three-Body Problem")
-		(NumPag 416)
-		(Se_Adquiere_En [salu2_Class25])
-		(Tiene_Como_Autor [salu2_Class20004])
-		(Valoracion 7))
-
-	([salu2_Class20007] of  Libro
-
-		(Es_Del_Genero [salu2_Class4])
-		(es_predecesor_de [salu2_Class20008])
-		(es_sucesor_se [salu2_Class20005])
-		(Es_Version_Original TRUE)
-		(Formato Paper)
-		(Idioma Ingles)
-		(Nombre "The Dark Forest (Remembrance of Earth's Past)")
-		(NumPag 528)
-		(Se_Adquiere_En [salu2_Class25])
-		(Tiene_Como_Autor [salu2_Class20004])
-		(Valoracion 9))
-
-	([salu2_Class20008] of  Libro
-
-		(Es_Del_Genero [salu2_Class4])
-		(es_sucesor_se [salu2_Class20007])
-		(Es_Version_Original TRUE)
-		(Formato Paper)
-		(Idioma Ingles)
-		(Nombre "Death's End (Remembrance of Earth's Past)")
-		(NumPag 624)
-		(Se_Adquiere_En [salu2_Class25])
-		(Tiene_Como_Autor [salu2_Class20004])
-		(Valoracion 8))
-
-	([salu2_Class20009] of  Libro
-
-		(Es_Del_Genero [salu2_Class4])
-		(Es_Version_Original TRUE)
-		(Formato Digital Paper)
-		(Idioma Ingles Frances)
-		(Nombre "Stories of Your Life and Others")
-		(NumPag 304)
-		(Se_Adquiere_En [salu2_Class25])
-		(Tiene_Como_Autor [salu2_Class20010])
-		(Valoracion 6))
-
-	([salu2_Class20010] of  Autor
-
-		(Complejidad_Tramas Baja)
-		(Dificultad_Lenguaje Baja)
-		(Es_Autor_De [salu2_Class20009])
-		(Idioma Ingles)
-		(Nacionalidad "China")
-		(Nombre "Ted Chiang")
-		(Popularidad Media))
-
-	([salu2_Class20011] of  Libro
-
-		(Es_Del_Genero [salu2_Class4])
-		(Es_Version_Original TRUE)
-		(Formato Paper)
-		(Idioma Ingles)
-		(Nombre "Childhood's End: A Novel")
-		(NumPag 224)
-		(Se_Adquiere_En [salu2_Class25])
-		(Tiene_Como_Autor [salu2_Class20012])
-		(Valoracion 7))
-
-	([salu2_Class20012] of  Autor
-
-		(Complejidad_Tramas Alta)
-		(Dificultad_Lenguaje Media)
-		(Es_Autor_De [salu2_Class20011])
-		(Idioma Ingles)
-		(Nacionalidad "UK")
-		(Nombre "Arthur C. Clarke")
-		(Popularidad Media))
-
-	([salu2_Class20013] of  Libro
-
-		(Es_Del_Genero [salu2_Class8])
-		(Es_Version_Original TRUE)
-		(Formato Paper Digital)
-		(Idioma Ingles)
-		(Nombre "Snow Crash")
-		(NumPag 440)
-		(Se_Adquiere_En [salu2_Class25])
-		(Tiene_Como_Autor [salu2_Class20014])
-		(Valoracion 6))
-
-	([salu2_Class20014] of  Autor
-
-		(Complejidad_Tramas Media)
-		(Dificultad_Lenguaje Baja)
-		(Es_Autor_De [salu2_Class20013])
-		(Idioma Ingles)
-		(Nacionalidad "USA")
-		(Nombre "Neal Stephenson")
-		(Popularidad Alta))
-
-	([salu2_Class20015] of  Libro
-
-		(Es_Del_Genero [salu2_Class8])
-		(es_predecesor_de [salu2_Class20017])
-		(Es_Version_Original TRUE)
-		(Formato Paper)
-		(Idioma Ingles Castellano)
-		(Nombre "City of Golden Shadow (Otherland, Volume 1)")
-		(NumPag 800)
-		(Se_Adquiere_En [salu2_Class25])
-		(Tiene_Como_Autor [salu2_Class20016])
-		(Valoracion 7))
-
-	([salu2_Class20016] of  Autor
-
-		(Complejidad_Tramas Baja)
-		(Dificultad_Lenguaje Baja)
-		(Es_Autor_De
-			[salu2_Class20015]
-			[salu2_Class20017]
-			[salu2_Class20018]
-			[salu2_Class20019])
-		(Idioma Ingles Castellano)
-		(Nacionalidad "USA")
-		(Nombre "Tad Williams")
-		(Popularidad Media))
-
-	([salu2_Class20017] of  Libro
-
-		(Es_Del_Genero [salu2_Class8])
-		(es_predecesor_de [salu2_Class20018])
-		(es_sucesor_se [salu2_Class20015])
-		(Es_Version_Original TRUE)
-		(Formato Paper)
-		(Idioma Ingles Castellano)
-		(Nombre "River of Blue Fire (Otherland, Volume 2)")
-		(NumPag 704)
-		(Se_Adquiere_En [salu2_Class25])
-		(Tiene_Como_Autor [salu2_Class20016])
-		(Valoracion 7))
-
-	([salu2_Class20018] of  Libro
-
-		(Es_Del_Genero [salu2_Class8])
-		(es_predecesor_de [salu2_Class20019])
-		(es_sucesor_se [salu2_Class20017])
-		(Es_Version_Original TRUE)
-		(Formato Paper)
-		(Idioma Ingles Castellano)
-		(Nombre "Mountain of Black Glass (Otherland, Volume 3)")
-		(NumPag 784)
-		(Se_Adquiere_En [salu2_Class25])
-		(Tiene_Como_Autor [salu2_Class20016])
-		(Valoracion 8))
-
-	([salu2_Class20019] of  Libro
-
-		(Es_Del_Genero [salu2_Class8])
-		(es_sucesor_se [salu2_Class20018])
-		(Es_Version_Original TRUE)
-		(Formato Paper)
-		(Idioma Ingles Castellano)
-		(Nombre "Sea of Silver Light (Otherland, Volume 4)")
-		(NumPag 1072)
-		(Se_Adquiere_En [salu2_Class25])
-		(Tiene_Como_Autor [salu2_Class20016])
-		(Valoracion 9))
-
-	([salu2_Class20020] of  Libro
-
-		(Es_Del_Genero [salu2_Class22])
-		(Es_Version_Original TRUE)
-		(Formato Paper)
-		(Idioma Ingles)
-		(Nombre "The Time Machine")
-		(NumPag 113)
-		(Se_Adquiere_En [salu2_Class25])
-		(Tiene_Como_Autor [salu2_Class20021])
-		(Valoracion 8))
-
-	([salu2_Class20021] of  Autor
-
-		(Complejidad_Tramas Alta)
-		(Dificultad_Lenguaje Alta)
-		(Es_Autor_De [salu2_Class20020])
-		(Idioma Ingles)
-		(Nacionalidad "UK")
-		(Nombre "H.G. Wells")
-		(Popularidad Baja))
-
-	([salu2_Class20022] of  Libro
-
-		(Es_Del_Genero [salu2_Class22])
-		(Es_Version_Original TRUE)
-		(Formato Paper Digital)
-		(Idioma Ingles)
-		(Nombre "1636: The Atlantic Encounter (28) (Ring of Fire)")
-		(NumPag 368)
-		(Se_Adquiere_En [salu2_Class25])
-		(Tiene_Como_Autor
-			[salu2_Class20023]
-			[salu2_Class20024])
-		(Valoracion 7))
-
-	([salu2_Class20023] of  Autor
-
-		(Complejidad_Tramas Media)
-		(Dificultad_Lenguaje Baja)
-		(Es_Autor_De [salu2_Class20022])
-		(Idioma Ingles)
-		(Nacionalidad "USA")
-		(Nombre "Eric Flint")
-		(Popularidad Media))
-
-	([salu2_Class20024] of  Autor
-
-		(Complejidad_Tramas Media)
-		(Dificultad_Lenguaje Baja)
-		(Es_Autor_De [salu2_Class20022])
-		(Idioma Ingles Frances)
-		(Nacionalidad "USA")
-		(Nombre "Walter H. Hunt")
-		(Popularidad Media))
-
-	([salu2_Class20025] of  Libro
-
-		(Es_Del_Genero [salu2_Class22])
-		(Es_Version_Original FALSE)
-		(Formato Digital)
-		(Idioma Ingles Aleman)
-		(Nombre "How to Stop Time: A Novel")
-		(NumPag 352)
-		(Se_Adquiere_En [salu2_Class25])
-		(Tiene_Como_Autor [salu2_Class20026])
-		(Valoracion 7))
-
-	([salu2_Class20026] of  Autor
-
-		(Complejidad_Tramas Media)
-		(Dificultad_Lenguaje Media)
-		(Es_Autor_De [salu2_Class20025])
-		(Idioma Ingles)
-		(Nacionalidad "UK")
-		(Nombre "Matt Haig")
-		(Popularidad Alta))
-
-	([salu2_Class20027] of  Libro
-
-		(Es_Del_Genero [salu2_Class22])
-		(Es_Version_Original FALSE)
-		(Formato Paper)
-		(Idioma Ingles)
-		(Nombre "Lightning")
-		(NumPag 372)
-		(Se_Adquiere_En [salu2_Class25])
-		(Tiene_Como_Autor [salu2_Class20028])
-		(Valoracion 6))
-
-	([salu2_Class20028] of  Autor
-
-		(Complejidad_Tramas Alta)
-		(Dificultad_Lenguaje Alta)
-		(Es_Autor_De [salu2_Class20027])
-		(Idioma Ingles)
-		(Nacionalidad "USA")
-		(Nombre "Dean Koontz")
-		(Popularidad Baja))
-
-	([salu2_Class20029] of  Libro
-
-		(Es_Del_Genero [salu2_Class22])
-		(Es_Version_Original FALSE)
-		(Formato Paper Digital)
-		(Idioma Ingles Aleman Frances Castellano)
-		(Nombre "Flatland: A Romance of Many Dimensions")
-		(NumPag 119)
-		(Se_Adquiere_En [salu2_Class25])
-		(Tiene_Como_Autor [salu2_Class20030])
-		(Valoracion 10))
-
-	([salu2_Class20030] of  Autor
-
-		(Complejidad_Tramas Alta)
-		(Dificultad_Lenguaje Baja)
-		(Es_Autor_De [salu2_Class20029])
-		(Idioma Ingles Aleman)
-		(Nacionalidad "UK")
-		(Nombre "Edwin A. Abbot")
-		(Popularidad Alta))
-
-	([salu2_Class20031] of  LugarDeLectura
-
-		(Clima Ruidoso)
-		(Nombre "Autobus"))
-
-	([salu2_Class20032] of  LugarDeLectura
-
-		(Clima Ruidoso)
-		(Nombre "Metro"))
-
-	([salu2_Class21] of  Genero
-
-		(Nombre "Steampunk"))
-
-	([salu2_Class22] of  Genero
-
-		(Es_Genero_De
-			[salu2_Class20020]
-			[salu2_Class20022]
-			[salu2_Class20025]
-			[salu2_Class20027]
-			[salu2_Class20029])
-		(Es_Tendencia TRUE)
-		(Nombre "TimeTravel"))
-
-	([salu2_Class25] of  LugarDeAdquision
-
-		(Nombre "Amazon.com")
-		(Se_Adquiere
-			[salu2_Class1]
-			[salu2_Class10000]
-			[salu2_Class10001]
-			[salu2_Class20001]
-			[salu2_Class20003]
-			[salu2_Class20005]
-			[salu2_Class20007]
-			[salu2_Class20008]
-			[salu2_Class20009]
-			[salu2_Class20011]
-			[salu2_Class20013]
-			[salu2_Class20015]
-			[salu2_Class20017]
-			[salu2_Class20018]
-			[salu2_Class20019]
-			[salu2_Class20020]
-			[salu2_Class20022]
-			[salu2_Class20025]
-			[salu2_Class20027]
-			[salu2_Class20029]))
-
-	([salu2_Class26] of  Autor
-
-		(Complejidad_Tramas Media)
-		(Dificultad_Lenguaje Media)
-		(Es_Autor_De [salu2_Class1])
-		(Idioma Ingles)
-		(Nacionalidad "USA")
-		(Nombre "Ernest_Cline")
-		(Popularidad Media))
-
-	([salu2_Class3] of  Genero
-
-		(Es_Tendencia TRUE)
-		(Nombre "Adventure"))
-
-	([salu2_Class30001] of  LugarDeLectura
-
-		(Clima Ajetreado)
-		(Nombre "Avion"))
-
-	([salu2_Class30002] of  LugarDeLectura
-
-		(Clima Ajetreado)
-		(Nombre "Restaurante"))
-
-	([salu2_Class30003] of  LugarDeLectura
-
-		(Clima Tranquilo)
-		(Nombre "Cafeteria"))
-
-	([salu2_Class30004] of  LugarDeLectura
-
-		(Clima Silencioso)
-		(Nombre "Dormitorio"))
-
-	([salu2_Class30005] of  LugarDeLectura
-
-		(Clima Tranquilo)
-		(Nombre "Oficina"))
-
-	([salu2_Class30006] of  LugarDeLectura
-
-		(Clima Ruidoso)
-		(Nombre "Calle"))
-
-	([salu2_Class30007] of  LugarDeLectura
-
-		(Clima Tranquilo)
-		(Nombre "Montana"))
-
-	([salu2_Class30008] of  LugarDeLectura
-
-		(Clima Silencioso)
-		(Nombre "Biblioteca"))
-
-	([salu2_Class30009] of  LugarDeLectura
-
-		(Clima Tranquilo)
-		(Nombre "Coche"))
-
-	([salu2_Class30010] of  LugarDeAdquision
-
-		(Nombre "Biblioteca")
-		(Se_Adquiere [salu2_Class20003]))
-
-	([salu2_Class4] of  Genero
-
-		(Es_Genero_De
-			[salu2_Class20005]
-			[salu2_Class20007]
-			[salu2_Class20008]
-			[salu2_Class20009]
-			[salu2_Class20011])
-		(Es_Tendencia TRUE)
-		(Nombre "AlienInvasion"))
-
-	([salu2_Class5] of  Genero
-
-		(Es_Tendencia TRUE)
-		(Nombre "AlternateHistory"))
-
-	([salu2_Class6] of  Genero
-
-		(Nombre "Anthologies"))
-
-	([salu2_Class7] of  Genero
-
-		(Nombre "Colonization"))
-
-	([salu2_Class8] of  Genero
-
-		(Es_Genero_De
-			[salu2_Class20013]
-			[salu2_Class20015]
-			[salu2_Class20017]
-			[salu2_Class20018]
-			[salu2_Class20019])
-		(Es_Tendencia TRUE)
-		(Nombre "Cyberpunk"))
-
-	([salu2_Class9] of  Genero
-
-		(Es_Genero_De
-			[salu2_Class1]
-			[salu2_Class10000]
-			[salu2_Class10001]
-			[salu2_Class20001]
-			[salu2_Class20003])
-		(Es_Tendencia TRUE)
-		(Nombre "Dystopian"))
 )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; CLASES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1165,6 +1285,7 @@
     (tipo_lugar_lect not_deff)
     (libros_g not_deff)
     (libros_dg not_deff)
+    (edad not_deff)
 )
 
 (deffacts asociacion_heuristica::controladores_asociacion_heuristica
@@ -1229,21 +1350,21 @@
 (defrule recopilacion_datos_personales::longitud_libros
     ?d <- (datos_usuario (longitud -1))
 	=>
-	(bind ?l (pregunta_numerica "Longitud de los libros (paginas) (0 si te es indiferente)? " 0 1000))
+	(bind ?l (pregunta_numerica "- Longitud de los libros (paginas) (0 si te es indiferente)? " 0 1000))
 	(modify ?d (longitud ?l))
 )
 
 (defrule recopilacion_datos_personales::sexo_usuario
     ?d <- (datos_usuario (sexo "null"))
 	=>
-	(bind ?s (ask_question "- ï¿½Cual es tu genero (Hombre/Mujer)? " Hombre Mujer))
+	(bind ?s (ask_question "- Cual es tu genero (Hombre/Mujer)? " Hombre Mujer))
 	(modify ?d (sexo ?s))
 )
 
 (defrule recopilacion_datos_personales::idiomas_usuario
     ?d <- (datos_usuario (idioma "null"))
 	=>
-	(bind ?s (ask_question "Â¿En que idioma prefieres leer(Ingles | Castellano | Frances | Aleman)? " Ingles Castellano Frances Aleman))
+	(bind ?s (ask_question "- En que idioma prefieres leer(Ingles | Castellano | Frances | Aleman)? " Ingles Castellano Frances Aleman))
 	(modify ?d (idioma ?s))
 )
 
@@ -1268,14 +1389,14 @@
 (defrule recopilacion_datos_personales::edad_usuario
     ?d <- (datos_usuario (edad -1))
 	=>
-	(bind ?e (pregunta_numerica "Â¿Cual es tu edad? " 3 120))
+	(bind ?e (pregunta_numerica "- ¿Cual es tu edad? " 3 120))
 	(modify ?d (edad ?e))
 )
 
 (defrule recopilacion_datos_personales::assignar_cantidad_libros
     ?d <- (datos_usuario (cantidad_libros_leidos -1))
     =>
-    (bind ?l (pregunta_numerica "Â¿Cuantos libros has leido?" 0 100))
+    (bind ?l (pregunta_numerica "- ¿Cuantos libros has leido?" 0 100))
     (modify ?d (cantidad_libros_leidos ?l))
 )
 
@@ -1647,47 +1768,52 @@
 (defrule abstraccion_de_datos:edad_lector_nino
     ?pa <- (problema_abstracto (etapa_edad ?l))
     ?d <- (datos_usuario (edad ?x))
+    ?fact <- (edad not_deff)
     (test (>= ?x 3))
     (test (< ?x 12))
     =>
     (modify ?pa (etapa_edad "Nino"))
-    (modify ?d (edad -1))
+    (retract ?fact)
 )
 (defrule abstraccion_de_datos:edad_lector_adolescente
     ?pa <- (problema_abstracto (etapa_edad ?l))
     ?d <- (datos_usuario (edad ?x))
+    ?fact <- (edad not_deff)
     (test (>= ?x 12))
     (test (< ?x 20))
     =>
     (modify ?pa (etapa_edad "Adolescente"))
-    (modify ?d (edad -1))
+    (retract ?fact)
 )
 (defrule abstraccion_de_datos:edad_lector_joven
     ?pa <- (problema_abstracto (etapa_edad ?l))
     ?d <- (datos_usuario (edad ?x))
+    ?fact <- (edad not_deff)
     (test (>= ?x 20))
     (test (< ?x 35))
     =>
     (modify ?pa (etapa_edad "Joven"))
-    (modify ?d (edad -1))
+    (retract ?fact)
 )
 (defrule abstraccion_de_datos:edad_lector_maduro
     ?pa <- (problema_abstracto (etapa_edad ?l))
     ?d <- (datos_usuario (edad ?x))
+    ?fact <- (edad not_deff)
     (test (>= ?x 35))
     (test (< ?x 60))
     =>
     (modify ?pa (etapa_edad "Maduro"))
-    (modify ?d (edad -1))
+    (retract ?fact)
 )
 (defrule abstraccion_de_datos:edad_lector_tercera_edad
     ?pa <- (problema_abstracto (etapa_edad ?l))
     ?d <- (datos_usuario (edad ?x))
+    ?fact <- (edad not_deff)
     (test (>= ?x 60))
-    (test (< ?x 120))
+    (test (<= ?x 120))
     =>
     (modify ?pa (etapa_edad "Tercera edad"))
-    (modify ?d (edad -1))
+    (retract ?fact)
 )
 
 (defrule abstraccion_de_datos:sexo_lector
@@ -1717,17 +1843,19 @@
     ?sol <- (solucion_abstracta)
     ?target <- (target_mode off)
     ?duser <- (problema_abstracto (idioma_lector ?ulang))
+    ?du <-(datos_usuario(edad ?edadUsr))
 	=>
-    (bind $?listaRec (create$ ))    
+    (bind $?listaRec (create$ ))
     (bind $?allLibros (find-all-instances ((?inst Libro)) TRUE))
- 	(loop-for-count (?i 1 (length$ $?allLibros)) do
+    (loop-for-count (?i 1 (length$ $?allLibros)) do
         (bind ?obj (nth$ ?i ?allLibros))
         (bind $?lang (send ?obj get-Idioma))
-        (if (member$ ?ulang $?lang) then
+        (bind ?edadMin (send ?obj get-edad_minima))
+        (if (and (member$ ?ulang $?lang) (>= ?edadUsr ?edadMin)) then
             (bind ?elem (make-instance (gensym) of Recomendacion (libro ?obj)(puntuacion 0)))
     		(bind $?listaRec(insert$ $?listaRec (+ (length$ $?listaRec) 1) ?elem))
         )
-	)
+    )
     (retract ?ctrl)
     (assert (libros_obtenidos deff))
     (retract ?target)
@@ -1752,6 +1880,8 @@
     (assert (targeted_sagas on))
     (assert (targeted_nivel on))
     (assert (targeted_longitud on))
+    (assert (targeted_franED on))
+    (assert (targeted_sexoXlib on))
     (assert (targeted_tipolugarlectura on))
 
     ; ESTABLECER LIBRO TARGETEADO
@@ -1773,6 +1903,8 @@
     ?csag <-(targeted_sagas off)
     ?cniv <-(targeted_nivel off)
     ?clon <-(targeted_longitud off)
+    ?cfed <- (targeted_franED off)
+    ?csexl <-(targeted_sexoXlib off)
     ?clug <-(targeted_tipolugarlectura off)
     =>
     
@@ -1790,6 +1922,8 @@
     (retract ?csag)
     (retract ?clon)
     (retract ?cniv)
+    (retract ?cfed)
+    (retract ?csexl)
     (retract ?clug)    
     ; ENCENDER EL MODO TARGET
     
@@ -2178,6 +2312,155 @@
     )
 )
 
+(defrule asociacion_heuristica::coincidencia_fran_nino
+   ?ctrl <-(targeted_franED on)
+   ?sol <- (solucion_abstracta (targeted_rec ?obj))
+   ?pa <- (problema_abstracto (etapa_edad ?typeED))
+   (test (eq ?typeED "Nino"))
+   =>
+   (retract ?ctrl)
+   (assert (targeted_franED off))
+   (bind ?libro (send ?obj get-libro))
+   (bind ?ed (send ?libro get-edad_recomendada))
+   (bind ?punt (send ?obj get-puntuacion))
+   (if (and (>= ?ed 3)(< ?ed 12)) then
+        (bind ?punt (+ ?punt 50))
+        (modify-instance ?obj (puntuacion ?punt))
+   )
+   (if (and (>= ?ed 12) (< ?ed 20) ) then
+       (bind ?punt (+ ?punt 25))
+       (modify-instance ?obj (puntuacion ?punt))
+   )
+   
+)
+(defrule asociacion_heuristica::coincidencia_fran_adolescente
+   ?ctrl <-(targeted_franED on)
+   ?sol <- (solucion_abstracta (targeted_rec ?obj))
+   ?pa <- (problema_abstracto (etapa_edad ?typeED))
+   (test (eq ?typeED "Adolescente"))
+   =>
+   (retract ?ctrl)
+   (assert (targeted_franED off))
+   (bind ?libro (send ?obj get-libro))
+   (bind ?ed (send ?libro get-edad_recomendada))
+   (bind ?punt (send ?obj get-puntuacion))
+   (if (and (>= ?ed 3)(< ?ed 12)) then
+        (bind ?punt (+ ?punt 25))
+        (modify-instance ?obj (puntuacion ?punt))
+   )
+   (if (and (>= ?ed 12) (< ?ed 20) ) then
+       (bind ?punt (+ ?punt 50))
+       (modify-instance ?obj (puntuacion ?punt))
+   )
+   (if (and (>= ?ed 20)(< ?ed 35)) then
+        (bind ?punt (+ ?punt 25))
+        (modify-instance ?obj (puntuacion ?punt))
+   )
+   
+)
+(defrule asociacion_heuristica::coincidencia_fran_joven
+   ?ctrl <-(targeted_franED on)
+   ?sol <- (solucion_abstracta (targeted_rec ?obj))
+   ?pa <- (problema_abstracto (etapa_edad ?typeED))
+   (test (eq ?typeED "Joven"))
+   =>
+   (retract ?ctrl)
+   (assert (targeted_franED off))
+   (bind ?libro (send ?obj get-libro))
+   (bind ?ed (send ?libro get-edad_recomendada))
+   (bind ?punt (send ?obj get-puntuacion))
+   (if (and (>= ?ed 12) (< ?ed 20) ) then
+        (bind ?punt (+ ?punt 25))
+        (modify-instance ?obj (puntuacion ?punt))
+   )
+   (if (and (>= ?ed 20)(< ?ed 35) ) then
+       (bind ?punt (+ ?punt 50))
+       (modify-instance ?obj (puntuacion ?punt))
+   )
+   (if (and (>= ?ed 35) (< ?ed 60) ) then
+        (bind ?punt (+ ?punt 25))
+        (modify-instance ?obj (puntuacion ?punt))
+   )
+   
+)
+(defrule asociacion_heuristica::coincidencia_fran_maduro
+   ?ctrl <-(targeted_franED on)
+   ?sol <- (solucion_abstracta (targeted_rec ?obj))
+   ?pa <- (problema_abstracto (etapa_edad ?typeED))
+   (test (eq ?typeED "Maduro"))
+   =>
+   (retract ?ctrl)
+   (assert (targeted_franED off))
+   (bind ?libro (send ?obj get-libro))
+   (bind ?ed (send ?libro get-edad_recomendada))   
+   (bind ?punt (send ?obj get-puntuacion))
+   (if (and (>= ?ed 20)(< ?ed 35) ) then
+        (bind ?punt (+ ?punt 25))
+        (modify-instance ?obj (puntuacion ?punt))
+   )
+   (if (and (>= ?ed 35) (< ?ed 60) ) then
+       (bind ?punt (+ ?punt 50))
+       (modify-instance ?obj (puntuacion ?punt))
+   )
+   (if (and (>= ?ed 60) (<= ?ed 120) ) then
+        (bind ?punt (+ ?punt 25))
+        (modify-instance ?obj (puntuacion ?punt))
+   )
+)
+(defrule asociacion_heuristica::coincidencia_fran_tercera
+   ?ctrl <-(targeted_franED on)
+   ?sol <- (solucion_abstracta (targeted_rec ?obj))
+   ?pa <- (problema_abstracto (etapa_edad ?typeED))
+   (test (eq ?typeED "Tercera edad"))
+   =>
+   (retract ?ctrl)
+   (assert (targeted_franED off))
+   (bind ?libro (send ?obj get-libro))
+   (bind ?ed (send ?libro get-edad_recomendada))   
+   (bind ?punt (send ?obj get-puntuacion))
+   (if (and (>= ?ed 35) (< ?ed 60) ) then
+       (bind ?punt (+ ?punt 25))
+       (modify-instance ?obj (puntuacion ?punt))
+   )
+   (if (and (>= ?ed 60) (<= ?ed 120) ) then
+        (bind ?punt (+ ?punt 50))
+        (modify-instance ?obj (puntuacion ?punt))
+   )
+)
+
+(defrule asociacion_heuristica::coincidencia_sexoH
+    ?ctrl <-(targeted_sexoXlib on)
+    ?sol <- (solucion_abstracta (targeted_rec ?obj))
+    ?pa <- (problema_abstracto (sexo_lector ?typeSE))
+    (test (eq ?typeSE "Hombre"))
+    =>
+    (retract ?ctrl)
+    (assert (targeted_sexoXlib off))
+    (bind ?libro (send ?obj get-libro))
+    (bind ?p (send ?libro get-popular_M))   
+    (bind ?punt (send ?obj get-puntuacion))
+    (if (eq ?p TRUE) then
+        (bind ?punt (+ ?punt 10))
+        (modify-instance ?obj (puntuacion ?punt))
+    )
+)
+(defrule asociacion_heuristica::coincidencia_sexoM
+    ?ctrl <-(targeted_sexoXlib on)
+    ?sol <- (solucion_abstracta (targeted_rec ?obj))
+    ?pa <- (problema_abstracto (sexo_lector ?typeSE))
+    (test (eq ?typeSE "Mujer"))
+    =>
+    (retract ?ctrl)
+    (assert (targeted_sexoXlib off))
+    (bind ?libro (send ?obj get-libro))
+    (bind ?p (send ?libro get-popular_M))   
+    (bind ?punt (send ?obj get-puntuacion))
+    (if (eq ?p TRUE) then
+        (bind ?punt (+ ?punt 10))
+        (modify-instance ?obj (puntuacion ?punt))
+    )
+)
+
 (defrule asociacion_heuristica::coincidencia_tipolugarlectura_silencioso
     ?ctrl <- (targeted_tipolugarlectura on)
     ?sol <- (solucion_abstracta (targeted_rec ?obj))
@@ -2311,6 +2594,7 @@
     
     (modify ?sol (solucion_no_refinada ?inst) (recomendaciones_ordenadas $?F))    
     (retract ?fact)
+    (assert (veredicto inicial))
 )
 
 
