@@ -1060,7 +1060,7 @@
 )
 
 (deftemplate MAIN::solucion_refinada
-    (slot solucion_final(type INSTANCE))
+    (slot solucion(type INSTANCE))
 )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; FUNCIONES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1219,6 +1219,7 @@
     =>
     (assert (solucion_refinada))
     (assert (goprint))
+    (assert (inicializar))
     (focus refinamiento_de_soluciones)
 )
 
@@ -2215,18 +2216,64 @@
     
     (modify ?sol (solucion_no_refinada ?inst) (recomendaciones_ordenadas $?F))    
     (retract ?fact)
-    (assert (veredicto inicial))
 )
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;; REFINAMIENTO DE SOLUCIONES ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
+(defrule refinamiento_de_soluciones::inicializar_solucion_refinada
+    (declare (salience 100))
+    ?sol_ref <- (solucion_refinada (solucion ?s))
+    ?sol_abs <- (solucion_abstracta (solucion_no_refinada ?veredicto))
+    ?fact <- (inicializar)
+    =>
+    (retract ?fact)
+    (modify ?sol_ref (solucion ?veredicto))
+)
+
 (defrule refinamiento_de_soluciones::saludos
     ?fact <- (goprint)
-    ?sol <- (solucion_abstracta (solucion_no_refinada ?veredicto))
+    ?sol <- (solucion_refinada (solucion ?veredicto))
+    (not (fin))
 	=>
     (printout t "AQUI LLEGA EL VEREDICTO:" crlf)
     (printout t (send ?veredicto print) crlf)
+    (assert (pregunta_final))
     (retract ?fact)
+)
+
+(defrule refinamiento_de_soluciones::add_siguiente_recomendacion
+    (declare (salience 100)) ;para que se ejecute antes que saludos
+    ?fact <- (add_siguiente)
+    ?sol_ref <- (solucion_refinada (solucion ?s))
+    ?sol_abs <- (solucion_abstracta (recomendaciones_ordenadas $?rec_ord))
+    =>
+    (bind ?next_rec (nth$ 1 $?rec_ord))
+    (printout t crlf crlf "RECOMENDACIONES ACTUALIZADAS. HEMOS AÑADIDO UN NUEVO LIBRO" crlf)
+    (slot-insert$ ?s recomendaciones 3 ?next_rec)
+    (retract ?fact)
+)
+
+(defrule refinamiento_de_soluciones::pregunta_final
+    ?fact <- (pregunta_final)
+    ?sol <- (solucion_refinada (solucion ?s))
+    =>
+    (bind ?veredicto (send ?s get-recomendaciones))
+    (bind $?nombre_libros (create$ ))
+    (loop-for-count (?i 1 (length$ $?veredicto)) do
+		(bind ?recomendacion (nth$ ?i ?veredicto))
+		(bind ?libro (send ?recomendacion get-libro))
+        (bind ?nombre_libro (send ?libro get-Nombre))
+		(bind $?nombre_libros(insert$ $?nombre_libros (+ (length$ $?nombre_libros) 1) ?nombre_libro))
+	)
+	(bind ?escogido (pregunta_multirespuesta "Alguno de estos libros no te interesa? (ya lo has leido, no te gusta...) (0 si te gustan todos): " $?nombre_libros))
+    (if (eq 0 (length$ ?escogido)) then (assert (fin)) else (assert (add_siguiente)))	
+    (loop-for-count (?i 1 (length$ ?escogido)) do
+		;(bind ?index (nth$ ?i ?escogido))
+		;(if (= ?index 0) then (assert (fin)))
+        (slot-delete$ ?s recomendaciones ?i ?i)
+	)
+    (assert (goprint))
+    (retract ?fact)   
 )
