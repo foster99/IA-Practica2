@@ -1752,6 +1752,7 @@
     (assert (targeted_sagas on))
     (assert (targeted_nivel on))
     (assert (targeted_longitud on))
+    (assert (targeted_tipolugarlectura on))
 
     ; ESTABLECER LIBRO TARGETEADO
     (bind ?lt (nth$ 1 $?lnt))
@@ -1772,6 +1773,7 @@
     ?csag <-(targeted_sagas off)
     ?cniv <-(targeted_nivel off)
     ?clon <-(targeted_longitud off)
+    ?clug <-(targeted_tipolugarlectura off)
     =>
     
     ; GUARDAR LIBRO TARGETEADO
@@ -1787,14 +1789,12 @@
     (retract ?cval)
     (retract ?csag)
     (retract ?clon)
-    (retract ?cniv)    
+    (retract ?cniv)
+    (retract ?clug)    
     ; ENCENDER EL MODO TARGET
     
     (retract ?target)
     (assert (target_mode on))
-    
-    
-
 )
 
 (defrule asociacion_heuristica::coincidencia_genero
@@ -2174,6 +2174,101 @@
     )
     (if (eq ?diff Alta) then
         (bind ?punt (+ ?punt 50))
+        (modify-instance ?obj (puntuacion ?punt))
+    )
+)
+
+(defrule asociacion_heuristica::coincidencia_tipolugarlectura_silencioso
+    ?ctrl <- (targeted_tipolugarlectura on)
+    ?sol <- (solucion_abstracta (targeted_rec ?obj))
+    ?pa <- (problema_abstracto (tipo_lugar_de_lectura ?tipo_lug))
+    ?pa2 <- (problema_abstracto (nivel_lector ?typeLVL))
+    (test (eq ?tipo_lug "Silencioso"))
+    =>
+    (retract ?ctrl)
+    (assert (targeted_tipolugarlectura off))
+)
+(defrule asociacion_heuristica::coincidencia_tipolugarlectura_tranquilo
+    ?ctrl <- (targeted_tipolugarlectura on)
+    ?sol <- (solucion_abstracta (targeted_rec ?obj))
+    ?pa <- (problema_abstracto (tipo_lugar_de_lectura ?tipo_lug))
+    ?pa2 <- (problema_abstracto (nivel_lector ?typeLVL))
+    (test (eq ?tipo_lug "Tranquilo"))
+    =>
+    (retract ?ctrl)
+    (assert (targeted_tipolugarlectura off))
+    (bind ?libro (send ?obj get-libro))
+    (bind ?punt (send ?obj get-puntuacion))
+    (bind $?autores (send $?libro get-Tiene_Como_Autor))
+    (bind ?diff (send (nth$ 1 $?autores) get-Dificultad_Lenguaje))
+    (if (eq ?diff Baja) then
+        (bind ?punt (+ ?punt 30))
+        (modify-instance ?obj (puntuacion ?punt))
+    )
+    (if (eq ?typeLVL "bajo") then
+        (bind ?punt (+ ?punt 30))
+        (modify-instance ?obj (puntuacion ?punt))
+    )
+)
+(defrule asociacion_heuristica::coincidencia_tipolugarlectura_ruidoso
+    ?ctrl <- (targeted_tipolugarlectura on)
+    ?sol <- (solucion_abstracta (targeted_rec ?obj))
+    ?pa <- (problema_abstracto (tipo_lugar_de_lectura ?tipo_lug))
+    ?pa2 <- (problema_abstracto (nivel_lector ?typeLVL))
+    (test (eq ?tipo_lug "Ruidoso"))
+    =>
+    (retract ?ctrl)
+    (assert (targeted_tipolugarlectura off))
+    (bind ?libro (send ?obj get-libro))
+    (bind ?punt (send ?obj get-puntuacion))
+    (bind $?autores (send $?libro get-Tiene_Como_Autor))
+    (bind ?diff (send (nth$ 1 $?autores) get-Dificultad_Lenguaje))
+    (if (eq ?diff Baja) then
+        (bind ?punt (+ ?punt 60))
+        (modify-instance ?obj (puntuacion ?punt))
+    )
+    (if (eq ?typeLVL "bajo") then
+        (bind ?punt (+ ?punt 60))
+        (modify-instance ?obj (puntuacion ?punt))
+    )
+    
+    (if (eq ?diff Media) then
+        (bind ?punt (+ ?punt 30))
+        (modify-instance ?obj (puntuacion ?punt))
+    )
+    (if (eq ?typeLVL "medio") then
+        (bind ?punt (+ ?punt 30))
+        (modify-instance ?obj (puntuacion ?punt))
+    )
+)
+(defrule asociacion_heuristica::coincidencia_tipolugarlectura_ajetreado
+    ?ctrl <- (targeted_tipolugarlectura on)
+    ?sol <- (solucion_abstracta (targeted_rec ?obj))
+    ?pa <- (problema_abstracto (tipo_lugar_de_lectura ?tipo_lug))
+    ?pa2 <- (problema_abstracto (nivel_lector ?typeLVL))
+    (test (eq ?tipo_lug "Ajetreado"))
+    =>
+    (retract ?ctrl)
+    (assert (targeted_tipolugarlectura off))
+    (bind ?libro (send ?obj get-libro))
+    (bind ?punt (send ?obj get-puntuacion))
+    (bind $?autores (send $?libro get-Tiene_Como_Autor))
+    (bind ?diff (send (nth$ 1 $?autores) get-Dificultad_Lenguaje))
+    (if (eq ?diff Baja) then
+        (bind ?punt (+ ?punt 100))
+        (modify-instance ?obj (puntuacion ?punt))
+    )
+    (if (eq ?typeLVL "bajo") then
+        (bind ?punt (+ ?punt 100))
+        (modify-instance ?obj (puntuacion ?punt))
+    )
+    
+    (if (eq ?diff Media) then
+        (bind ?punt (+ ?punt 30))
+        (modify-instance ?obj (puntuacion ?punt))
+    )
+    (if (eq ?typeLVL "medio") then
+        (bind ?punt (+ ?punt 30))
         (modify-instance ?obj (puntuacion ?punt))
     )
 )
