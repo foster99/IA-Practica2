@@ -504,9 +504,6 @@
 	(Tiene_Como_Autor [salu2_Class20004])
 	(Valoracion 7))
 
-([salu2_Class20006] of  Genero
-)
-
 ([salu2_Class20007] of  Libro
 
 	(edad_minima 16)
@@ -2757,14 +2754,16 @@
     (bind ?next_rec (nth$ 1 $?rec_ord))
     (slot-insert$ ?s recomendaciones 3 ?next_rec)
     (printout t crlf crlf "RECOMENDACIONES ACTUALIZADAS. HEMOS ANADIDO UN NUEVO LIBRO" crlf)
-    (bind $?F (delete$ $?rec_ord 1 1))
-    (modify ?sol_abs (recomendaciones_ordenadas $?F))    
+    (if (= (length$ $?rec_ord) 0) then (printout f "Lo sentimos, se han agotado los libros disponibles" crlf)
+    else (bind $?F (delete$ $?rec_ord 1 1))(modify ?sol_abs (recomendaciones_ordenadas $?F)))
+    
     (retract ?fact)
 )
 
 (defrule refinamiento_de_soluciones::pregunta_final
     ?fact <- (pregunta_final)
-    ?sol <- (solucion_refinada (solucion ?s))
+    ?sol_ref <- (solucion_refinada (solucion ?s))
+    ?sol_abs <- (solucion_abstracta (recomendaciones_ordenadas $?rec_ord))
     =>
     (bind ?veredicto (send ?s get-recomendaciones))
     (bind $?nombre_libros (create$ ))
@@ -2775,7 +2774,8 @@
 		(bind $?nombre_libros(insert$ $?nombre_libros (+ (length$ $?nombre_libros) 1) ?nombre_libro))
 	)
 	(bind ?escogido (pregunta_unirespuesta "Si deseas eliminar UNO de estos libros (ya lo has leido, no te gusta...) introduce su numero (0 si te gustan todos): " $?nombre_libros))
-    (if (eq 0 (length$ ?escogido)) then (assert (fin)) else (assert (add_siguiente)))	
+    (if (eq 0 (length$ ?escogido)) then (assert (fin))
+    else (if (not(= (length$ $?rec_ord) 0)) then (assert (add_siguiente))))	
 	(bind ?index (nth$ 1 ?escogido))
     (if (neq 0 (length$ ?escogido)) then (slot-delete$ ?s recomendaciones ?index ?index))
     (assert (goprint))
