@@ -1194,6 +1194,13 @@
    )
    ?answer)
 
+(deffunction si_o_no_p (?question)
+   (bind ?response (ask_question ?question si no s n))
+   (if (or (eq ?response si) (eq ?response s))
+       then TRUE
+       else FALSE)
+)
+
 ;;; Funcion para hacer una pregunta numerica-univalor
 (deffunction MAIN::pregunta_numerica (?pregunta ?rangini ?rangfi)
 	(format t "%s (De %d hasta %d) " ?pregunta ?rangini ?rangfi)
@@ -1387,9 +1394,10 @@
 		(bind ?nombre (send ?obj get-Nombre))
 		(bind $?nombre_lugares(insert$ $?nombre_lugares (+ (length$ $?nombre_lugares) 1) ?nombre))
 	)
-	(bind ?escogido (pregunta_opciones "Donde le gusta leer (elija 1 lugar)? " $?nombre_lugares))
-    (bind ?pos_l (member$ ?escogido $?nombre_lugares))	
-	(bind ?l (nth$ ?pos_l $?lugares))
+	(bind ?escogido (pregunta_unirespuesta "Donde le gusta leer (elija 1 lugar)? " $?nombre_lugares))
+    
+    (bind ?index (nth$ 1 ?escogido))
+	(bind ?l (nth$ ?index $?lugares))
     (retract ?hecho)
 	(modify ?p-user (lugar_de_lectura $?l))
 )
@@ -2658,11 +2666,8 @@
 	)
 	(bind ?escogido (pregunta_unirespuesta "Si deseas eliminar UNO de estos libros (ya lo has leido, no te gusta...) introduce su numero (0 si te gustan todos): " $?nombre_libros))
     (if (eq 0 (length$ ?escogido)) then (assert (fin)) else (assert (add_siguiente)))	
-    (loop-for-count (?i 1 (length$ ?escogido)) do
-		(bind ?index (nth$ ?i ?escogido))
-		;(if (= ?index 0) then (assert (fin)))
-        (slot-delete$ ?s recomendaciones ?index ?index)
-	)
+	(bind ?index (nth$ 1 ?escogido))
+    (slot-delete$ ?s recomendaciones ?index ?index)
     (assert (goprint))
     (retract ?fact)   
 )
