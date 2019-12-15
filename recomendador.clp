@@ -1140,11 +1140,12 @@
 	(slot sexo (type STRING)(default "null"))				; sexo del usuario
 	(slot edad (type INTEGER)(default -1))			        ; edad del usuario
 	(slot idioma (type STRING)(default "null"))		        ; idiomas que lee el usuario
-	(slot lugar_de_lectura (type INSTANCE))                  ; lugares de lectura del usuario
-	(slot sagas (type INTEGER)(default -1))				    ; Le gustan o no las sagas
+	(slot lugar_de_lectura (type INSTANCE))                 ; lugares de lectura del usuario
+    (multislot lugares_de_adquisicion(type INSTANCE))         ; lugares de adquisicion de libros del usuario	
+    (slot sagas (type INTEGER)(default -1))				    ; Le gustan o no las sagas
 	(slot longitud (type INTEGER)(default -1))		        ; Como de largos le gustan los libros
 	(slot VO (type INTEGER)(default -1))      		        ; Prioriza versiones originales
-	(slot confianza_valoraciones (type INTEGER)(default -1))				; Confia en las valoraciones de la gente
+	(slot confianza_valoraciones (type INTEGER)(default -1))	; Confia en las valoraciones de la gente
 	(slot cantidad_libros_leidos (type INTEGER)(default -1)) 	; Cantidad de libros leidos por el usuario
 	(multislot generos_fav (type INSTANCE))			; Generos favoritos del usuario
 	(multislot autores_fav (type INSTANCE))			; Autores que le gustan al usuario
@@ -1163,6 +1164,7 @@
     (multislot generos_validos (type INSTANCE))
     (multislot autores_validos (type INSTANCE))
     (slot tipo_lugar_de_lectura (type STRING))
+    (multislot lugares_de_adquisicion(type INSTANCE)) 
     (slot etapa_edad (type STRING))
     (slot sexo_lector (type STRING))
     (slot idioma_lector (type STRING))
@@ -1176,6 +1178,7 @@
     (multislot libros_recomendados(type INSTANCE))
     (multislot libros_no_tratados (type INSTANCE))
     (multislot recomendaciones_ordenadas(type INSTANCE))
+    (slot no_anadir (type INTEGER)(default 0))
     
 )
 
@@ -1292,6 +1295,7 @@
 	(librosG not_deff)
 	(librosD not_deff)
     (lugarLect not_deff)
+    (lugaresAdq not_deff)
 )
 
 (deffacts abstraccion_de_datos::controladores_abstraccion
@@ -1301,6 +1305,7 @@
     (libros_g not_deff)
     (libros_dg not_deff)
     (edad not_deff)
+    (lugaresA not_deff)
 )
 
 (deffacts asociacion_heuristica::controladores_asociacion_heuristica
@@ -1402,6 +1407,29 @@
 	(modify ?p-user (lugar_de_lectura $?l))
 )
 
+(defrule recopilacion_datos_personales::asignar_lugares_adquisicion
+    ?fact <- (lugaresAdq not_deff)
+    ?p-user <- (datos_usuario)
+	=>
+    (bind $?lugares (find-all-instances ((?inst LugarDeAdquision)) TRUE))
+	(bind $?nombre_lugares (create$ ))    
+    (loop-for-count (?i 1 (length$ $?lugares)) do
+		(bind ?obj (nth$ ?i ?lugares))
+		(bind ?nombre (send ?obj get-Nombre))
+		(bind $?nombre_lugares(insert$ $?nombre_lugares (+ (length$ $?nombre_lugares) 1) ?nombre))
+	)
+	(bind ?escogido (pregunta_multirespuesta "Donde le gusta adquirir los libros? " $?nombre_lugares))
+    (bind $?respuesta (create$ ))
+	(loop-for-count (?i 1 (length$ ?escogido)) do
+		(bind ?index (nth$ ?i ?escogido))
+		(bind ?lug (nth$ ?index ?lugares))
+		(bind $?respuesta(insert$ $?respuesta (+ (length$ $?respuesta) 1) ?lug))
+	)
+	(retract ?fact)
+	(modify ?p-user (lugares_de_adquisicion $?respuesta))
+)
+
+
 (defrule recopilacion_datos_personales::edad_usuario
     ?d <- (datos_usuario (edad -1))
 	=>
@@ -1428,11 +1456,9 @@
 		(bind $?tipo_genero(insert$ $?tipo_genero (+ (length$ $?tipo_genero) 1) ?nombre))
 	)
 	(bind ?escogido (pregunta_multirespuesta "Escoja sus generos favoritos (o 0 si no tiene): " $?tipo_genero))
-	;(assert (generosF TRUE))
 	(bind $?respuesta (create$ ))
 	(loop-for-count (?i 1 (length$ ?escogido)) do
 		(bind ?index (nth$ ?i ?escogido))
-		;(if (= ?index 0) then (assert (generosF FALSE)))
 		(bind ?gen (nth$ ?index ?generos))
 		(bind $?respuesta(insert$ $?respuesta (+ (length$ $?respuesta) 1) ?gen))
 	)
@@ -1453,11 +1479,9 @@
 		(bind $?nombre_autores(insert$ $?nombre_autores (+ (length$ $?nombre_autores) 1) ?nombre))
 	)
 	(bind ?escogido (pregunta_multirespuesta "Escoja sus autores favoritos (o 0 si no tiene): " $?nombre_autores))
-	;(assert (autoresF TRUE))
 	(bind $?respuesta (create$ ))
 	(loop-for-count (?i 1 (length$ ?escogido)) do
 		(bind ?index (nth$ ?i ?escogido))
-		;(if (= ?index 0) then (assert (autoresF FALSE)))
 		(bind ?aut (nth$ ?index ?autores))
 		(bind $?respuesta(insert$ $?respuesta (+ (length$ $?respuesta) 1) ?aut))
 	)
@@ -1498,11 +1522,9 @@
 		(bind $?nombre_libros(insert$ $?nombre_libros (+ (length$ $?nombre_libros) 1) ?nombre))
 	)
 	(bind ?escogido (pregunta_multirespuesta "Escoja libros que ha leido y le han gustado (o 0 si no tiene): " $?nombre_libros))
-	;(assert (autoresF TRUE))
-		(bind $?respuesta (create$ ))
+	(bind $?respuesta (create$ ))
 	(loop-for-count (?i 1 (length$ ?escogido)) do
 		(bind ?index (nth$ ?i ?escogido))
-		;(if (= ?index 0) then (assert (autoresF FALSE)))
 		(bind ?lib (nth$ ?index ?libros))
 		(bind $?respuesta(insert$ $?respuesta (+ (length$ $?respuesta) 1) ?lib))
 	)
@@ -1522,11 +1544,9 @@
 		(bind $?nombre_libros(insert$ $?nombre_libros (+ (length$ $?nombre_libros) 1) ?nombre))
 	)
 	(bind ?escogido (pregunta_multirespuesta "Escoja libros que ha leido y no le han gustado (o 0 si no tiene): " $?nombre_libros))
-	;(assert (autoresF TRUE))
-		(bind $?respuesta (create$ ))
+	(bind $?respuesta (create$ ))
 	(loop-for-count (?i 1 (length$ ?escogido)) do
 		(bind ?index (nth$ ?i ?escogido))
-		;(if (= ?index 0) then (assert (autoresF FALSE)))
 		(bind ?lib (nth$ ?index ?libros))
 		(bind $?respuesta(insert$ $?respuesta (+ (length$ $?respuesta) 1) ?lib))
 	)
@@ -1780,6 +1800,20 @@
     
     
 )
+(defrule abstraccion_de_datos::lugares_adquisicion
+    ?fact <- (lugaresA not_deff)
+    ?p-pab <- (problema_abstracto)
+    ?p-du <- (datos_usuario(lugares_de_adquisicion $?lugares))
+    =>
+    (bind $?res (create$))
+    (loop-for-count (?i 1 (length$ $?lugares)) do
+        (bind ?obj (nth ?i ?lugares))
+        (bind $?res(insert$ $?res (+ (length$ $?res) 1) ?obj))
+    )
+    (modify ?p-pab (lugares_de_adquisicion ?res))    
+    (retract ?fact)
+)
+
 
 (defrule abstraccion_de_datos:edad_lector_nino
     ?pa <- (problema_abstracto (etapa_edad ?l))
@@ -1899,6 +1933,7 @@
     (assert (targeted_franED on))
     (assert (targeted_sexoXlib on))
     (assert (targeted_tipolugarlectura on))
+    (assert (targeted_lugar_adquisicion on))
 
     ; ESTABLECER LIBRO TARGETEADO
     (bind ?lt (nth$ 1 $?lnt))
@@ -1910,7 +1945,7 @@
 
 (defrule asociacion_heuristica::end_tratamiento_targeteado
     ?target <- (target_mode off)
-    ?sol <- (solucion_abstracta (targeted_rec ?lt) (libros_recomendados $?rec))
+    ?sol <- (solucion_abstracta (targeted_rec ?lt) (libros_recomendados $?rec) (no_anadir ?na))
     (libros_obtenidos deff)   
     ?cgen<-(targeted_genero off)
     ?caut <-(targeted_autor off)
@@ -1922,12 +1957,14 @@
     ?cfed <- (targeted_franED off)
     ?csexl <-(targeted_sexoXlib off)
     ?clug <-(targeted_tipolugarlectura off)
+    ?cluga <-(targeted_lugar_adquisicion off)
     =>
     
     ; GUARDAR LIBRO TARGETEADO
     
     (bind $?rec(insert$ $?rec (+ (length$ $?rec) 1) ?lt))
-    (modify ?sol (libros_recomendados $?rec))
+    (if (= 0 ?na) then (modify ?sol (libros_recomendados $?rec)) else (bind ?na (- ?na 1)))
+    
     
     ; BORRAR HECHOS CONTROL
     
@@ -1940,7 +1977,8 @@
     (retract ?cniv)
     (retract ?cfed)
     (retract ?csexl)
-    (retract ?clug)    
+    (retract ?clug)  
+    (retract ?cluga)  
     ; ENCENDER EL MODO TARGET
     
     (retract ?target)
@@ -2543,8 +2581,7 @@
 (defrule asociacion_heuristica::coincidencia_tipolugarlectura_ajetreado
     ?ctrl <- (targeted_tipolugarlectura on)
     ?sol <- (solucion_abstracta (targeted_rec ?obj))
-    ?pa <- (problema_abstracto (tipo_lugar_de_lectura ?tipo_lug))
-    ?pa2 <- (problema_abstracto (nivel_lector ?typeLVL))
+    ?pa <- (problema_abstracto (tipo_lugar_de_lectura ?tipo_lug)(nivel_lector ?typeLVL))
     (test (eq ?tipo_lug "Ajetreado"))
     =>
     (retract ?ctrl)
@@ -2570,6 +2607,25 @@
         (bind ?punt (+ ?punt 30))
         (modify-instance ?obj (puntuacion ?punt))
     )
+)
+
+(defrule asociacion_heuristica::coincidencia_lugar_adquisicion
+    ?ctrl <- (targeted_lugar_adquisicion on)
+    ?sol <- (solucion_abstracta (targeted_rec ?obj)(no_anadir ?na))
+    ?pa <- (problema_abstracto (lugares_de_adquisicion $?lugares))
+    =>
+    (retract ?ctrl)
+    (assert (targeted_lugar_adquisicion off))
+    ;(bind $?na (create$ ))
+    (bind ?libro (send ?obj get-libro))
+    (bind ?na (+ ?na 1))
+    (loop-for-count (?i 1 (length$ $?lugares)) do
+		(bind ?lug (nth$ ?i ?lugares))
+        (bind ?libs_disp (send ?lug get-Se_Adquiere))
+		(if (and (member$ ?libro $?libs_disp) (= ?na 1)) then (bind ?na (- ?na 1)))
+	)
+    (modify ?sol (no_anadir ?na))
+    
 )
 
 (defrule asociacion_heuristica::ordenar_recomendaciones
@@ -2667,7 +2723,7 @@
 	(bind ?escogido (pregunta_unirespuesta "Si deseas eliminar UNO de estos libros (ya lo has leido, no te gusta...) introduce su numero (0 si te gustan todos): " $?nombre_libros))
     (if (eq 0 (length$ ?escogido)) then (assert (fin)) else (assert (add_siguiente)))	
 	(bind ?index (nth$ 1 ?escogido))
-    (slot-delete$ ?s recomendaciones ?index ?index)
+    (if (neq 0 (length$ ?escogido)) then (slot-delete$ ?s recomendaciones ?index ?index))
     (assert (goprint))
     (retract ?fact)   
 )
