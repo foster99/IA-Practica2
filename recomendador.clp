@@ -1142,6 +1142,7 @@
 	(slot idioma (type STRING)(default "null"))		        ; idiomas que lee el usuario
 	(slot lugar_de_lectura (type INSTANCE))                 ; lugares de lectura del usuario
     (multislot lugares_de_adquisicion(type INSTANCE))         ; lugares de adquisicion de libros del usuario	
+    (multislot formatos (type SYMBOL))                        ; formatos en los que lee el usuario
     (slot sagas (type INTEGER)(default -1))				    ; Le gustan o no las sagas
 	(slot longitud (type INTEGER)(default -1))		        ; Como de largos le gustan los libros
 	(slot VO (type INTEGER)(default -1))      		        ; Prioriza versiones originales
@@ -1156,6 +1157,7 @@
 (deftemplate MAIN::problema_abstracto
     (multislot libros_g (type INSTANCE))
     (multislot libros_dg (type INSTANCE))
+    (multislot formatos (type SYMBOL))
     (slot longitud_libro (type STRING))
     (slot puede_ser_de_saga (type STRING))
     (slot mejor_si_es_VO (type STRING))
@@ -1296,6 +1298,7 @@
 	(librosD not_deff)
     (lugarLect not_deff)
     (lugaresAdq not_deff)
+    (formatos not_deff)
 )
 
 (deffacts abstraccion_de_datos::controladores_abstraccion
@@ -1306,6 +1309,7 @@
     (libros_dg not_deff)
     (edad not_deff)
     (lugaresA not_deff)
+    (formatos not_deff)
 )
 
 (deffacts asociacion_heuristica::controladores_asociacion_heuristica
@@ -1429,6 +1433,20 @@
 	(modify ?p-user (lugares_de_adquisicion $?respuesta))
 )
 
+(defrule recopilacion_datos_personales::formatos_usuario
+    ?fact <- (formatos not_deff)
+    ?d <- (datos_usuario)
+	=>
+	(bind ?escogido (pregunta_multirespuesta "- En que formatos lees? " Paper Digital))
+    (bind $?respuesta (create$ ))
+	(loop-for-count (?i 1 (length$ ?escogido)) do
+		(bind ?index (nth$ ?i ?escogido))
+        (if (= ?index 1) then (bind $?respuesta(insert$ $?respuesta (+ (length$ $?respuesta) 1) Paper)))
+		(if (= ?index 2) then (bind $?respuesta(insert$ $?respuesta (+ (length$ $?respuesta) 1) Digital)))
+	)
+	(modify ?d (formatos ?respuesta))
+    (retract ?fact)
+)
 
 (defrule recopilacion_datos_personales::edad_usuario
     ?d <- (datos_usuario (edad -1))
@@ -1814,6 +1832,19 @@
     (retract ?fact)
 )
 
+(defrule abstraccion_de_datos::formatos
+    ?fact <- (formatos not_deff)
+    ?p-pab <- (problema_abstracto)
+    ?p-du <- (datos_usuario(formatos $?formatos))
+    =>
+    (bind $?res (create$))
+    (loop-for-count (?i 1 (length$ $?formatos)) do
+        (bind ?obj (nth ?i ?formatos))
+        (bind $?res(insert$ $?res (+ (length$ $?res) 1) ?obj))
+    )
+    (modify ?p-pab (formatos ?res))    
+    (retract ?fact)
+)
 
 (defrule abstraccion_de_datos:edad_lector_nino
     ?pa <- (problema_abstracto (etapa_edad ?l))
@@ -1934,6 +1965,7 @@
     (assert (targeted_sexoXlib on))
     (assert (targeted_tipolugarlectura on))
     (assert (targeted_lugar_adquisicion on))
+    (assert (targeted_formatos on))
 
     ; ESTABLECER LIBRO TARGETEADO
     (bind ?lt (nth$ 1 $?lnt))
@@ -1958,6 +1990,7 @@
     ?csexl <-(targeted_sexoXlib off)
     ?clug <-(targeted_tipolugarlectura off)
     ?cluga <-(targeted_lugar_adquisicion off)
+    ?cfor <-(targeted_formatos off)
     =>
     
     ; GUARDAR LIBRO TARGETEADO
@@ -1979,6 +2012,7 @@
     (retract ?csexl)
     (retract ?clug)  
     (retract ?cluga)  
+    (retract ?cfor)
     ; ENCENDER EL MODO TARGET
     
     (retract ?target)
@@ -2616,16 +2650,36 @@
     =>
     (retract ?ctrl)
     (assert (targeted_lugar_adquisicion off))
-    ;(bind $?na (create$ ))
     (bind ?libro (send ?obj get-libro))
-    (bind ?na (+ ?na 1))
-    (loop-for-count (?i 1 (length$ $?lugares)) do
-		(bind ?lug (nth$ ?i ?lugares))
-        (bind ?libs_disp (send ?lug get-Se_Adquiere))
-		(if (and (member$ ?libro $?libs_disp) (= ?na 1)) then (bind ?na (- ?na 1)))
+    (if (= 0 ?na) then
+        (bind ?na (+ ?na 1))
+        (loop-for-count (?i 1 (length$ $?lugares)) do
+		    (bind ?lug (nth$ ?i ?lugares))
+            (bind ?libs_disp (send ?lug get-Se_Adquiere))
+		    (if (and (member$ ?libro $?libs_disp) (= ?na 1)) then (bind ?na (- ?na 1)))
+        )
 	)
     (modify ?sol (no_anadir ?na))
     
+)
+
+(defrule asociacion_heuristica::coincidencia_formatos
+    ?ctrl <- (targeted_formatos on)
+    ?sol <- (solucion_abstracta (targeted_rec ?obj)(no_anadir ?na))
+    ?pa <- (problema_abstracto (formatos $?formatos))
+    =>
+    (retract ?ctrl)
+    (assert (targeted_formatos off))
+    (bind ?libro (send ?obj get-libro))
+    (if (= 0 ?na) then
+        (bind ?na (+ ?na 1))
+        (loop-for-count (?i 1 (length$ $?formatos)) do
+		    (bind ?f (nth$ ?i ?formatos))
+            (bind ?f_disp (send ?libro get-Formato))
+		    (if (and (member$ ?f $?f_disp) (= ?na 1)) then (bind ?na (- ?na 1)))
+	    )
+        (modify ?sol (no_anadir ?na))
+    )   
 )
 
 (defrule asociacion_heuristica::ordenar_recomendaciones
