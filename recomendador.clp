@@ -1147,13 +1147,9 @@
 	(slot cantidad_libros_leidos (type INTEGER)(default -1)) 	; Cantidad de libros leidos por el usuario
 	(multislot generos_fav (type INSTANCE))			; Generos favoritos del usuario
 	(multislot autores_fav (type INSTANCE))			; Autores que le gustan al usuario
-	(multislot libros_gustado (type INSTANCE))		; Libros que le hayan gustado
-	(multislot libros_disgustado (type INSTANCE))	; Libros que NO le hayan gustado
 )
 
 (deftemplate MAIN::problema_abstracto
-    (multislot libros_g (type INSTANCE))
-    (multislot libros_dg (type INSTANCE))
     (multislot formatos (type SYMBOL))
     (slot longitud_libro (type STRING))
     (slot puede_ser_de_saga (type STRING))
@@ -1195,13 +1191,6 @@
       (bind ?answer (read))
    )
    ?answer)
-
-(deffunction si_o_no_p (?question)
-   (bind ?response (ask_question ?question si no s n))
-   (if (or (eq ?response si) (eq ?response s))
-       then TRUE
-       else FALSE)
-)
 
 ;;; Funcion para hacer una pregunta numerica-univalor
 (deffunction MAIN::pregunta_numerica (?pregunta ?rangini ?rangfi)
@@ -1291,8 +1280,6 @@
 (deffacts recopilacion_datos_personales::controladores_preguntas
 	(generosF not_deff)
 	(autoresF not_deff)
-	(librosG not_deff)
-	(librosD not_deff)
     (lugarLect not_deff)
     (lugaresAdq not_deff)
     (formatos not_deff)
@@ -1302,8 +1289,6 @@
 	(generos_v not_deff)
 	(autores_v not_deff)
     (tipo_lugar_lect not_deff)
-    (libros_g not_deff)
-    (libros_dg not_deff)
     (edad not_deff)
     (lugaresA not_deff)
     (formatos not_deff)
@@ -1400,7 +1385,7 @@
 		(bind ?nombre (send ?obj get-Nombre))
 		(bind $?nombre_lugares(insert$ $?nombre_lugares (+ (length$ $?nombre_lugares) 1) ?nombre))
 	)
-	(bind ?escogido (pregunta_unirespuesta "Donde le gusta leer (elija 1 lugar)? " $?nombre_lugares))
+	(bind ?escogido (pregunta_unirespuesta "- Donde le gusta leer (elija 1 lugar)? " $?nombre_lugares))
     
     (bind ?index (nth$ 1 ?escogido))
 	(bind ?l (nth$ ?index $?lugares))
@@ -1419,7 +1404,7 @@
 		(bind ?nombre (send ?obj get-Nombre))
 		(bind $?nombre_lugares(insert$ $?nombre_lugares (+ (length$ $?nombre_lugares) 1) ?nombre))
 	)
-	(bind ?escogido (pregunta_multirespuesta "Donde le gusta adquirir los libros? " $?nombre_lugares))
+	(bind ?escogido (pregunta_multirespuesta "- Donde le gusta adquirir los libros? " $?nombre_lugares))
     (bind $?respuesta (create$ ))
 	(loop-for-count (?i 1 (length$ ?escogido)) do
 		(bind ?index (nth$ ?i ?escogido))
@@ -1448,14 +1433,14 @@
 (defrule recopilacion_datos_personales::edad_usuario
     ?d <- (datos_usuario (edad -1))
 	=>
-	(bind ?e (pregunta_numerica "- �Cual es tu edad? " 3 120))
+	(bind ?e (pregunta_numerica "- Cual es tu edad? " 3 120))
 	(modify ?d (edad ?e))
 )
 
 (defrule recopilacion_datos_personales::assignar_cantidad_libros
     ?d <- (datos_usuario (cantidad_libros_leidos -1))
     =>
-    (bind ?l (pregunta_numerica "- �Cuantos libros has leido?" 0 100))
+    (bind ?l (pregunta_numerica "- Cuantos libros has leido?" 0 100))
     (modify ?d (cantidad_libros_leidos ?l))
 )
 
@@ -1470,7 +1455,7 @@
 		(bind ?nombre (send ?obj get-Nombre))
 		(bind $?tipo_genero(insert$ $?tipo_genero (+ (length$ $?tipo_genero) 1) ?nombre))
 	)
-	(bind ?escogido (pregunta_multirespuesta "Escoja sus generos favoritos (o 0 si no tiene): " $?tipo_genero))
+	(bind ?escogido (pregunta_multirespuesta "- Escoja sus generos favoritos (o 0 si no tiene): " $?tipo_genero))
 	(bind $?respuesta (create$ ))
 	(loop-for-count (?i 1 (length$ ?escogido)) do
 		(bind ?index (nth$ ?i ?escogido))
@@ -1493,7 +1478,7 @@
 		(bind ?nombre (send ?obj get-Nombre))
 		(bind $?nombre_autores(insert$ $?nombre_autores (+ (length$ $?nombre_autores) 1) ?nombre))
 	)
-	(bind ?escogido (pregunta_multirespuesta "Escoja sus autores favoritos (o 0 si no tiene): " $?nombre_autores))
+	(bind ?escogido (pregunta_multirespuesta "- Escoja sus autores favoritos (o 0 si no tiene): " $?nombre_autores))
 	(bind $?respuesta (create$ ))
 	(loop-for-count (?i 1 (length$ ?escogido)) do
 		(bind ?index (nth$ ?i ?escogido))
@@ -1507,99 +1492,26 @@
 (defrule recopilacion_datos_personales::confianza_valoraciones
     ?d <- (datos_usuario (confianza_valoraciones -1))
 	=>
-	(bind ?e (pregunta_numerica "¿Cuanto confias en las valoraciones (introduce 0 si no lo tienes en cuenta)? " 0 10))
+	(bind ?e (pregunta_numerica "- Cuanto confias en las valoraciones (introduce 0 si no lo tienes en cuenta)? " 0 10))
 	(modify ?d (confianza_valoraciones ?e))
 )
 
 (defrule recopilacion_datos_personales::VO
     ?d <- (datos_usuario (VO -1))
 	=>
-	(bind ?e (pregunta_numerica "¿Cuanto te importan los libros en VO (introduce 0 si no lo tienes en cuenta)? " 0 10))
+	(bind ?e (pregunta_numerica "- Cuanto te importan los libros en VO (introduce 0 si no lo tienes en cuenta)? " 0 10))
 	(modify ?d (VO ?e))
 )
 
 (defrule recopilacion_datos_personales::sagas
     ?d <- (datos_usuario (sagas -1))
 	=>
-	(bind ?e (pregunta_numerica "¿Cuanto te importa que los libros pertenezcan a sagas (introduce 0 si no lo tienes en cuenta)? " 0 10))
+	(bind ?e (pregunta_numerica "- Cuanto te importa que los libros pertenezcan a sagas (introduce 0 si no lo tienes en cuenta)? " 0 10))
 	(modify ?d (sagas ?e))
 )
 
-(defrule recopilacion_datos_personales::assignar_libros_gustado
-	?hecho <- (librosG not_deff)
-	?p-user <- (datos_usuario)
-	=>
-	(bind $?libros (find-all-instances ((?inst Libro)) TRUE))
-	(bind $?nombre_libros (create$ ))
-	(loop-for-count (?i 1 (length$ $?libros)) do
-		(bind ?obj (nth$ ?i ?libros))
-		(bind ?nombre (send ?obj get-Nombre))
-		(bind $?nombre_libros(insert$ $?nombre_libros (+ (length$ $?nombre_libros) 1) ?nombre))
-	)
-	(bind ?escogido (pregunta_multirespuesta "Escoja libros que ha leido y le han gustado (o 0 si no tiene): " $?nombre_libros))
-	(bind $?respuesta (create$ ))
-	(loop-for-count (?i 1 (length$ ?escogido)) do
-		(bind ?index (nth$ ?i ?escogido))
-		(bind ?lib (nth$ ?index ?libros))
-		(bind $?respuesta(insert$ $?respuesta (+ (length$ $?respuesta) 1) ?lib))
-	)
-	(retract ?hecho)
-	(modify ?p-user (libros_gustado $?respuesta))
-)
-
-(defrule recopilacion_datos_personales::assignar_libros_disgustado
-	?hecho <- (librosD not_deff)
-	?p-user <- (datos_usuario)
-	=>
-	(bind $?libros (find-all-instances ((?inst Libro)) TRUE))
-	(bind $?nombre_libros (create$ ))
-	(loop-for-count (?i 1 (length$ $?libros)) do
-		(bind ?obj (nth$ ?i ?libros))
-		(bind ?nombre (send ?obj get-Nombre))
-		(bind $?nombre_libros(insert$ $?nombre_libros (+ (length$ $?nombre_libros) 1) ?nombre))
-	)
-	(bind ?escogido (pregunta_multirespuesta "Escoja libros que ha leido y no le han gustado (o 0 si no tiene): " $?nombre_libros))
-	(bind $?respuesta (create$ ))
-	(loop-for-count (?i 1 (length$ ?escogido)) do
-		(bind ?index (nth$ ?i ?escogido))
-		(bind ?lib (nth$ ?index ?libros))
-		(bind $?respuesta(insert$ $?respuesta (+ (length$ $?respuesta) 1) ?lib))
-	)
-	(retract ?hecho)
-	(modify ?p-user (libros_disgustado $?respuesta))
-)
-
-
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;; ABSTRACCION DE DATOS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defrule abstraccion_de_datos::libros_g
-    ?fact <- (libros_g not_deff)
-    ?p-pab <- (problema_abstracto)
-    ?p-du <- (datos_usuario(libros_gustado $?libs))
-    =>
-    (bind $?res (create$))
-    (loop-for-count (?i 1 (length$ $?libs)) do
-        (bind ?obj (nth ?i ?libs))
-        (bind $?res(insert$ $?res (+ (length$ $?res) 1) ?obj))
-    )
-    (modify ?p-pab (libros_g ?res))    
-    (retract ?fact)
-)
-(defrule abstraccion_de_datos::libros_dg
-    ?fact <- (libros_dg not_deff)
-    ?p-pab <- (problema_abstracto)
-    ?p-du <- (datos_usuario(libros_disgustado $?libs))
-    =>
-    (bind $?res (create$))
-    (loop-for-count (?i 1 (length$ $?libs)) do
-        (bind ?obj (nth ?i ?libs))
-        (bind $?res(insert$ $?res (+ (length$ $?res) 1) ?obj))
-    )
-    (modify ?p-pab (libros_dg ?res))    
-    (retract ?fact)
-)
 
 (defrule abstraccion_de_datos::generos_viables
     ?fact <- (generos_v not_deff)
@@ -1621,7 +1533,6 @@
     ?p-pab <- (problema_abstracto)
     ?p-du <- (datos_usuario(autores_fav $?fav))
     =>
-    (assert (autores_v TRUE))
     (bind $?res (create$))
     (loop-for-count (?i 1 (length$ $?fav)) do
         (bind ?obj (nth ?i ?fav))
