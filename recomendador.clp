@@ -2045,7 +2045,9 @@
     (bind $?aut ?self:Tiene_Como_Autor)
     (loop-for-count (?j 1 (length$ $?aut)) do    
         (bind ?autorName (send (nth$ ?j $?aut) get-Nombre))
+		(bind ?autorDificultad (send (nth$ ?j $?aut) get-Dificultad_Lenguaje))
         (format t "- %s" ?autorName)
+		(format t " (Dificultad: %s)" ?autorDificultad)
         (printout t crlf)  
     )
     (printout t crlf) 
@@ -2055,6 +2057,14 @@
     (printout t crlf)
 
     (format t "Valoracion de 1 a 10: %d" ?self:Valoracion)
+	(printout t crlf)
+    (printout t crlf) 
+	
+	(format t "Popular entre hombres: %s" ?self:popular_M)
+	(printout t crlf)
+    (printout t crlf) 
+	
+	(format t "Popular entre mujeres: %s" ?self:popular_F)
 	(printout t crlf)
     (printout t crlf) 
 
@@ -2086,22 +2096,23 @@
         (format t "- %s" ?tiendaName)
         (printout t crlf)  
     )
-	(printout t "---------------------------------------------------" crlf)
-
 )
 
 (defmessage-handler Recomendacion print ()
-	(printout t (send ?self:libro print) crlf)
+	(send ?self:libro print)
+	(printout t "---------------------------------------------------" crlf)
 	(printout t "Puntuacion: " (dynamic-get puntuacion) crlf)
 )
 
 (defmessage-handler Veredicto print ()
-	(printout t "===================================================" crlf)
+	(printout t "***************************************************" crlf)
 	(bind $?recs ?self:recomendaciones)
 	(progn$ (?curr-rec $?recs)
-		(printout t (send ?curr-rec print))
+		(printout t crlf "===================================================" crlf)
+		(send ?curr-rec print)
+		(printout t "===================================================" crlf crlf)
 	)
-	(printout t "===================================================" crlf)
+	(printout t "***************************************************" crlf)
 )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; TEMPLATES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -2157,21 +2168,24 @@
 
 (deffunction ask_question (?question $?allowed_values)
    (printout t ?question)
+   (printout t crlf)
    (bind ?answer (read))
    (while (not (member ?answer ?allowed_values)) do
       (printout t ?question)
       (bind ?answer (read))
    )
-   ?answer)
-
-;;; Funcion para hacer una pregunta numerica-univalor
+   (printout t crlf)
+   ?answer
+)
 (deffunction MAIN::pregunta_numerica (?pregunta ?rangini ?rangfi)
 	(format t "%s (De %d hasta %d) " ?pregunta ?rangini ?rangfi)
+	(printout t crlf)
 	(bind ?respuesta (read))
 	(while (not(and(>= ?respuesta ?rangini)(<= ?respuesta ?rangfi))) do
 		(format t "%s (De %d hasta %d) " ?pregunta ?rangini ?rangfi)
 		(bind ?respuesta (read))
 	)
+	(printout t crlf)
 	?respuesta
 )
 
@@ -2190,6 +2204,7 @@
 	  (printout t ": ")
       (bind ?answer (readline))
    )
+   (printout t crlf)
    ?answer
 )
 
@@ -2201,7 +2216,8 @@
             (printout t ?linea crlf)
     )
     (format t "%s" "Indica los numeros referentes a las preferencias separados por un espacio: ")
-    (bind ?resp (readline))
+    (printout t crlf)
+	(bind ?resp (readline))
     (bind ?numeros (str-explode ?resp))
     (bind $?lista (create$))
     (progn$ (?var ?numeros)
@@ -2213,6 +2229,7 @@
         )
     )
     (if (or(member$ 0 ?lista)(= (length$ ?lista) 0)) then (bind ?lista (create$ )))
+	(printout t crlf)
     ?lista
 )
 
@@ -2229,6 +2246,7 @@
             then (bind ?lista (insert$ ?lista 1 ?resp))
         )
     (if (or(member$ 0 ?lista)(= (length$ ?lista) 0)) then (bind ?lista (create$ )))
+	(printout t crlf)
     ?lista
 )
 
@@ -3584,8 +3602,7 @@
 	; Anadiremos 3 ganadores, si los hay
 	(bind ?num 3)
 	(if (> ?num (length$ $?libs)) then (bind ?num (length$ $?libs)))
-	(if (> ?num 0)
-	then
+	(if (> ?num 0) then
 		; Anadir los libros ganadores
 		(bind $?ganadores (create$ ))
 		(loop-for-count (?i 1 ?num) do
@@ -3599,8 +3616,6 @@
 		(bind ?inst (make-instance (gensym) of Veredicto (recomendaciones $?ganadores)))    
 		
 		(modify ?sol (solucion_no_refinada ?inst) (recomendaciones_ordenadas $?F))
-	else
-		(assert (listaVacia))
 	)
     (retract ?fact)
     (assert (veredicto inicial))
@@ -3623,24 +3638,27 @@
     ?sol <- (solucion_refinada (solucion ?veredicto))
     (not (fin))
 	=>
-    (printout t "----- VEREDICTO -----" crlf)
+	(printout t crlf crlf "###################################################")
+	(printout t crlf "################# RECOMENDACIONES #################" crlf)
+	(printout t "###################################################" crlf crlf)
     (printout t (send ?veredicto print) crlf)
     (assert (pregunta_final))
     (retract ?fact)
 )
 
 (defrule refinamiento_de_soluciones::add_siguiente_recomendacion
-    (declare (salience 100)) ;para que se ejecute antes que saludos
+    (declare (salience 100)) ; Para que se ejecute antes que saludos
     ?fact <- (add_siguiente)
     ?sol_ref <- (solucion_refinada (solucion ?s))
     ?sol_abs <- (solucion_abstracta (recomendaciones_ordenadas $?rec_ord))
     =>
     (bind ?next_rec (nth$ 1 $?rec_ord))
     (slot-insert$ ?s recomendaciones 3 ?next_rec)
-    (printout t crlf crlf "RECOMENDACIONES ACTUALIZADAS. HEMOS ANADIDO UN NUEVO LIBRO" crlf)
-    (if (= (length$ $?rec_ord) 0) then (assert (listaVacia))
-    else (bind $?F (delete$ $?rec_ord 1 1))(modify ?sol_abs (recomendaciones_ordenadas $?F)))
-    
+    (printout t crlf crlf "**** Las recomendaciones han sido actualizadas ****" crlf crlf)
+    (if (neq (length$ $?rec_ord) 0) then 
+		(bind $?F (delete$ $?rec_ord 1 1))
+		(modify ?sol_abs (recomendaciones_ordenadas $?F))
+	)
     (retract ?fact)
 )
 
@@ -3675,14 +3693,6 @@
 	(assert (fin))
 	(printout t "No podemos ofrecer ningun cambio en las recomendaciones." crlf)
 	(printout t "Todos los libros mostrados hasta el momento son los unicos que cumplen con los requisitos solicitados." crlf)
-)
-
-
-(defrule refinamiento_de_soluciones::listaVacia
-	(listaVacia)
-	=>
-	(assert (fin))
-	(printout t "Lo sentimos, no hay libros que cumplan con sus requisitos." crlf)
 )
 
 
