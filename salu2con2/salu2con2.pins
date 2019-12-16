@@ -1,4 +1,4 @@
-; Sat Dec 14 17:18:19 CET 2019
+; Mon Dec 16 11:26:00 CET 2019
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -33,6 +33,9 @@
 
 ([salu2_Class10] of  Genero
 
+	(Es_Genero_De
+		[salu2con2_Class20]
+		[salu2con2_Class31])
 	(Nombre "Exploration"))
 
 ([salu2_Class10000] of  Libro
@@ -72,42 +75,71 @@
 
 ([salu2_Class11] of  Genero
 
+	(Es_Genero_De
+		[salu2con2_Class3]
+		[salu2con2_Class23]
+		[salu2con2_Class28]
+		[salu2con2_Class27])
 	(Nombre "FirstContact"))
-
-([salu2_Class12] of  Genero
-
-	(Nombre "GalacticEmpire"))
 
 ([salu2_Class13] of  Genero
 
+	(Es_Genero_De
+		[salu2con2_Class1]
+		[salu2con2_Class3])
 	(Nombre "GeneticEngineering"))
 
 ([salu2_Class14] of  Genero
 
+	(Es_Genero_De [salu2con2_Class4])
 	(Nombre "HardScienceFiction"))
 
 ([salu2_Class15] of  Genero
 
+	(Es_Genero_De
+		[salu2con2_Class12]
+		[salu2con2_Class19])
 	(Nombre "History&Criticism"))
 
 ([salu2_Class16] of  Genero
 
+	(Es_Genero_De
+		[salu2con2_Class28]
+		[salu2con2_Class27]
+		[salu2con2_Class29])
 	(Nombre "Humorous"))
 
 ([salu2_Class17] of  Genero
 
+	(Es_Genero_De
+		[salu2con2_Class22]
+		[salu2con2_Class20]
+		[salu2con2_Class23]
+		[salu2con2_Class24]
+		[salu2con2_Class29])
 	(Nombre "Military"))
 
 ([salu2_Class18] of  Genero
 
+	(Es_Genero_De
+		[salu2con2_Class18]
+		[salu2con2_Class31])
 	(Nombre "Post-Apocalyptic"))
 
 ([salu2_Class19] of  Genero
 
+	(Es_Genero_De
+		[salu2con2_Class6]
+		[salu2con2_Class7]
+		[salu2con2_Class10])
 	(Nombre "SpaceOpera"))
 
 ([salu2_Class20] of  Genero
 
+	(Es_Genero_De
+		[salu2con2_Class13]
+		[salu2con2_Class14]
+		[salu2con2_Class15])
 	(Nombre "ShortStories"))
 
 ([salu2_Class20000] of  LugarDeLectura
@@ -135,7 +167,9 @@
 ([salu2_Class20002] of  Autor
 
 	(Dificultad_Lenguaje Media)
-	(Es_Autor_De [salu2_Class20003])
+	(Es_Autor_De
+		[salu2_Class20003]
+		[salu2con2_Class24])
 	(Idioma Ingles)
 	(Nacionalidad "USA")
 	(Nombre "H. P. Lovecraft")
@@ -165,7 +199,9 @@
 	(Es_Autor_De
 		[salu2_Class20005]
 		[salu2_Class20007]
-		[salu2_Class20008])
+		[salu2_Class20008]
+		[salu2con2_Class27]
+		[salu2con2_Class28])
 	(Idioma Ingles Aleman)
 	(Nacionalidad "China")
 	(Nombre "Cixin Liu")
@@ -187,9 +223,6 @@
 	(Se_Adquiere_En [salu2_Class25])
 	(Tiene_Como_Autor [salu2_Class20004])
 	(Valoracion 7))
-
-([salu2_Class20006] of  Genero
-)
 
 ([salu2_Class20007] of  Libro
 
@@ -245,7 +278,9 @@
 ([salu2_Class20010] of  Autor
 
 	(Dificultad_Lenguaje Baja)
-	(Es_Autor_De [salu2_Class20009])
+	(Es_Autor_De
+		[salu2_Class20009]
+		[salu2con2_Class24])
 	(Idioma Ingles)
 	(Nacionalidad "China")
 	(Nombre "Ted Chiang")
@@ -532,6 +567,11 @@
 
 ([salu2_Class21] of  Genero
 
+	(Es_Genero_De
+		[salu2con2_Class5]
+		[salu2con2_Class6]
+		[salu2con2_Class7]
+		[salu2con2_Class10])
 	(Nombre "Steampunk"))
 
 ([salu2_Class22] of  Genero
@@ -567,7 +607,16 @@
 		[salu2_Class20022]
 		[salu2_Class20025]
 		[salu2_Class20027]
-		[salu2_Class20029]))
+		[salu2_Class20029]
+		[salu2con2_Class3]
+		[salu2con2_Class4]
+		[salu2con2_Class7]
+		[salu2con2_Class10]
+		[salu2con2_Class15]
+		[salu2con2_Class18]
+		[salu2con2_Class27]
+		[salu2con2_Class28]
+		[salu2con2_Class31]))
 
 ([salu2_Class26] of  Autor
 
@@ -580,6 +629,12 @@
 
 ([salu2_Class3] of  Genero
 
+	(Es_Genero_De
+		[salu2con2_Class4]
+		[salu2con2_Class5]
+		[salu2con2_Class12]
+		[salu2con2_Class15]
+		[salu2con2_Class19])
 	(Nombre "Adventure"))
 
 ([salu2_Class30001] of  LugarDeLectura
@@ -630,7 +685,16 @@
 ([salu2_Class30010] of  LugarDeAdquision
 
 	(Nombre "Biblioteca")
-	(Se_Adquiere [salu2_Class20003]))
+	(Se_Adquiere
+		[salu2_Class20003]
+		[salu2con2_Class1]
+		[salu2con2_Class3]
+		[salu2con2_Class13]
+		[salu2con2_Class22]
+		[salu2con2_Class20]
+		[salu2con2_Class23]
+		[salu2con2_Class24]
+		[salu2con2_Class29]))
 
 ([salu2_Class4] of  Genero
 
@@ -641,18 +705,6 @@
 		[salu2_Class20009]
 		[salu2_Class20011])
 	(Nombre "AlienInvasion"))
-
-([salu2_Class5] of  Genero
-
-	(Nombre "AlternateHistory"))
-
-([salu2_Class6] of  Genero
-
-	(Nombre "Anthologies"))
-
-([salu2_Class7] of  Genero
-
-	(Nombre "Colonization"))
 
 ([salu2_Class8] of  Genero
 
@@ -671,5 +723,505 @@
 		[salu2_Class10000]
 		[salu2_Class10001]
 		[salu2_Class20001]
-		[salu2_Class20003])
+		[salu2_Class20003]
+		[salu2con2_Class1])
 	(Nombre "Dystopian"))
+
+([salu2con2_Class0] of  Autor
+
+	(Dificultad_Lenguaje Media)
+	(Es_Autor_De
+		[salu2con2_Class1]
+		[salu2con2_Class3]
+		[salu2con2_Class4]
+		[salu2con2_Class5])
+	(Idioma Ingles)
+	(Nacionalidad "Rusa")
+	(Nombre "Isaac Asimov")
+	(Popularidad Alta))
+
+([salu2con2_Class1] of  Libro
+
+	(edad_minima 8)
+	(edad_recomendada 18)
+	(Es_Del_Genero
+		[salu2_Class13]
+		[salu2_Class9])
+	(Es_Version_Original TRUE)
+	(Formato Paper)
+	(Idioma Ingles)
+	(Nombre "Yo, robot")
+	(NumPag 253)
+	(popular_F FALSE)
+	(popular_M FALSE)
+	(Se_Adquiere_En
+		[salu2con2_Class2]
+		[salu2_Class30010])
+	(Tiene_Como_Autor [salu2con2_Class0])
+	(Valoracion 9))
+
+([salu2con2_Class10] of  Libro
+
+	(edad_minima 18)
+	(edad_recomendada 30)
+	(Es_Del_Genero
+		[salu2_Class21]
+		[salu2_Class19])
+	(es_predecesor_de [salu2con2_Class7])
+	(Es_Version_Original TRUE)
+	(Formato Digital)
+	(Idioma Aleman Ingles)
+	(Nombre "Kawaii Desune(La Novela Cap.2)")
+	(NumPag 215)
+	(popular_F TRUE)
+	(popular_M FALSE)
+	(Se_Adquiere_En [salu2_Class25])
+	(Tiene_Como_Autor
+		[salu2con2_Class9]
+		[salu2con2_Class11])
+	(Valoracion 8))
+
+([salu2con2_Class11] of  Autor
+
+	(Dificultad_Lenguaje Baja)
+	(Es_Autor_De
+		[salu2con2_Class10]
+		[salu2con2_Class12])
+	(Idioma Aleman Castellano)
+	(Nacionalidad "Espana")
+	(Nombre "B.P. Tomy")
+	(Popularidad Alta))
+
+([salu2con2_Class12] of  Libro
+
+	(edad_minima 2)
+	(edad_recomendada 6)
+	(Es_Del_Genero
+		[salu2_Class15]
+		[salu2_Class3])
+	(Es_Version_Original TRUE)
+	(Formato Paper)
+	(Idioma Aleman Castellano)
+	(Nombre "Otaku Axe Chan")
+	(NumPag 42)
+	(popular_F TRUE)
+	(popular_M TRUE)
+	(Se_Adquiere_En [salu2con2_Class8])
+	(Tiene_Como_Autor [salu2con2_Class11])
+	(Valoracion 5))
+
+([salu2con2_Class13] of  Libro
+
+	(edad_minima 18)
+	(edad_recomendada 21)
+	(Es_Del_Genero [salu2_Class20])
+	(es_predecesor_de [salu2con2_Class14])
+	(Es_Version_Original TRUE)
+	(Formato Paper)
+	(Idioma Frances Ingles)
+	(Nombre "Mi Visa")
+	(NumPag 101)
+	(popular_F TRUE)
+	(popular_M FALSE)
+	(Se_Adquiere_En
+		[salu2con2_Class8]
+		[salu2con2_Class2]
+		[salu2_Class30010])
+	(Tiene_Como_Autor [salu2con2_Class9])
+	(Valoracion 7))
+
+([salu2con2_Class14] of  Libro
+
+	(edad_minima 3)
+	(edad_recomendada 25)
+	(Es_Del_Genero [salu2_Class20])
+	(es_predecesor_de [salu2con2_Class15])
+	(es_sucesor_se [salu2con2_Class13])
+	(Es_Version_Original FALSE)
+	(Formato Paper)
+	(Idioma Frances Castellano Aleman)
+	(Nombre "Mi Mastercard")
+	(NumPag 202)
+	(popular_F TRUE)
+	(popular_M FALSE)
+	(Se_Adquiere_En [salu2con2_Class8])
+	(Tiene_Como_Autor [salu2con2_Class9])
+	(Valoracion 9))
+
+([salu2con2_Class15] of  Libro
+
+	(edad_minima 15)
+	(edad_recomendada 22)
+	(Es_Del_Genero
+		[salu2_Class20]
+		[salu2_Class3])
+	(es_sucesor_se [salu2con2_Class14])
+	(Es_Version_Original FALSE)
+	(Formato Paper)
+	(Idioma Aleman Ingles Castellano Frances)
+	(Nombre "The Future is Paypal")
+	(NumPag 262)
+	(popular_F TRUE)
+	(popular_M FALSE)
+	(Se_Adquiere_En
+		[salu2con2_Class8]
+		[salu2_Class25])
+	(Tiene_Como_Autor [salu2con2_Class9])
+	(Valoracion 7))
+
+([salu2con2_Class17] of  Autor
+
+	(Dificultad_Lenguaje Alta)
+	(Es_Autor_De
+		[salu2con2_Class18]
+		[salu2con2_Class19])
+	(Idioma Ingles)
+	(Nacionalidad "USA")
+	(Nombre "Stephen King")
+	(Popularidad Alta))
+
+([salu2con2_Class18] of  Libro
+
+	(edad_minima 12)
+	(edad_recomendada 16)
+	(Es_Del_Genero [salu2_Class18])
+	(Es_Version_Original TRUE)
+	(Formato Paper Digital)
+	(Idioma Ingles Castellano)
+	(Nombre "Apocalipsis")
+	(NumPag 150)
+	(popular_F FALSE)
+	(popular_M TRUE)
+	(Se_Adquiere_En [salu2_Class25])
+	(Tiene_Como_Autor [salu2con2_Class17])
+	(Valoracion 8))
+
+([salu2con2_Class19] of  Libro
+
+	(edad_minima 10)
+	(edad_recomendada 40)
+	(Es_Del_Genero
+		[salu2_Class3]
+		[salu2_Class15])
+	(Es_Version_Original TRUE)
+	(Formato Paper)
+	(Idioma Aleman Ingles)
+	(Nombre "The Adventure")
+	(NumPag 412)
+	(popular_F FALSE)
+	(popular_M TRUE)
+	(Se_Adquiere_En
+		[salu2con2_Class8]
+		[salu2con2_Class2])
+	(Tiene_Como_Autor [salu2con2_Class17])
+	(Valoracion 3))
+
+([salu2con2_Class2] of  LugarDeAdquision
+
+	(Nombre "casadellibro.com")
+	(Se_Adquiere
+		[salu2con2_Class1]
+		[salu2con2_Class4]
+		[salu2con2_Class5]
+		[salu2con2_Class13]
+		[salu2con2_Class19]
+		[salu2con2_Class31]))
+
+([salu2con2_Class20] of  Libro
+
+	(edad_minima 6)
+	(edad_recomendada 55)
+	(Es_Del_Genero
+		[salu2_Class10]
+		[salu2_Class17])
+	(Es_Version_Original TRUE)
+	(Formato Digital Paper)
+	(Idioma Aleman Castellano Ingles)
+	(Nombre "A Hymm Before Battle")
+	(NumPag 111)
+	(popular_F FALSE)
+	(popular_M FALSE)
+	(Se_Adquiere_En
+		[salu2con2_Class8]
+		[salu2_Class30010])
+	(Tiene_Como_Autor [salu2con2_Class21])
+	(Valoracion 5))
+
+([salu2con2_Class21] of  Autor
+
+	(Dificultad_Lenguaje Alta)
+	(Es_Autor_De
+		[salu2con2_Class20]
+		[salu2con2_Class22]
+		[salu2con2_Class23])
+	(Idioma Ingles Frances)
+	(Nacionalidad "USA")
+	(Nombre "John Ringo")
+	(Popularidad Media))
+
+([salu2con2_Class22] of  Libro
+
+	(edad_minima 6)
+	(edad_recomendada 18)
+	(Es_Del_Genero [salu2_Class17])
+	(Es_Version_Original TRUE)
+	(Formato Paper)
+	(Idioma Ingles Frances)
+	(Nombre "Battle Royale")
+	(NumPag 165)
+	(popular_F FALSE)
+	(popular_M TRUE)
+	(Se_Adquiere_En [salu2_Class30010])
+	(Tiene_Como_Autor [salu2con2_Class21])
+	(Valoracion 10))
+
+([salu2con2_Class23] of  Libro
+
+	(edad_minima 3)
+	(edad_recomendada 12)
+	(Es_Del_Genero
+		[salu2_Class11]
+		[salu2_Class17])
+	(Es_Version_Original FALSE)
+	(Formato Digital)
+	(Idioma Frances Aleman Castellano)
+	(Nombre "Talent WarFrame 2")
+	(NumPag 120)
+	(popular_F TRUE)
+	(popular_M TRUE)
+	(Se_Adquiere_En
+		[salu2_Class30010]
+		[salu2con2_Class8])
+	(Tiene_Como_Autor [salu2con2_Class21])
+	(Valoracion 6))
+
+([salu2con2_Class24] of  Libro
+
+	(edad_minima 12)
+	(edad_recomendada 65)
+	(Es_Del_Genero [salu2_Class17])
+	(Es_Version_Original TRUE)
+	(Formato Paper)
+	(Idioma Frances Castellano Ingles)
+	(Nombre "Armor")
+	(NumPag 600)
+	(popular_F FALSE)
+	(popular_M FALSE)
+	(Se_Adquiere_En [salu2_Class30010])
+	(Tiene_Como_Autor
+		[salu2_Class20002]
+		[salu2_Class20010])
+	(Valoracion 8))
+
+([salu2con2_Class27] of  Libro
+
+	(edad_minima 6)
+	(edad_recomendada 12)
+	(Es_Del_Genero
+		[salu2_Class16]
+		[salu2_Class11])
+	(es_sucesor_se [salu2con2_Class28])
+	(Es_Version_Original TRUE)
+	(Formato Paper Digital)
+	(Idioma Ingles Frances)
+	(Nombre "Shema?")
+	(NumPag 130)
+	(popular_F TRUE)
+	(popular_M FALSE)
+	(Se_Adquiere_En [salu2_Class25])
+	(Tiene_Como_Autor [salu2_Class20004])
+	(Valoracion 8))
+
+([salu2con2_Class28] of  Libro
+
+	(edad_minima 6)
+	(edad_recomendada 12)
+	(Es_Del_Genero
+		[salu2_Class16]
+		[salu2_Class11])
+	(es_predecesor_de [salu2con2_Class27])
+	(Es_Version_Original TRUE)
+	(Formato Paper)
+	(Idioma Ingles Frances)
+	(Nombre "Ni Sho Shua?")
+	(NumPag 146)
+	(popular_F TRUE)
+	(popular_M FALSE)
+	(Se_Adquiere_En [salu2_Class25])
+	(Tiene_Como_Autor [salu2_Class20004])
+	(Valoracion 7))
+
+([salu2con2_Class29] of  Libro
+
+	(edad_minima 6)
+	(edad_recomendada 12)
+	(Es_Del_Genero
+		[salu2_Class16]
+		[salu2_Class17])
+	(Es_Version_Original TRUE)
+	(Formato Digital)
+	(Idioma Frances Aleman)
+	(Nombre "Old Man's War")
+	(NumPag 89)
+	(popular_F FALSE)
+	(popular_M FALSE)
+	(Se_Adquiere_En
+		[salu2con2_Class8]
+		[salu2_Class30010])
+	(Tiene_Como_Autor [salu2con2_Class30])
+	(Valoracion 7))
+
+([salu2con2_Class3] of  Libro
+
+	(edad_minima 3)
+	(edad_recomendada 15)
+	(Es_Del_Genero
+		[salu2_Class11]
+		[salu2_Class13])
+	(Es_Version_Original FALSE)
+	(Formato Digital Paper)
+	(Idioma Ingles Aleman)
+	(Nombre "Fundacion")
+	(NumPag 230)
+	(popular_F FALSE)
+	(popular_M FALSE)
+	(Se_Adquiere_En
+		[salu2_Class25]
+		[salu2_Class30010])
+	(Tiene_Como_Autor [salu2con2_Class0])
+	(Valoracion 8))
+
+([salu2con2_Class30] of  Autor
+
+	(Dificultad_Lenguaje Baja)
+	(Es_Autor_De
+		[salu2con2_Class29]
+		[salu2con2_Class31])
+	(Idioma Ingles Frances)
+	(Nacionalidad "India")
+	(Nombre "J. K. Paget")
+	(Popularidad Alta))
+
+([salu2con2_Class31] of  Libro
+
+	(edad_minima 3)
+	(edad_recomendada 15)
+	(Es_Del_Genero
+		[salu2_Class18]
+		[salu2_Class10])
+	(Es_Version_Original TRUE)
+	(Formato Digital)
+	(Idioma Ingles Frances)
+	(Nombre "Call Center Guide")
+	(NumPag 156)
+	(popular_F FALSE)
+	(popular_M TRUE)
+	(Se_Adquiere_En
+		[salu2_Class25]
+		[salu2con2_Class2])
+	(Tiene_Como_Autor [salu2con2_Class30])
+	(Valoracion 8))
+
+([salu2con2_Class4] of  Libro
+
+	(edad_minima 3)
+	(edad_recomendada 21)
+	(Es_Del_Genero
+		[salu2_Class3]
+		[salu2_Class14])
+	(Es_Version_Original FALSE)
+	(Formato Paper)
+	(Idioma Ingles Frances Castellano)
+	(Nombre "La ultima pregunta")
+	(NumPag 312)
+	(popular_F FALSE)
+	(popular_M FALSE)
+	(Se_Adquiere_En
+		[salu2con2_Class2]
+		[salu2_Class25])
+	(Tiene_Como_Autor [salu2con2_Class0])
+	(Valoracion 6))
+
+([salu2con2_Class5] of  Libro
+
+	(edad_minima 3)
+	(edad_recomendada 25)
+	(Es_Del_Genero
+		[salu2_Class3]
+		[salu2_Class21])
+	(Es_Version_Original FALSE)
+	(Formato Paper)
+	(Idioma Ingles Frances Castellano Aleman)
+	(Nombre "En la arena estelar")
+	(NumPag 333)
+	(popular_F FALSE)
+	(popular_M TRUE)
+	(Se_Adquiere_En [salu2con2_Class2])
+	(Tiene_Como_Autor [salu2con2_Class0])
+	(Valoracion 7))
+
+([salu2con2_Class6] of  Libro
+
+	(edad_minima 15)
+	(edad_recomendada 35)
+	(Es_Del_Genero
+		[salu2_Class21]
+		[salu2_Class19])
+	(Es_Version_Original TRUE)
+	(Formato Paper)
+	(Idioma Aleman Frances Castellano)
+	(Nombre "Leviathan")
+	(NumPag 150)
+	(popular_F FALSE)
+	(popular_M TRUE)
+	(Se_Adquiere_En [salu2con2_Class8])
+	(Tiene_Como_Autor [salu2con2_Class9])
+	(Valoracion 3))
+
+([salu2con2_Class7] of  Libro
+
+	(edad_minima 18)
+	(edad_recomendada 30)
+	(Es_Del_Genero
+		[salu2_Class21]
+		[salu2_Class19])
+	(es_sucesor_se [salu2con2_Class10])
+	(Es_Version_Original TRUE)
+	(Formato Digital)
+	(Idioma Castellano Aleman Frances)
+	(Nombre "Awa de UwU (La Novela Cap.1)")
+	(NumPag 666)
+	(popular_F TRUE)
+	(popular_M FALSE)
+	(Se_Adquiere_En [salu2_Class25])
+	(Tiene_Como_Autor [salu2con2_Class9])
+	(Valoracion 3))
+
+([salu2con2_Class8] of  LugarDeAdquision
+
+	(Nombre "elCorteIngles")
+	(Se_Adquiere
+		[salu2con2_Class6]
+		[salu2con2_Class12]
+		[salu2con2_Class13]
+		[salu2con2_Class14]
+		[salu2con2_Class15]
+		[salu2con2_Class19]
+		[salu2con2_Class20]
+		[salu2con2_Class23]
+		[salu2con2_Class29]))
+
+([salu2con2_Class9] of  Autor
+
+	(Dificultad_Lenguaje Baja)
+	(Es_Autor_De
+		[salu2con2_Class6]
+		[salu2con2_Class7]
+		[salu2con2_Class10]
+		[salu2con2_Class13]
+		[salu2con2_Class14]
+		[salu2con2_Class15])
+	(Idioma Castellano Ingles)
+	(Nacionalidad "Espana")
+	(Nombre "P.B. Fowoster")
+	(Popularidad Alta))

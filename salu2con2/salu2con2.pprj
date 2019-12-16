@@ -1,4 +1,4 @@
-; Sat Dec 14 17:18:19 CET 2019
+; Mon Dec 16 11:26:00 CET 2019
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -20,14 +20,14 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[salu2con2_ProjectKB_Class113]
-		[salu2con2_ProjectKB_Class114]
-		[salu2con2_ProjectKB_Class115]
-		[salu2con2_ProjectKB_Class116]
-		[salu2con2_ProjectKB_Class117]
-		[salu2con2_ProjectKB_Class118]
-		[salu2con2_ProjectKB_Class119]
-		[salu2con2_ProjectKB_Class120]))
+		[salu2con2_ProjectKB_Class89]
+		[salu2con2_ProjectKB_Class90]
+		[salu2con2_ProjectKB_Class91]
+		[salu2con2_ProjectKB_Class92]
+		[salu2con2_ProjectKB_Class93]
+		[salu2con2_ProjectKB_Class94]
+		[salu2con2_ProjectKB_Class95]
+		[salu2con2_ProjectKB_Class96]))
 
 ([CLSES_TAB] of  Widget
 
@@ -71,6 +71,9 @@
 	(is_hidden FALSE)
 	(widget_class_name "edu.stanford.smi.protege.widget.InstancesTab"))
 
+([KB_038631_Class3] of  Map
+)
+
 ([KB_542718_Class0] of  String
 
 	(name "factory_class_name")
@@ -79,9 +82,9 @@
 ([KB_542718_Class1] of  Map
 
 	(entries
-		[salu2con2_ProjectKB_Class121]
-		[salu2con2_ProjectKB_Class122]
-		[salu2con2_ProjectKB_Class123]))
+		[salu2con2_ProjectKB_Class97]
+		[salu2con2_ProjectKB_Class98]
+		[salu2con2_ProjectKB_Class99]))
 
 ([KB_542718_Class100] of  String
 
@@ -175,9 +178,6 @@
 	(name "classes_file_name")
 	(string_value "salu2con2.pont"))
 
-([KB_656717_Class3] of  Map
-)
-
 ([LAYOUT_PROPERTIES] of  Property_List
 
 	(name "layout properties")
@@ -262,8 +262,8 @@
 	(browser_slot_names [BROWSER_SLOT_NAMES])
 	(customized_instance_widgets
 		[INSTANCE_ANNOTATION_FORM_WIDGET]
-		[STANDARD_SLOT_FORM_WIDGET]
 		[STANDARD_FACET_FORM_WIDGET]
+		[STANDARD_SLOT_FORM_WIDGET]
 		[PAL_FORM_WIDGET]
 		[STANDARD_CLASS_FORM_WIDGET])
 	(default_cls_metaclass ":STANDARD-CLASS")
@@ -662,80 +662,66 @@
 	(property_list [salu2_ProjectKB_Class10])
 	(widget_class_name "uk.ac.man.cs.mig.coode.debugger.test.DebuggerTestTab"))
 
-([salu2con2_ProjectKB_Class113] of  String
+([salu2con2_ProjectKB_Class89] of  String
 
 	(name "LugarDeLectura")
 	(string_value "Nombre"))
 
-([salu2con2_ProjectKB_Class114] of  String
+([salu2con2_ProjectKB_Class90] of  String
 
 	(name ":INSTANCE-ANNOTATION")
 	(string_value "%3AANNOTATION-TEXT"))
 
-([salu2con2_ProjectKB_Class115] of  String
+([salu2con2_ProjectKB_Class91] of  String
 
 	(name "Autor")
 	(string_value "Nombre"))
 
-([salu2con2_ProjectKB_Class116] of  String
+([salu2con2_ProjectKB_Class92] of  String
 
 	(name "Genero")
 	(string_value "Nombre"))
 
-([salu2con2_ProjectKB_Class117] of  String
-
-	(name ":PAL-CONSTRAINT")
-	(string_value "%3APAL-NAME"))
-
-([salu2con2_ProjectKB_Class118] of  String
+([salu2con2_ProjectKB_Class93] of  String
 
 	(name ":META-CLASS")
 	(string_value "%3ANAME"))
 
-([salu2con2_ProjectKB_Class119] of  String
+([salu2con2_ProjectKB_Class94] of  String
+
+	(name ":PAL-CONSTRAINT")
+	(string_value "%3APAL-NAME"))
+
+([salu2con2_ProjectKB_Class95] of  String
 
 	(name "LugarDeAdquision")
 	(string_value "Nombre"))
 
-([salu2con2_ProjectKB_Class120] of  String
+([salu2con2_ProjectKB_Class96] of  String
 
 	(name "Libro")
 	(string_value "Nombre"))
 
-([salu2con2_ProjectKB_Class121] of  Map_Entry
+([salu2con2_ProjectKB_Class97] of  Map_Entry
 
 	(key "add_name_on_instance_form")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([salu2con2_ProjectKB_Class122] of  Map_Entry
+([salu2con2_ProjectKB_Class98] of  Map_Entry
 
 	(key "change_tracking_active")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([salu2con2_ProjectKB_Class123] of  Map_Entry
+([salu2con2_ProjectKB_Class99] of  Map_Entry
 
 	(key "suppress_instance_counting")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
-
-([salu2con2_ProjectKB_Class20] of  Widget
-
-	(height 60)
-	(is_hidden FALSE)
-	(name "edad_recomendada")
-	(property_list [salu2con2_ProjectKB_Class21])
-	(widget_class_name "edu.stanford.smi.protege.widget.TextFieldWidget")
-	(width 200)
-	(x 0)
-	(y 0))
-
-([salu2con2_ProjectKB_Class21] of  Property_List
-)
 
 ([SLOTS_TAB] of  Widget
 
