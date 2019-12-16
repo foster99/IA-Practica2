@@ -1,4 +1,4 @@
-; Mon Dec 16 12:38:57 CET 2019
+; Mon Dec 16 12:40:22 CET 2019
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -1178,9 +1178,6 @@
 	(Se_Adquiere_En [salu2_Class30010])
 	(Tiene_Como_Autor [salu2_Class20012])
 	(Valoracion 9))
-
-([salu2con2_Class10023] of  Genero
-)
 
 ([salu2con2_Class11] of  Autor
 
