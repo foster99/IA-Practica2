@@ -1,7 +1,7 @@
-; Mon Dec 16 12:40:22 CET 2019
+; Mon Dec 16 19:16:11 CET 2019
 ; 
 ;+ (version "3.5")
-;+ (build "Build 663")
+;+ (build "Build 660")
 
 ([salu2_Class0] of  Autor
 
@@ -353,7 +353,7 @@
 	(Formato Paper Digital)
 	(Idioma Ingles)
 	(Nombre "Snow Crash")
-	(NumPag 440)
+	(NumPag 200)
 	(popular_F FALSE)
 	(popular_M TRUE)
 	(Se_Adquiere_En [salu2_Class25])
@@ -388,7 +388,7 @@
 
 ([salu2_Class20016] of  Autor
 
-	(Dificultad_Lenguaje Baja)
+	(Dificultad_Lenguaje Alta)
 	(Es_Autor_De
 		[salu2_Class20015]
 		[salu2_Class20017]
@@ -494,8 +494,8 @@
 	(popular_M TRUE)
 	(Se_Adquiere_En [salu2_Class25])
 	(Tiene_Como_Autor
-		[salu2_Class20023]
-		[salu2_Class20024])
+		[salu2_Class20024]
+		[salu2_Class20023])
 	(Valoracion 7))
 
 ([salu2_Class20023] of  Autor
@@ -986,7 +986,7 @@
 	(Formato Paper Digital)
 	(Idioma Ingles Castellano Aleman)
 	(Nombre "Borderlands 1")
-	(NumPag 415)
+	(NumPag 200)
 	(popular_F TRUE)
 	(popular_M FALSE)
 	(Se_Adquiere_En [salu2con2_Class2])
@@ -1007,7 +1007,7 @@
 	(Formato Paper)
 	(Idioma Ingles Castellano Aleman)
 	(Nombre "Borderlands 2")
-	(NumPag 536)
+	(NumPag 246)
 	(popular_F FALSE)
 	(popular_M TRUE)
 	(Se_Adquiere_En [salu2con2_Class2])
@@ -1027,7 +1027,7 @@
 	(Formato Paper)
 	(Idioma Ingles Castellano Aleman)
 	(Nombre "Borderlands 3")
-	(NumPag 378)
+	(NumPag 214)
 	(popular_F TRUE)
 	(popular_M FALSE)
 	(Se_Adquiere_En [salu2con2_Class2])
@@ -1122,7 +1122,7 @@
 	(Formato Paper Digital)
 	(Idioma Ingles)
 	(Nombre "International Surfing Day")
-	(NumPag 426)
+	(NumPag 231)
 	(popular_F FALSE)
 	(popular_M FALSE)
 	(Se_Adquiere_En [salu2_Class25])
@@ -1396,7 +1396,7 @@
 	(Formato Digital)
 	(Idioma Frances Aleman Castellano)
 	(Nombre "Talent WarFrame 2")
-	(NumPag 120)
+	(NumPag 444)
 	(popular_F TRUE)
 	(popular_M TRUE)
 	(Se_Adquiere_En
@@ -1435,7 +1435,7 @@
 	(Formato Paper Digital)
 	(Idioma Ingles Frances)
 	(Nombre "Shema?")
-	(NumPag 130)
+	(NumPag 563)
 	(popular_F TRUE)
 	(popular_M FALSE)
 	(Se_Adquiere_En [salu2_Class25])
@@ -1454,7 +1454,7 @@
 	(Formato Paper)
 	(Idioma Ingles Frances)
 	(Nombre "Ni Sho Shua?")
-	(NumPag 146)
+	(NumPag 450)
 	(popular_F TRUE)
 	(popular_M FALSE)
 	(Se_Adquiere_En [salu2_Class25])
@@ -1628,7 +1628,7 @@
 
 ([salu2con2_Class9] of  Autor
 
-	(Dificultad_Lenguaje Baja)
+	(Dificultad_Lenguaje Media)
 	(Es_Autor_De
 		[salu2con2_Class6]
 		[salu2con2_Class7]
