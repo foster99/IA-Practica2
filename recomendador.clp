@@ -314,10 +314,10 @@
 ;
 
 (definstances instancias
-; Mon Dec 16 12:40:22 CET 2019
+; Mon Dec 16 19:16:11 CET 2019
 ; 
 ;+ (version "3.5")
-;+ (build "Build 663")
+;+ (build "Build 660")
 
 ([salu2_Class0] of  Autor
 
@@ -669,7 +669,7 @@
 	(Formato Paper Digital)
 	(Idioma Ingles)
 	(Nombre "Snow Crash")
-	(NumPag 440)
+	(NumPag 200)
 	(popular_F FALSE)
 	(popular_M TRUE)
 	(Se_Adquiere_En [salu2_Class25])
@@ -704,7 +704,7 @@
 
 ([salu2_Class20016] of  Autor
 
-	(Dificultad_Lenguaje Baja)
+	(Dificultad_Lenguaje Alta)
 	(Es_Autor_De
 		[salu2_Class20015]
 		[salu2_Class20017]
@@ -810,8 +810,8 @@
 	(popular_M TRUE)
 	(Se_Adquiere_En [salu2_Class25])
 	(Tiene_Como_Autor
-		[salu2_Class20023]
-		[salu2_Class20024])
+		[salu2_Class20024]
+		[salu2_Class20023])
 	(Valoracion 7))
 
 ([salu2_Class20023] of  Autor
@@ -1302,7 +1302,7 @@
 	(Formato Paper Digital)
 	(Idioma Ingles Castellano Aleman)
 	(Nombre "Borderlands 1")
-	(NumPag 415)
+	(NumPag 200)
 	(popular_F TRUE)
 	(popular_M FALSE)
 	(Se_Adquiere_En [salu2con2_Class2])
@@ -1323,7 +1323,7 @@
 	(Formato Paper)
 	(Idioma Ingles Castellano Aleman)
 	(Nombre "Borderlands 2")
-	(NumPag 536)
+	(NumPag 246)
 	(popular_F FALSE)
 	(popular_M TRUE)
 	(Se_Adquiere_En [salu2con2_Class2])
@@ -1343,7 +1343,7 @@
 	(Formato Paper)
 	(Idioma Ingles Castellano Aleman)
 	(Nombre "Borderlands 3")
-	(NumPag 378)
+	(NumPag 214)
 	(popular_F TRUE)
 	(popular_M FALSE)
 	(Se_Adquiere_En [salu2con2_Class2])
@@ -1438,7 +1438,7 @@
 	(Formato Paper Digital)
 	(Idioma Ingles)
 	(Nombre "International Surfing Day")
-	(NumPag 426)
+	(NumPag 231)
 	(popular_F FALSE)
 	(popular_M FALSE)
 	(Se_Adquiere_En [salu2_Class25])
@@ -1712,7 +1712,7 @@
 	(Formato Digital)
 	(Idioma Frances Aleman Castellano)
 	(Nombre "Talent WarFrame 2")
-	(NumPag 120)
+	(NumPag 444)
 	(popular_F TRUE)
 	(popular_M TRUE)
 	(Se_Adquiere_En
@@ -1751,7 +1751,7 @@
 	(Formato Paper Digital)
 	(Idioma Ingles Frances)
 	(Nombre "Shema?")
-	(NumPag 130)
+	(NumPag 563)
 	(popular_F TRUE)
 	(popular_M FALSE)
 	(Se_Adquiere_En [salu2_Class25])
@@ -1770,7 +1770,7 @@
 	(Formato Paper)
 	(Idioma Ingles Frances)
 	(Nombre "Ni Sho Shua?")
-	(NumPag 146)
+	(NumPag 450)
 	(popular_F TRUE)
 	(popular_M FALSE)
 	(Se_Adquiere_En [salu2_Class25])
@@ -1944,7 +1944,7 @@
 
 ([salu2con2_Class9] of  Autor
 
-	(Dificultad_Lenguaje Baja)
+	(Dificultad_Lenguaje Media)
 	(Es_Autor_De
 		[salu2con2_Class6]
 		[salu2con2_Class7]
@@ -1961,10 +1961,7 @@
 	(Nacionalidad "Espana")
 	(Nombre "P.B. Fowoster")
 	(Popularidad Alta))
-
-
 )
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; CLASES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; Una recomendacion es un libro asociado a unas justificaciones.
@@ -2110,17 +2107,17 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; TEMPLATES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (deftemplate MAIN::datos_usuario
-	(slot sexo (type STRING)(default "null"))				; sexo del usuario
-	(slot edad (type INTEGER)(default -1))			        ; edad del usuario
-	(slot idioma (type STRING)(default "null"))		        ; idiomas que lee el usuario
+	(slot sexo (type STRING))				; sexo del usuario
+	(slot edad (type INTEGER))			        ; edad del usuario
+	(slot idioma (type STRING))		        ; idiomas que lee el usuario
 	(slot lugar_de_lectura (type INSTANCE))                 ; lugares de lectura del usuario
     (multislot lugares_de_adquisicion(type INSTANCE))         ; lugares de adquisicion de libros del usuario	
     (multislot formatos (type SYMBOL))                        ; formatos en los que lee el usuario
-    (slot sagas (type INTEGER)(default -1))				    ; Le gustan o no las sagas
-	(slot longitud (type INTEGER)(default -1))		        ; Como de largos le gustan los libros
-	(slot VO (type INTEGER)(default -1))      		        ; Prioriza versiones originales
-	(slot confianza_valoraciones (type INTEGER)(default -1))	; Confia en las valoraciones de la gente
-	(slot cantidad_libros_leidos (type INTEGER)(default -1)) 	; Cantidad de libros leidos por el usuario
+    (slot sagas (type INTEGER))				    ; Le gustan o no las sagas
+	(slot longitud (type INTEGER))		        ; Como de largos le gustan los libros
+	(slot VO (type INTEGER))      		        ; Prioriza versiones originales
+	(slot confianza_valoraciones (type INTEGER))	; Confia en las valoraciones de la gente
+	(slot cantidad_libros_leidos (type INTEGER)) 	; Cantidad de libros leidos por el usuario
 	(multislot generos_fav (type INSTANCE))			; Generos favoritos del usuario
 	(multislot autores_fav (type INSTANCE))			; Autores que le gustan al usuario
 )
@@ -2258,6 +2255,14 @@
     (lugarLect not_deff)
     (lugaresAdq not_deff)
     (formatos not_deff)
+    (sexo not_deff)
+    (edad not_deff)
+    (idiomas not_deff)
+    (qlibros not_deff)
+    (longL not_deff)
+    (cval not_deff)
+    (cvo not_deff)
+    (csa not_deff)
 )
 
 (deffacts abstraccion_de_datos::controladores_abstraccion
@@ -2328,29 +2333,44 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;; RECOPILACION DE DATOS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defrule recopilacion_datos_personales::longitud_libros
-    ?d <- (datos_usuario (longitud -1))
-	=>
-	(bind ?l (pregunta_numerica "- Longitud de los libros (paginas) (0 si te es indiferente)? " 0 1000))
-	(modify ?d (longitud ?l))
-)
-
 (defrule recopilacion_datos_personales::sexo_usuario
-    ?d <- (datos_usuario (sexo "null"))
+    ?fact <-(sexo not_deff)    
+    ?d <- (datos_usuario)
 	=>
 	(bind ?s (ask_question "- Cual es tu genero (Hombre/Mujer)? " Hombre Mujer))
-	(modify ?d (sexo ?s))
+	(retract ?fact)
+    (modify ?d (sexo ?s))
+)
+
+(defrule recopilacion_datos_personales::edad_usuario 
+    ?fact <-(edad not_deff)    
+    ?d <- (datos_usuario)
+	=>
+	(bind ?e (pregunta_numerica "- Cual es tu edad? " 3 120))
+	(retract ?fact)
+    (modify ?d (edad ?e))
 )
 
 (defrule recopilacion_datos_personales::idiomas_usuario
-    ?d <- (datos_usuario (idioma "null"))
+    ?fact <-(idiomas not_deff)
+    ?d <- (datos_usuario)
 	=>
 	(bind ?s (ask_question "- En que idioma prefieres leer(Ingles | Castellano | Frances | Aleman)? " Ingles Castellano Frances Aleman))
+    (retract ?fact) 
 	(modify ?d (idioma ?s))
 )
 
+(defrule recopilacion_datos_personales::assignar_cantidad_libros
+    ?fact <-(qlibros not_deff)    
+    ?d <- (datos_usuario)
+    =>
+    (bind ?l (pregunta_numerica "- Cuantos libros has leido?" 0 100))
+    (retract ?fact)    
+    (modify ?d (cantidad_libros_leidos ?l))
+)
+
 (defrule recopilacion_datos_personales::assignar_lugar_lectura
-	?hecho <- (lugarLect not_deff)
+    ?hecho <- (lugarLect not_deff)
 	?p-user <- (datos_usuario)
 	=>
 	(bind $?lugares (find-all-instances ((?inst LugarDeLectura)) TRUE))
@@ -2405,18 +2425,40 @@
     (retract ?fact)
 )
 
-(defrule recopilacion_datos_personales::edad_usuario
-    ?d <- (datos_usuario (edad -1))
+(defrule recopilacion_datos_personales::longitud_libros
+    ?fact <-(longL not_deff)    
+    ?d <- (datos_usuario)
 	=>
-	(bind ?e (pregunta_numerica "- Cual es tu edad? " 3 120))
-	(modify ?d (edad ?e))
+	(bind ?l (pregunta_numerica "- Longitud de los libros (paginas) (0 si te es indiferente)? " 0 1000))
+    (retract ?fact)	
+    (modify ?d (longitud ?l))
 )
 
-(defrule recopilacion_datos_personales::assignar_cantidad_libros
-    ?d <- (datos_usuario (cantidad_libros_leidos -1))
-    =>
-    (bind ?l (pregunta_numerica "- Cuantos libros has leido?" 0 100))
-    (modify ?d (cantidad_libros_leidos ?l))
+(defrule recopilacion_datos_personales::confianza_valoraciones
+    ?fact <-(cval not_deff)    
+    ?d <- (datos_usuario)
+	=>
+	(bind ?e (pregunta_numerica "- Cuanto confias en las valoraciones (introduce 0 si no lo tienes en cuenta)? " 0 10))
+	(modify ?d (confianza_valoraciones ?e))
+    (retract ?fact)
+)
+
+(defrule recopilacion_datos_personales::VO
+    ?fact <-(cvo not_deff)    
+    ?d <- (datos_usuario)
+	=>
+	(bind ?e (pregunta_numerica "- Cuanto te importan los libros en VO (introduce 0 si no lo tienes en cuenta)? " 0 10))
+	(modify ?d (VO ?e))
+    (retract ?fact)
+)
+
+(defrule recopilacion_datos_personales::sagas
+    ?fact <-(csa not_deff)    
+    ?d <- (datos_usuario)
+	=>
+	(bind ?e (pregunta_numerica "- Cuanto te importa que los libros pertenezcan a sagas (introduce 0 si no lo tienes en cuenta)? " 0 10))
+	(modify ?d (sagas ?e))
+    (retract ?fact)
 )
 
 (defrule recopilacion_datos_personales::assignar_generos
@@ -2462,27 +2504,6 @@
 	)
 	(retract ?hecho)
 	(modify ?p-user (autores_fav $?respuesta))
-)
-
-(defrule recopilacion_datos_personales::confianza_valoraciones
-    ?d <- (datos_usuario (confianza_valoraciones -1))
-	=>
-	(bind ?e (pregunta_numerica "- Cuanto confias en las valoraciones (introduce 0 si no lo tienes en cuenta)? " 0 10))
-	(modify ?d (confianza_valoraciones ?e))
-)
-
-(defrule recopilacion_datos_personales::VO
-    ?d <- (datos_usuario (VO -1))
-	=>
-	(bind ?e (pregunta_numerica "- Cuanto te importan los libros en VO (introduce 0 si no lo tienes en cuenta)? " 0 10))
-	(modify ?d (VO ?e))
-)
-
-(defrule recopilacion_datos_personales::sagas
-    ?d <- (datos_usuario (sagas -1))
-	=>
-	(bind ?e (pregunta_numerica "- Cuanto te importa que los libros pertenezcan a sagas (introduce 0 si no lo tienes en cuenta)? " 0 10))
-	(modify ?d (sagas ?e))
 )
 
 
