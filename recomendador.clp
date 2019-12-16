@@ -2731,11 +2731,25 @@
     
     =>
     (bind ?c (send ?x get-Clima))
-    (if (eq ?c Tranquilo) then (modify ?pa (tipo_lugar_de_lectura "Tranquilo"))
-    else (if (eq ?c Ruidoso) then (modify ?pa (tipo_lugar_de_lectura "Ruidoso"))
-    else (if (eq ?c Ajetreado) then (modify ?pa (tipo_lugar_de_lectura "Ajetreado"))
-    else (if (eq ?c Silencioso) then (modify ?pa (tipo_lugar_de_lectura "Silencioso"))
-    ))))
+    (if (eq ?c Tranquilo) 
+	then 
+		(modify ?pa (tipo_lugar_de_lectura "Tranquilo"))
+	else 
+		(if (eq ?c Ruidoso)
+		then
+			(modify ?pa (tipo_lugar_de_lectura "Ruidoso"))
+		else
+			(if (eq ?c Ajetreado)
+			then
+				(modify ?pa (tipo_lugar_de_lectura "Ajetreado"))
+			else
+				(if (eq ?c Silencioso)
+				then
+					(modify ?pa (tipo_lugar_de_lectura "Silencioso"))
+				)
+			)
+		)
+	)
     (retract ?fact)
     
     
@@ -3456,14 +3470,13 @@
     ?sol <- (solucion_abstracta (targeted_rec ?obj))
     ?pa <- (problema_abstracto (sexo_lector ?typeSE)(valoraciones_cuentan ?typeVA))
     (test (eq ?typeSE "Hombre"))
-	(test (neq ?typeVA "nulo"))
     =>
     (retract ?ctrl)
     (assert (targeted_sexoXlib off))
     (bind ?libro (send ?obj get-libro))
     (bind ?p (send ?libro get-popular_M))   
     (bind ?punt (send ?obj get-puntuacion))
-    (if (eq ?p TRUE) then
+    (if (and (neq ?typeVA "nulo")(eq ?p TRUE)) then
         (bind ?punt (+ ?punt 25))
         (modify-instance ?obj (puntuacion ?punt))
     )
@@ -3473,14 +3486,13 @@
     ?sol <- (solucion_abstracta (targeted_rec ?obj))
     ?pa <- (problema_abstracto (sexo_lector ?typeSE)(valoraciones_cuentan ?typeVA))
     (test (eq ?typeSE "Mujer"))
-	(test (neq ?typeVA "nulo"))
     =>
     (retract ?ctrl)
     (assert (targeted_sexoXlib off))
     (bind ?libro (send ?obj get-libro))
     (bind ?p (send ?libro get-popular_F))   
     (bind ?punt (send ?obj get-puntuacion))
-    (if (eq ?p TRUE) then
+    (if (and (neq ?typeVA "nulo")(eq ?p TRUE)) then
         (bind ?punt (+ ?punt 25))
         (modify-instance ?obj (puntuacion ?punt))
     )
