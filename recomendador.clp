@@ -3454,8 +3454,9 @@
 (defrule asociacion_heuristica::coincidencia_sexoH
     ?ctrl <-(targeted_sexoXlib on)
     ?sol <- (solucion_abstracta (targeted_rec ?obj))
-    ?pa <- (problema_abstracto (sexo_lector ?typeSE))
+    ?pa <- (problema_abstracto (sexo_lector ?typeSE)(valoraciones_cuentan ?typeVA))
     (test (eq ?typeSE "Hombre"))
+	(test (neq ?typeVA "nulo"))
     =>
     (retract ?ctrl)
     (assert (targeted_sexoXlib off))
@@ -3463,23 +3464,24 @@
     (bind ?p (send ?libro get-popular_M))   
     (bind ?punt (send ?obj get-puntuacion))
     (if (eq ?p TRUE) then
-        (bind ?punt (+ ?punt 10))
+        (bind ?punt (+ ?punt 25))
         (modify-instance ?obj (puntuacion ?punt))
     )
 )
 (defrule asociacion_heuristica::coincidencia_sexoM
     ?ctrl <-(targeted_sexoXlib on)
     ?sol <- (solucion_abstracta (targeted_rec ?obj))
-    ?pa <- (problema_abstracto (sexo_lector ?typeSE))
+    ?pa <- (problema_abstracto (sexo_lector ?typeSE)(valoraciones_cuentan ?typeVA))
     (test (eq ?typeSE "Mujer"))
+	(test (neq ?typeVA "nulo"))
     =>
     (retract ?ctrl)
     (assert (targeted_sexoXlib off))
     (bind ?libro (send ?obj get-libro))
-    (bind ?p (send ?libro get-popular_M))   
+    (bind ?p (send ?libro get-popular_F))   
     (bind ?punt (send ?obj get-puntuacion))
     (if (eq ?p TRUE) then
-        (bind ?punt (+ ?punt 10))
+        (bind ?punt (+ ?punt 25))
         (modify-instance ?obj (puntuacion ?punt))
     )
 )
