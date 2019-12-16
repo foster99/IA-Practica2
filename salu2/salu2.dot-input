@@ -1,5 +1,0 @@
-digraph "salu2" {
-
-"Lugar" [shape=box, label="Lugar", color="0.0,0.0,0.0", fontcolor="0.0,0.0,0.0"]
-"Autor" [shape=box, label="Autor", color="0.0,0.0,0.0", fontcolor="0.0,0.0,0.0"]
-}
